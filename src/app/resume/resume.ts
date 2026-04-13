@@ -54,6 +54,7 @@ export class ResumeComponent {
         'Led frontend development of Credit & BNPL journey serving +10M users, implementing complex multi-step financial flows with Angular and TypeScript.',
         'Architected and published 14 internal npm packages, reducing cross-team code duplication and improving delivery speed across multiple product lines.',
         'Leading Credit & BNPL line front developers.',
+        'Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.',
         'Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.',
         'Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.',
         'Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document image inspection, implementing multi-touch distance calculation, boundary-constrained CSS transforms, and requestAnimationFrame-throttled magnifier with rotation-aware coordinate mapping.',
