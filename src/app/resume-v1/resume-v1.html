@@ -1,0 +1,79 @@
+<article class="cv">
+  <!-- Header -->
+  <header class="cv-header">
+    <h1 class="cv-header__name">{{ r.name }}</h1>
+    <p class="cv-header__title">{{ r.title }}</p>
+    <div class="cv-header__links">
+      <a [href]="'mailto:' + r.email">{{ r.email }}</a>
+      <span class="cv-header__dot"></span>
+      <a [href]="'tel:' + r.phone">{{ r.phone }}</a>
+      <span class="cv-header__dot"></span>
+      <a [href]="r.linkedinUrl" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </header>
+
+  <!-- Summary -->
+  <section class="cv-section">
+    <p class="cv-summary">{{ r.summary }}</p>
+  </section>
+
+  <hr class="cv-divider" />
+
+  <!-- Experience -->
+  <section class="cv-section">
+    <h2 class="cv-section__title">Experience</h2>
+
+    <div *ngFor="let exp of r.experiences" class="cv-entry">
+      <div class="cv-entry__head">
+        <div>
+          <strong>{{ exp.role }}</strong>
+          <span class="cv-entry__at"> at {{ exp.company }}, {{ exp.location }}</span>
+        </div>
+        <time>{{ exp.period }}</time>
+      </div>
+      <ul class="cv-entry__list">
+        <li *ngFor="let b of exp.bullets">{{ b }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="cv-divider" />
+
+  <!-- Projects -->
+  <section class="cv-section">
+    <h2 class="cv-section__title">Projects</h2>
+
+    <div *ngFor="let proj of r.projects" class="cv-entry">
+      <div class="cv-entry__head">
+        <div>
+          <strong>{{ proj.name }}</strong>
+          <span class="cv-entry__tech">{{ proj.tech }}</span>
+        </div>
+        <time>{{ proj.period }}</time>
+      </div>
+      <ul class="cv-entry__list">
+        <li *ngFor="let b of proj.bullets">{{ b }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="cv-divider" />
+
+  <!-- Education & Courses -->
+  <footer class="cv-footer">
+    <div class="cv-footer__col">
+      <h2 class="cv-section__title">Education</h2>
+      <div *ngFor="let edu of r.education" class="cv-footer__item">
+        <strong>{{ edu.degree }}</strong>
+        <span>{{ edu.institution }} · {{ edu.period }}</span>
+      </div>
+    </div>
+    <div class="cv-footer__col">
+      <h2 class="cv-section__title">Certifications</h2>
+      <div *ngFor="let c of r.courses" class="cv-footer__item">
+        <strong>{{ c.name }}</strong>
+        <span>{{ c.provider }}{{ c.year ? ' · ' + c.year : '' }}</span>
+      </div>
+    </div>
+  </footer>
+</article>
