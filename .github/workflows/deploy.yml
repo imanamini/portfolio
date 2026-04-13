@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npx ng build --base-href /
+
+      - name: Prepare deploy artifacts
+        run: |
+          cp dist/resume-app/browser/index.html dist/resume-app/browser/404.html
+          cp CNAME dist/resume-app/browser/CNAME
+          touch dist/resume-app/browser/.nojekyll
+          [ -f "Iman Amini Resume.pdf" ] && cp "Iman Amini Resume.pdf" dist/resume-app/browser/ || true
+
+      - name: Deploy to master
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: master
+          folder: dist/resume-app/browser
+          clean: true
