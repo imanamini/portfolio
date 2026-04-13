@@ -40,7 +40,7 @@ export class ResumeComponent {
   title = 'Senior Front-End Developer';
   email = 'iman.fa88@gmail.com';
   phone = '+98-9034646366';
-  linkedinUrl = 'https://www.linkedin.com/in/imanamini';
+  linkedinUrl = 'https://www.linkedin.com/in/imanamini78';
 
   summary = 'Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran\'s largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Experienced with React/Next.js, Vue/Nuxt, and NX monorepo architectures.';
 
