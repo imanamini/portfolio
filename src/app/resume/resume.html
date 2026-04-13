@@ -24,17 +24,10 @@
 
   <div class="resume__body">
 
-    <!-- Skills -->
+    <!-- Summary -->
     <section class="resume__section">
-      <h2 class="resume__section-title">Skills</h2>
-      <div class="skills-grid">
-        <ul class="skills-list">
-          <li *ngFor="let skill of skillsLeft" class="skills-list__item">{{ skill }}</li>
-        </ul>
-        <ul class="skills-list">
-          <li *ngFor="let skill of skillsRight" class="skills-list__item">{{ skill }}</li>
-        </ul>
-      </div>
+      <h2 class="resume__section-title">Summary</h2>
+      <p class="summary">{{ summary }}</p>
     </section>
 
     <!-- Experience -->
@@ -66,7 +59,7 @@
           <div class="entry__header">
             <div class="entry__meta">
               <span class="entry__company">{{ proj.name }}</span>
-              <span class="entry__role">— <em>{{ proj.role }}</em></span>
+              <span class="entry__role">— <em>{{ proj.tech }}</em></span>
             </div>
             <span class="entry__period">{{ proj.period }}</span>
           </div>
@@ -101,7 +94,9 @@
       <ul class="courses-list">
         <li *ngFor="let course of courses" class="courses-list__item">
           <span class="courses-list__name">{{ course.name }}</span>
-          <span class="courses-list__provider">{{ course.provider }}</span>
+          <span class="courses-list__provider">
+            {{ course.year ? course.year + ' · ' : '' }}{{ course.provider }}
+          </span>
         </li>
       </ul>
     </section>

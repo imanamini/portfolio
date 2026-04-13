@@ -11,7 +11,7 @@ interface Experience {
 
 interface Project {
   name: string;
-  role: string;
+  tech: string;
   period: string;
   bullets: string[];
 }
@@ -23,6 +23,12 @@ interface Education {
   period: string;
 }
 
+interface Course {
+  name: string;
+  provider: string;
+  year?: string;
+}
+
 @Component({
   selector: 'app-resume',
   imports: [NgFor],
@@ -31,39 +37,33 @@ interface Education {
 })
 export class ResumeComponent {
   name = 'Iman Amini';
-  title = 'Front-End Developer';
+  title = 'Senior Front-End Developer';
   email = 'iman.fa88@gmail.com';
   phone = '+98-9034646366';
   linkedinUrl = 'https://www.linkedin.com/in/imanamini';
 
-  skillsLeft = [
-    'Fluent in Vue and Nuxt',
-    'Fluent in Bootstrap',
-    'Experienced with HTML, CSS, and JS',
-    'Experienced with Git and Git Workflows',
-    'Experienced with Rest APIs',
-    'Experienced with jQuery',
-    'Experienced with writing test cases',
-  ];
-
-  skillsRight = [
-    'Familiar with Vuex',
-    'Familiar with SASS',
-    'Familiar with Adobe XD & Figma',
-    'Familiar with Agile methods',
-    'Familiar with Test frameworks (JEST)',
-  ];
+  summary = 'Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran\'s largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Experienced with React/Next.js, Vue/Nuxt, and NX monorepo architectures.';
 
   experiences: Experience[] = [
     {
       company: 'Digipay',
       location: 'Tehran',
-      role: 'Front-End Developer',
+      role: 'Senior Front-End Developer',
       period: 'Dec 2021 – Present',
       bullets: [
-        'Developing Mydigipay website by blade framework.',
-        'Built pixel-perfect in different sizes according to the design.',
-        'Developing website by pure JS and not using any JS framework.',
+        'Led frontend development of Credit & BNPL journey serving +10M users, implementing complex multi-step financial flows with Angular and TypeScript.',
+        'Architected and published 14 internal npm packages, reducing cross-team code duplication and improving delivery speed across multiple product lines.',
+        'Leading Credit & BNPL line front developers.',
+        'Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.',
+        'Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.',
+        'Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document image inspection, implementing multi-touch distance calculation, boundary-constrained CSS transforms, and requestAnimationFrame-throttled magnifier with rotation-aware coordinate mapping.',
+        'Designed a Claude AI–assisted test generation pipeline for a 75-package Angular component library, engineering a 900-line reusable prompt specification that encodes testing principles, Angular signal patterns, OnPush behavioral contracts, and Playwright pitfalls.',
+        'Adopted Angular 17 standalone components, OnPush change detection, and signal-based computed properties across the entire Credit/BNPL library, eliminating NgModule overhead.',
+        'Implemented a custom Angular preloading strategy using route metadata (preload: true, critical: true) to load critical routes immediately post-bootstrap, alongside retryImport wrappers for network-resilient lazy module loading.',
+        'Integrated multi-platform analytics (Google Tag Manager, InTrack, Sentry) behind a single EventManagementService abstraction, with Sentry configured for performance profiling and console-error capture.',
+        'Built a zero-maintenance test catalog CLI (generate-package-status.mjs) that auto-discovers unit and E2E specs across all 75 packages, counts individual test cases via regex, and generates a typed TypeScript data file powering a live status dashboard.',
+        'Developed digital sign feature capturing selfie video and photo.',
+        'Developed Mydigipay website by Laravel & Angular.',
       ]
     },
     {
@@ -84,7 +84,7 @@ export class ResumeComponent {
       company: 'Carnotic',
       location: 'Tehran',
       role: 'Front-End Developer',
-      period: 'Oct 2019 – Present',
+      period: 'Oct 2019 – Dec 2021',
       bullets: [
         'Implemented a highly responsive user interface for a freight forwarding platform.',
         'Built pixel-perfect in different sizes according to the design.',
@@ -108,8 +108,28 @@ export class ResumeComponent {
 
   projects: Project[] = [
     {
+      name: 'Pita-front',
+      tech: 'NX Monorepo · React · Restaurant Kiosk + Kitchen Display',
+      period: 'Jan 2021 – Jun 2021',
+      bullets: [
+        'Architected an NX monorepo with two independent React apps (customer self-service kiosk + kitchen staff display) sharing @pita/api and @pita/ui libraries, deployed via separate Docker images with nginx routing per app.',
+        'Integrated Epson ePOS SDK for thermal receipt printing with automatic network→USB fallback: probes configured network IP first, then discovers USB printers by scanning localhost proxy ports, with mobile-device and browser-print fallbacks.',
+        'Implemented real-time order synchronization between kiosk and kitchen using Laravel Echo + Pusher WebSockets, with a 10-second polling safety net and a live KDS board showing in-process vs ready orders.',
+        'Engineered a zero-downtime version checker service for always-on kiosk hardware that polls /version.json with cache-busting headers every 5 minutes and forces a hard reload when a new build is detected.',
+      ]
+    },
+    {
+      name: 'Pharma',
+      tech: 'Angular 17 PWA · Prescription Drug E-commerce',
+      period: 'Jan 2021 – Jun 2021',
+      bullets: [
+        'Developed a server-driven adaptive medical questionnaire engine supporting 4 question types (SingleChoice, MultipleChoice, FormFill, Terminate), where each question is dynamically fetched from the API based on the previous answer.',
+        'Built a full Angular 17 PWA for prescription pharmaceutical e-commerce with signal-based session management, CAPTCHA-protected authentication, multi-step drug selection/checkout flow, in-app order support chat, and Service Worker for offline capability.',
+      ]
+    },
+    {
       name: 'Talent Academy',
-      role: 'Front-End Developer',
+      tech: 'Front-End Developer',
       period: 'Jan 2021 – Jun 2021',
       bullets: [
         'Created an interactive video player with features such as playlist, sending improvement messages & praising instructors like Instagram live.',
@@ -118,7 +138,7 @@ export class ResumeComponent {
     },
     {
       name: 'Majid (confidential)',
-      role: 'Front-End Developer',
+      tech: 'Front-End Developer',
       period: 'Apr 2020 – Mar 2021',
       bullets: [
         'Developed a full-featured online form builder that makes it easy to create robust forms and collect important data.',
@@ -133,7 +153,7 @@ export class ResumeComponent {
       institution: 'Islamic Azad University Central Tehran Branch',
       location: 'Tehran',
       degree: 'Computer Engineering — Bachelor',
-      period: '2017 – Present'
+      period: '2017 – 2022'
     },
     {
       institution: 'Imam Sadiq Highschool',
@@ -143,7 +163,10 @@ export class ResumeComponent {
     }
   ];
 
-  courses = [
+  courses: Course[] = [
+    { name: 'Claude Code in Action', provider: 'Anthropic', year: 'Feb 2026' },
+    { name: 'The Complete Guide to Becoming a Software Architect', provider: 'Udemy', year: 'Apr 2025' },
+    { name: 'Angular — The Complete Guide (2024 Edition)', provider: 'Udemy' },
     { name: 'UTACM-Cafebazaar Android Course', provider: 'Cafebazaar & University of Tehran', year: 'Winter 2019' },
     { name: 'Agile Software Development: Clean Coding Practices', provider: 'LinkedIn' },
     { name: 'Agile Software Development: Refactoring', provider: 'LinkedIn' },

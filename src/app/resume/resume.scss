@@ -74,6 +74,12 @@ $white: #ffffff;
 // ─── Section ───────────────────────────────────────────────────────
 .resume__section {}
 
+.summary {
+  font-size: 0.9rem;
+  color: $text-primary;
+  line-height: 1.7;
+}
+
 .resume__section-title {
   font-size: 0.7rem;
   font-weight: 600;
