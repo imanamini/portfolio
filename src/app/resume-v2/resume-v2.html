@@ -1,0 +1,91 @@
+<div class="page">
+
+  <!-- ─── Sidebar ──────────────────────────────────────────── -->
+  <aside class="side">
+    <div class="side__identity">
+      <h1 class="side__name">{{ r.name }}</h1>
+      <p class="side__role">{{ r.title }}</p>
+    </div>
+
+    <div class="side__block">
+      <h3 class="side__heading">Contact</h3>
+      <ul class="side__contact">
+        <li><a [href]="'mailto:' + r.email">{{ r.email }}</a></li>
+        <li><a [href]="'tel:' + r.phone">{{ r.phone }}</a></li>
+        <li><a [href]="r.linkedinUrl" target="_blank" rel="noopener">linkedin.com/in/imanamini78</a></li>
+      </ul>
+    </div>
+
+    <div class="side__block">
+      <h3 class="side__heading">Tech Stack</h3>
+      <div class="tags">
+        <span *ngFor="let skill of r.skills" class="tag">{{ skill }}</span>
+      </div>
+    </div>
+
+    <div class="side__block">
+      <h3 class="side__heading">Education</h3>
+      <div *ngFor="let edu of r.education" class="side__edu">
+        <strong>{{ edu.degree }}</strong>
+        <span>{{ edu.institution }}</span>
+        <span>{{ edu.period }}</span>
+      </div>
+    </div>
+
+    <div class="side__block">
+      <h3 class="side__heading">Certifications</h3>
+      <div *ngFor="let c of r.courses" class="side__cert">
+        <span>{{ c.name }}</span>
+        <span class="side__cert-meta">{{ c.provider }}{{ c.year ? ', ' + c.year : '' }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── Main ─────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Summary -->
+    <section class="main__section">
+      <p class="main__summary">{{ r.summary }}</p>
+    </section>
+
+    <!-- Experience -->
+    <section class="main__section">
+      <h2 class="main__title">Experience</h2>
+
+      <div *ngFor="let exp of r.experiences" class="timeline">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <div class="timeline__head">
+            <div>
+              <strong class="timeline__company">{{ exp.company }}</strong>
+              <span class="timeline__role">{{ exp.role }}</span>
+            </div>
+            <time class="timeline__period">{{ exp.period }}</time>
+          </div>
+          <ul class="timeline__list">
+            <li *ngFor="let b of exp.bullets">{{ b }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="main__section">
+      <h2 class="main__title">Projects</h2>
+
+      <div class="projects-grid">
+        <div *ngFor="let proj of r.projects" class="project-card">
+          <div class="project-card__head">
+            <strong>{{ proj.name }}</strong>
+            <span class="project-card__tech">{{ proj.tech }}</span>
+          </div>
+          <ul class="project-card__list">
+            <li *ngFor="let b of proj.bullets">{{ b }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>

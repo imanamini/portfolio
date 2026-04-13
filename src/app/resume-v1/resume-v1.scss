@@ -1,0 +1,191 @@
+// ─── Tokens ────────────────────────────────────────────────────────
+$ink:     #0f172a;
+$mid:     #475569;
+$faint:   #94a3b8;
+$line:    #e2e8f0;
+$page:    #ffffff;
+$accent:  #2563eb;          // blue-600
+
+// ─── Page ──────────────────────────────────────────────────────────
+.cv {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+  background: $page;
+  min-height: 100vh;
+  color: $ink;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+
+  @media print {
+    padding: 0;
+    max-width: none;
+  }
+}
+
+// ─── Header ────────────────────────────────────────────────────────
+.cv-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+
+  &__name {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: $accent;
+    margin-top: 0.15rem;
+  }
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: $mid;
+
+    a {
+      color: $mid;
+      text-decoration: none;
+      &:hover { color: $accent; }
+    }
+  }
+
+  &__dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: $faint;
+    align-self: center;
+  }
+}
+
+// ─── Summary ───────────────────────────────────────────────────────
+.cv-summary {
+  color: $mid;
+  line-height: 1.75;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+// ─── Divider ───────────────────────────────────────────────────────
+.cv-divider {
+  border: none;
+  border-top: 1px solid $line;
+  margin: 1.75rem 0;
+}
+
+// ─── Section ───────────────────────────────────────────────────────
+.cv-section {
+  &__title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $accent;
+    margin-bottom: 1rem;
+  }
+}
+
+// ─── Entry (Experience / Project) ──────────────────────────────────
+.cv-entry {
+  & + & { margin-top: 1.35rem; }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.75rem;
+    margin-bottom: 0.35rem;
+
+    strong {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    time {
+      font-size: 0.78rem;
+      color: $faint;
+      white-space: nowrap;
+    }
+  }
+
+  &__at {
+    font-weight: 400;
+    color: $mid;
+    font-size: 0.85rem;
+  }
+
+  &__tech {
+    font-weight: 400;
+    color: $faint;
+    font-size: 0.8rem;
+    margin-left: 0.35rem;
+
+    &::before { content: '— '; }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    li {
+      padding-left: 0.9rem;
+      position: relative;
+      color: $ink;
+      line-height: 1.6;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: $line;
+      }
+    }
+  }
+}
+
+// ─── Footer (Education + Courses side by side) ─────────────────────
+.cv-footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: 560px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    margin-bottom: 0.5rem;
+
+    strong {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    span {
+      font-size: 0.78rem;
+      color: $faint;
+    }
+  }
+}
