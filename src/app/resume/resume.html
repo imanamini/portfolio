@@ -1,0 +1,110 @@
+<main class="resume">
+
+  <!-- Header -->
+  <header class="resume__header">
+    <div class="resume__header-left">
+      <h1 class="resume__name">{{ name }}</h1>
+      <p class="resume__title">{{ title }}</p>
+      <div class="resume__contact">
+        <a [href]="'mailto:' + email" class="resume__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          {{ email }}
+        </a>
+        <a [href]="'tel:' + phone" class="resume__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.35h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          {{ phone }}
+        </a>
+        <a [href]="linkedinUrl" target="_blank" rel="noopener" class="resume__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="resume__body">
+
+    <!-- Skills -->
+    <section class="resume__section">
+      <h2 class="resume__section-title">Skills</h2>
+      <div class="skills-grid">
+        <ul class="skills-list">
+          <li *ngFor="let skill of skillsLeft" class="skills-list__item">{{ skill }}</li>
+        </ul>
+        <ul class="skills-list">
+          <li *ngFor="let skill of skillsRight" class="skills-list__item">{{ skill }}</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="resume__section">
+      <h2 class="resume__section-title">Experience</h2>
+      <div class="entries">
+        <div *ngFor="let exp of experiences" class="entry">
+          <div class="entry__header">
+            <div class="entry__meta">
+              <span class="entry__company">{{ exp.company }}</span>
+              <span class="entry__separator">,</span>
+              <span class="entry__location">{{ exp.location }}</span>
+              <span class="entry__role">— <em>{{ exp.role }}</em></span>
+            </div>
+            <span class="entry__period">{{ exp.period }}</span>
+          </div>
+          <ul class="entry__bullets">
+            <li *ngFor="let bullet of exp.bullets">{{ bullet }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="resume__section">
+      <h2 class="resume__section-title">Projects</h2>
+      <div class="entries">
+        <div *ngFor="let proj of projects" class="entry">
+          <div class="entry__header">
+            <div class="entry__meta">
+              <span class="entry__company">{{ proj.name }}</span>
+              <span class="entry__role">— <em>{{ proj.role }}</em></span>
+            </div>
+            <span class="entry__period">{{ proj.period }}</span>
+          </div>
+          <ul class="entry__bullets">
+            <li *ngFor="let bullet of proj.bullets">{{ bullet }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="resume__section">
+      <h2 class="resume__section-title">Education</h2>
+      <div class="entries">
+        <div *ngFor="let edu of education" class="entry entry--compact">
+          <div class="entry__header">
+            <div class="entry__meta">
+              <span class="entry__company">{{ edu.institution }}</span>
+              <span class="entry__separator">,</span>
+              <span class="entry__location">{{ edu.location }}</span>
+              <span class="entry__role">— <em>{{ edu.degree }}</em></span>
+            </div>
+            <span class="entry__period">{{ edu.period }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Courses -->
+    <section class="resume__section">
+      <h2 class="resume__section-title">Courses</h2>
+      <ul class="courses-list">
+        <li *ngFor="let course of courses" class="courses-list__item">
+          <span class="courses-list__name">{{ course.name }}</span>
+          <span class="courses-list__provider">{{ course.provider }}</span>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+</main>

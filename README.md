@@ -1,11 +1,37 @@
-# STATIC
+# imanamini.ir — Angular Portfolio
 
-**This directory is not required, you can delete it if you don't want to use it.**
+Personal portfolio site for Iman Amini, built with Angular 21 (standalone components, lazy-loaded routes).
 
-This directory contains your static files.
-Each file inside this directory is mapped to `/`.
-Thus you'd want to delete this README.md before deploying to production.
+## Routes
+| Path | Description |
+|------|-------------|
+| `/` | Home |
+| `/resume` | Resume / CV |
 
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
+## Development
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/assets#static).
+```bash
+npm install
+npx ng serve
+# → http://localhost:4200
+```
+
+## Deploy to GitHub Pages
+
+Source code lives on the `develop` branch.  
+GitHub Pages serves from the `master` branch (build output only).
+
+```bash
+./deploy.sh
+```
+
+The script:
+1. Builds with `--base-href /`
+2. Copies `index.html` → `404.html` (SPA routing fix for GitHub Pages)
+3. Adds `CNAME` and `.nojekyll` to the output
+4. Pushes the `dist/` contents to `master` via a git worktree
+
+## Tech Stack
+- Angular 21 (standalone, lazy routes)
+- SCSS
+- GitHub Pages (custom domain: imanamini.ir)
