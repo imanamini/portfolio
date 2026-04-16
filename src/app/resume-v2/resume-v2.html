@@ -3,7 +3,7 @@
   <!-- ─── Sidebar ──────────────────────────────────────────── -->
   <aside class="side">
     <div class="side__identity">
-      <h1 class="side__name">{{ r.name }}</h1>
+      <h1 class="side__name" (click)="onNameClick()">{{ r.name }}</h1>
       <p class="side__role">{{ r.title }}</p>
     </div>
 

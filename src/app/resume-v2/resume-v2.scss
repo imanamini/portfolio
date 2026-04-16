@@ -314,3 +314,50 @@ $accent-bg: rgba(99,102,241,0.08);
     }
   }
 }
+
+// ─── Name click hint ───────────────────────────────────────────────
+.side__name {
+  cursor: default;
+  user-select: none;
+}
+
+// ─── Print / PDF ───────────────────────────────────────────────────
+@media print {
+  @page { margin: 1cm 1.2cm; size: A4; }
+
+  // Switch sidebar to light for print
+  .side {
+    background: #f8fafc;
+    color: #0f172a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .side__role { color: #6366f1; }
+
+  .side__contact li,
+  .side__contact a { color: #475569; }
+
+  .side__heading { color: #94a3b8; }
+
+  .side__edu span,
+  .side__cert-meta { color: #94a3b8 !important; }
+
+  .tag {
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+  }
+
+  .main__summary {
+    background: rgba(99,102,241,0.06);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .project-card { break-inside: avoid; }
+
+  .timeline { break-inside: avoid; }
+}

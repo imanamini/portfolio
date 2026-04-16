@@ -1,7 +1,7 @@
 <article class="cv">
   <!-- Header -->
   <header class="cv-header">
-    <h1 class="cv-header__name">{{ r.name }}</h1>
+    <h1 class="cv-header__name" (click)="onNameClick()">{{ r.name }}</h1>
     <p class="cv-header__title">{{ r.title }}</p>
     <div class="cv-header__links">
       <a [href]="'mailto:' + r.email">{{ r.email }}</a>
