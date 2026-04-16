@@ -36,7 +36,7 @@ export const RESUME = {
     'Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. ' +
     'Led development of Credit & BNPL flows serving 10M+ users at Iran\'s largest digital payment platform. ' +
     'Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. ' +
-    'Experienced with React/Next.js, Vue/Nuxt, and NX monorepo architectures.',
+    'Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in collaborative, cross-functional teams.',
 
   skills: [
     'Angular', 'TypeScript', 'RxJS', 'NX Monorepo',
@@ -59,8 +59,12 @@ export const RESUME = {
         'Migrated three standalone Angular apps into a unified NX monorepo with shared libs, consolidating dependencies and enabling cross-app code reuse.',
         'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine unit tests, Playwright E2E tests, and a dual snapshot system (style + visual) as backward-compatibility guards.',
         'Engineered a 7-step credit pre-registration state machine with conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL–step synchronization.',
+        'Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document inspection — implementing multi-touch distance calculation, boundary-constrained CSS transforms, and rAF-throttled magnifier with rotation-aware coordinate mapping.',
+        'Implemented a custom Angular preloading strategy using route metadata (preload: true, critical: true) with retryImport wrappers for network-resilient lazy module loading.',
         'Designed a Claude AI–assisted test generation pipeline for 75 Angular packages, engineering a 900-line reusable prompt specification encoding testing principles and Angular patterns.',
+        'Built a zero-maintenance test catalog CLI that auto-discovers specs across all 75 packages, counts test cases via regex, and generates a typed TypeScript data file powering a live status dashboard.',
         'Adopted Angular 17+ standalone components, OnPush change detection, and signal-based computed properties across the entire Credit/BNPL library.',
+        'Built biometric identity verification feature with selfie video capture and liveness photo for digital document signing.',
       ],
     },
     {
