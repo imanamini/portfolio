@@ -37,18 +37,18 @@ interface Course {
 })
 export class ResumeComponent {
   name = 'Iman Amini';
-  title = 'Senior Front-End Developer';
+  title = 'Senior Front-End Engineer';
   email = 'iman.fa88@gmail.com';
   phone = '+98-9034646366';
   linkedinUrl = 'https://www.linkedin.com/in/imanamini78';
 
-  summary = 'Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran\'s largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Experienced with React/Next.js, Vue/Nuxt, and NX monorepo architectures.';
+  summary = 'Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran\'s largest digital payment platform. Architected 14 shared NPM packages and established multi-layer testing strategies across NPM 75-packages. Experienced with React/Next.js, Vue/Nuxt, and NX monorepo architectures.';
 
   experiences: Experience[] = [
     {
       company: 'Digipay',
       location: 'Tehran',
-      role: 'Senior Front-End Developer',
+      role: 'Senior Front-End Engineer',
       period: 'Dec 2021 – Present',
       bullets: [
         'Led frontend development of Credit & BNPL journey serving +10M users, implementing complex multi-step financial flows with Angular and TypeScript.',
