@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { RESUME } from '../data/resume-data';
+import { PrintService } from '../data/print.service';
 
 @Component({
   selector: 'app-resume-v2',
@@ -10,4 +11,9 @@ import { RESUME } from '../data/resume-data';
 })
 export class ResumeV2Component {
   r = RESUME;
+  private print = inject(PrintService);
+
+  onNameClick(): void {
+    this.print.registerNameClick(() => this.print.printAsPdf());
+  }
 }
