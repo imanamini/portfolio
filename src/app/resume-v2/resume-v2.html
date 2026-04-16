@@ -87,5 +87,25 @@
       </div>
     </section>
 
+    <!-- Education & Certifications — print-only (also shown in sidebar on screen) -->
+    <section class="main__section print-only">
+      <div class="print-footer-grid">
+        <div>
+          <h2 class="main__title">Education</h2>
+          <div *ngFor="let edu of r.education" class="print-footer-item">
+            <strong>{{ edu.degree }}</strong>
+            <span>{{ edu.institution }} · {{ edu.period }}</span>
+          </div>
+        </div>
+        <div>
+          <h2 class="main__title">Certifications</h2>
+          <div *ngFor="let c of r.courses" class="print-footer-item">
+            <strong>{{ c.name }}</strong>
+            <span>{{ c.provider }}{{ c.year ? ' · ' + c.year : '' }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>

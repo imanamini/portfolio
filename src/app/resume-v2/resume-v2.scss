@@ -315,6 +315,24 @@ $accent-bg: rgba(99,102,241,0.08);
   }
 }
 
+// ─── Print-only elements (hidden on screen) ───────────────────────
+.print-only { display: none; }
+
+.print-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2rem;
+}
+
+.print-footer-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.4rem;
+
+  strong { font-size: 0.8rem; font-weight: 500; }
+  span   { font-size: 0.73rem; color: #64748b; }
+}
+
 // ─── Name click hint ───────────────────────────────────────────────
 .side__name {
   cursor: default;
@@ -323,41 +341,135 @@ $accent-bg: rgba(99,102,241,0.08);
 
 // ─── Print / PDF ───────────────────────────────────────────────────
 @media print {
-  @page { margin: 1cm 1.2cm; size: A4; }
+  // margin: 0 removes the browser's date/url/title header+footer entirely
+  @page { margin: 0; size: A4; }
 
-  // Switch sidebar to light for print
-  .side {
-    background: #f8fafc;
-    color: #0f172a;
+  // ── Switch from two-column grid to single-column doc ──
+  .page {
+    display: block;
+    padding: 1.4cm 1.6cm;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  .side__role { color: #6366f1; }
+  // ── Sidebar becomes a compact top-bar ─────────────────
+  .side {
+    background: transparent;
+    color: #0f172a;
+    padding: 0;
+    margin-bottom: 0.8rem;
+    display: block;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.8rem;
+  }
 
-  .side__contact li,
-  .side__contact a { color: #475569; }
+  .side__identity {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    border-bottom: none;
+    padding-bottom: 0.2rem;
+  }
 
-  .side__heading { color: #94a3b8; }
+  .side__name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
 
-  .side__edu span,
-  .side__cert-meta { color: #94a3b8 !important; }
+  .side__role {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6366f1;
+    margin: 0;
+  }
+
+  // Contact: one row
+  .side__block:nth-child(2) { // Contact block
+    margin-top: 0.25rem;
+  }
+
+  .side__contact {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+
+    li { font-size: 0.75rem; color: #475569; }
+    a  { color: #475569; text-decoration: none; }
+  }
+
+  // Tech stack: compact inline row
+  .side__block:nth-child(3) {
+    margin-top: 0.4rem;
+  }
+
+  .tags { gap: 0.2rem; }
 
   .tag {
-    background: #e2e8f0;
-    color: #1e293b;
-    border: 1px solid #cbd5e1;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.62rem;
+    background: #f1f5f9;
+    color: #334155;
+    border-radius: 3px;
+  }
+
+  // Education + Certifications: hide from sidebar (not needed in print — already in main area if needed)
+  // Actually let's show them inline compactly
+  .side__block:nth-child(4),   // Education
+  .side__block:nth-child(5) {  // Certifications
+    display: none;
+  }
+
+  .side__heading { display: none; }
+
+  // ── Main becomes full-width ────────────────────────────
+  .main {
+    padding: 0;
+    margin-top: 1rem;
+    gap: 1.2rem;
   }
 
   .main__summary {
     background: rgba(99,102,241,0.06);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    border-left: 3px solid #6366f1;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  .main__title {
+    font-size: 0.6rem;
+    color: #6366f1;
+  }
+
+  .main__section + .main__section {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.2rem;
+  }
+
+  // ── Timeline ──────────────────────────────────────────
+  .timeline {
+    break-inside: avoid;
+
+    &__list li { font-size: 0.78rem; }
+    &__company { font-size: 0.85rem; }
+    &__period  { font-size: 0.72rem; }
+  }
+
+  // ── Projects grid → single column for print ───────────
+  .projects-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .project-card {
+    break-inside: avoid;
+    padding: 0.65rem 0.8rem;
+
+    &__list li { font-size: 0.76rem; }
   }
 
   a { color: inherit; text-decoration: none; }
 
-  .project-card { break-inside: avoid; }
-
-  .timeline { break-inside: avoid; }
+  .print-only { display: block; }
 }
