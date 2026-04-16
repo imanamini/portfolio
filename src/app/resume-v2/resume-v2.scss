@@ -146,11 +146,13 @@ $accent-bg: rgba(99,102,241,0.08);
   }
 
   &__summary {
-    color: $mid;
-    line-height: 1.75;
-    font-size: 0.9rem;
+    color: $dark;
+    line-height: 1.8;
+    font-size: 0.88rem;
+    background: $accent-bg;
     border-left: 3px solid $accent;
-    padding-left: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0 6px 6px 0;
   }
 
   &__title {
