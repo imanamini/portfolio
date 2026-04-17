@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'resume',
+    loadComponent: () => import('./portfolio-v2/portfolio-v2').then(m => m.PortfolioV2Component),
     pathMatch: 'full'
   },
   {
@@ -24,6 +24,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'resume'
+    redirectTo: ''
   }
 ];
