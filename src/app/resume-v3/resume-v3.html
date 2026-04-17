@@ -1,0 +1,194 @@
+<nav class="nav" [class.nav--scrolled]="scrolled()">
+  <div class="nav__inner">
+    <a href="#top" class="nav__brand">
+      <span class="nav__logo">IA</span>
+      <span class="nav__name">iman<span class="nav__dot">.</span>amini</span>
+    </a>
+    <div class="nav__links">
+      <a href="#work">Work</a>
+      <a href="#stack">Stack</a>
+      <a href="#education">Background</a>
+      <a href="#contact">Contact</a>
+      <span class="nav__sep"></span>
+      <button class="nav__theme" type="button" (click)="toggleTheme()" aria-label="Toggle theme">
+        <svg *ngIf="theme() === 'dark'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg *ngIf="theme() === 'light'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="v3">
+
+  <section id="top" class="hero">
+    <div class="hero__pill">
+      <span class="hero__pill-dot"><span></span></span>
+      Open to senior frontend roles &middot; Remote-friendly
+    </div>
+    <h1 class="hero__name" (click)="onNameClick()">
+      {{ firstName }}
+      <span class="hero__name-last">{{ lastName }}</span>
+    </h1>
+    <div class="hero__meta">
+      <span class="hero__chip">{{ role }}</span>
+      <span class="hero__loc">{{ location }}</span>
+    </div>
+    <p class="hero__pitch">
+      I lead frontend for
+      <span class="hero__accent">Credit &amp; BNPL flows serving 10M+ users</span>
+      at Iran&rsquo;s largest digital payment platform &mdash; architecting shared packages, taming a
+      <span class="hero__strong">75-package monorepo</span>,
+      and keeping a multi-layer testing strategy fast and boring.
+    </p>
+    <div class="hero__ctas">
+      <a href="#contact" class="cta cta--primary">
+        Get in touch
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="Iman Amini Resume.pdf" class="cta cta--secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download CV
+      </a>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stats__inner">
+      <div *ngFor="let s of stats; let i = index" class="stats__cell" [class.stats__cell--bordered]="i > 0">
+        <div class="stats__value">{{ s.value }}</div>
+        <div class="stats__label">{{ s.label }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="section">
+    <div class="kicker"><span class="kicker__num">01</span><span class="kicker__bar"></span><span class="kicker__label">Experience</span></div>
+    <h2 class="heading-xl">Shipping fintech at scale.</h2>
+    <div class="exp">
+      <article *ngFor="let job of experiences; let i = index" class="exp__item">
+        <div class="exp__side">
+          <div class="exp__period">{{ job.period }}</div>
+          <div class="exp__location">{{ job.location }}</div>
+        </div>
+        <div class="exp__body">
+          <div class="exp__head">
+            <h3 class="exp__company">{{ job.company }}</h3>
+            <span class="exp__role">{{ job.role }}</span>
+          </div>
+          <p *ngIf="job.summary" class="exp__summary">{{ job.summary }}</p>
+          <div *ngIf="job.tags.length" class="exp__tags">
+            <span *ngFor="let t of job.tags" class="exp__tag">{{ t }}</span>
+          </div>
+          <ul *ngIf="job.featured.length" class="exp__featured">
+            <li *ngFor="let f of job.featured">
+              <span class="exp__dot"></span>
+              <span>{{ f }}</span>
+            </li>
+          </ul>
+          <ng-container *ngIf="job.bullets.length">
+            <button type="button" class="exp__toggle" (click)="toggleExpanded(i)">
+              {{ isExpanded(i) ? 'Hide details' : 'Show ' + job.bullets.length + ' more details' }}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.exp__toggle-icon--open]="isExpanded(i)" class="exp__toggle-icon"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <ul *ngIf="isExpanded(i)" class="exp__bullets">
+              <li *ngFor="let b of job.bullets; let j = index">
+                <span class="exp__idx">{{ pad(j) }}</span>
+                <span>{{ b }}</span>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="stack" class="section">
+    <div class="kicker"><span class="kicker__num">02</span><span class="kicker__bar"></span><span class="kicker__label">Toolkit</span></div>
+    <h2 class="heading-xl">The stack I reach for.</h2>
+    <div class="stack">
+      <div class="stack__col">
+        <div class="stack__heading">Core &middot; daily</div>
+        <div class="stack__list">
+          <div *ngFor="let t of stackPrimary" class="stack__row">
+            <span class="stack__name">{{ t.name }}</span>
+            <span class="stack__years">{{ t.years }}y</span>
+          </div>
+        </div>
+      </div>
+      <div class="stack__col stack__col--right">
+        <div class="stack__heading">Proficient</div>
+        <div class="stack__chips">
+          <span *ngFor="let t of stackSecondary" class="stack__chip">{{ t }}</span>
+        </div>
+        <div class="stack__heading stack__heading--small">Also familiar</div>
+        <div class="stack__familiar">
+          <span *ngFor="let t of stackFamiliar">{{ t }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker"><span class="kicker__num">03</span><span class="kicker__bar"></span><span class="kicker__label">Selected work</span></div>
+    <h2 class="heading-xl">Problems I&rsquo;ve enjoyed solving.</h2>
+    <div class="highlights">
+      <div *ngFor="let it of highlights" class="highlights__item">
+        <div class="highlights__tag">{{ it.tag }}</div>
+        <div class="highlights__title">{{ it.title }}</div>
+        <div class="highlights__body">{{ it.body }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="section">
+    <div class="kicker"><span class="kicker__num">04</span><span class="kicker__bar"></span><span class="kicker__label">Background</span></div>
+    <h2 class="heading-xl">Education &amp; continuous learning.</h2>
+    <div class="bg">
+      <div class="bg__col">
+        <div class="bg__heading">Education</div>
+        <div *ngFor="let e of r.education" class="bg__edu">
+          <div class="bg__degree">{{ e.degree }}</div>
+          <div class="bg__school">{{ e.institution }}</div>
+          <div class="bg__period">{{ e.period }}</div>
+        </div>
+      </div>
+      <div class="bg__col">
+        <div class="bg__heading">Recent courses</div>
+        <div class="bg__courses">
+          <div *ngFor="let c of r.courses" class="bg__course">
+            <div>
+              <div class="bg__course-title">{{ c.name }}</div>
+              <div class="bg__course-source">{{ c.provider }}</div>
+            </div>
+            <div class="bg__course-year">{{ c.year }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section section--contact">
+    <div class="contact">
+      <div class="kicker"><span class="kicker__num">05</span><span class="kicker__bar"></span><span class="kicker__label">Let&rsquo;s talk</span></div>
+      <h2 class="heading-xl contact__title">
+        Got a hard frontend problem?
+        <span class="contact__italic">I&rsquo;d love to hear about it.</span>
+      </h2>
+      <div class="contact__grid">
+        <a *ngFor="let c of contactLinks" [href]="c.href" target="_blank" rel="noopener" class="contact__link">
+          <div class="contact__label">{{ c.label }}</div>
+          <div class="contact__val">{{ c.value }} &#x2197;</div>
+        </a>
+      </div>
+    </div>
+    <div class="footer">
+      <span>&copy; 2026 Iman Amini</span>
+      <span>Built with care &middot; v3</span>
+    </div>
+  </section>
+</main>

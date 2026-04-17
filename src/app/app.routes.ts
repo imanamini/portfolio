@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./resume-v2/resume-v2').then(m => m.ResumeV2Component)
   },
   {
+    path: 'resume/v3',
+    loadComponent: () => import('./resume-v3/resume-v3').then(m => m.ResumeV3Component)
+  },
+  {
     path: '**',
     redirectTo: 'resume'
   }
