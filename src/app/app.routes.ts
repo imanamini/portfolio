@@ -23,6 +23,10 @@ export const routes: Routes = [
     loadComponent: () => import('./resume-v3/resume-v3').then(m => m.ResumeV3Component)
   },
   {
+    path: 'deck/digipay-libs',
+    loadComponent: () => import('./digipay-deck/digipay-deck').then(m => m.DigipayDeckComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
