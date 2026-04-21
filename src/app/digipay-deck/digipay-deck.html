@@ -40,4 +40,53 @@
       <div class="right"><span><span class="status-dot"></span>CI green</span></div>
     </div>
   </section>
+
+  <!-- ===== 2. THE PAIN ============================================== -->
+  <section class="slide dot-bg" data-label="The Pain">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot warn"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">before.log</span></div>
+      <div class="right"><div class="kv">status: <b style="color:var(--warn)">bottleneck</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">02 · The Problem</div>
+      <h2 class="h-1" style="max-width: 1500px; margin-bottom: 40px;">
+        QA was the <span style="color: var(--warn);">firewall</span><br>for every library release.
+      </h2>
+      <p class="body-lg" style="max-width: 1100px; margin-bottom: 60px;">
+        A one-line change inside <span class="kw">ngx-button</span> could ripple through every product. Without automation, the only net was manual regression across every consumer app — on every release.
+      </p>
+
+      <div class="grid-3" style="margin-top: 20px;">
+        <div class="card">
+          <div class="card-num">01 · BLAST RADIUS</div>
+          <h4 class="h-3" style="color: var(--ink);">One change, N apps</h4>
+          <p class="body-md" style="margin-top: 14px;">
+            Every library is consumed by multiple production apps. A bug in <span class="kw">ngx-utils</span> could surface in half of Digipay.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-num">02 · HUMAN COST</div>
+          <h4 class="h-3" style="color: var(--ink);">QA regression per release</h4>
+          <p class="body-md" style="margin-top: 14px;">
+            Every release forced QA to re-run a manual sweep across consumer screens. Slow, expensive, and error-prone.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-num">03 · DEV CHILL</div>
+          <h4 class="h-3" style="color: var(--ink);">Developers stopped refactoring</h4>
+          <p class="body-md" style="margin-top: 14px;">
+            The safest change was <span class="kw">no change</span>. Tech debt grew because nobody wanted to trigger another full QA pass.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">02 / 10</span><span class="sep">·</span><span>before</span>
+      <div class="right"><span style="color:var(--warn)"><span class="status-dot" style="background:var(--warn);box-shadow:0 0 8px rgba(255,176,32,.6);"></span>QA bottleneck</span></div>
+    </div>
+  </section>
+
 </deck-stage>
