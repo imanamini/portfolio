@@ -216,4 +216,70 @@
     </div>
   </section>
 
+  <!-- ===== 5. REAL E2E TEST ========================================= -->
+  <section class="slide" data-label="Real Test">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot ok"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">tests <span class="sep">/</span> e2e <span class="sep">/</span> <span class="file">ngx-spinner.spec.ts</span></div>
+      <div class="right"><div class="kv">passing: <b>all</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">05 · Demo — A Real E2E Test</div>
+      <h2 class="h-2" style="margin-bottom: 32px;">We don't check that it rendered.<br><span class="muted">We check the exact computed pixel.</span></h2>
+
+      <div class="grid-2" style="gap: 40px; grid-template-columns: 1.4fr 1fr; align-items: start;">
+        <div class="code framed" style="font-size: 16px; line-height: 1.55;">
+          <div class="code-head">
+            <span class="tag">playwright</span>
+            <span class="fname">ngx-spinner.spec.ts — Size Contract</span>
+          </div>
+<pre><span class="c-kw">const</span> sizeSpec = &#123;
+  sm: &#123; size: <span class="c-str">'16px'</span>, stroke: <span class="c-str">'3px'</span> &#125;,
+  md: &#123; size: <span class="c-str">'20px'</span>, stroke: <span class="c-str">'4px'</span> &#125;,
+  lg: &#123; size: <span class="c-str">'24px'</span>, stroke: <span class="c-str">'4px'</span> &#125;,
+  xl: &#123; size: <span class="c-str">'32px'</span>, stroke: <span class="c-str">'4px'</span> &#125;,
+&#125;;
+
+<span class="c-kw">for</span> (<span class="c-kw">const</span> [name, expected] <span class="c-kw">of</span> Object.entries(sizeSpec)) &#123;
+  <span class="c-fn">test</span>(<span class="c-str">`"$&#123;name&#125;" → $&#123;expected.size&#125;`</span>, <span class="c-kw">async</span> (&#123; page &#125;) =&gt; &#123;
+    <span class="c-kw">const</span> el = page.<span class="c-fn">locator</span>(<span class="c-str">`ngx-spinner[size="$&#123;name&#125;"] .spinner`</span>);
+    <span class="c-kw">const</span> actual = <span class="c-kw">await</span> el.<span class="c-fn">evaluate</span>(el =&gt; &#123;
+      <span class="c-kw">const</span> s = getComputedStyle(el);
+      <span class="c-kw">return</span> &#123;
+        spinnerSize: s.<span class="c-fn">getPropertyValue</span>(<span class="c-str">'--spinner-size'</span>).<span class="c-fn">trim</span>(),
+        strokeWidth: s.<span class="c-fn">getPropertyValue</span>(<span class="c-str">'--stroke-width'</span>).<span class="c-fn">trim</span>(),
+      &#125;;
+    &#125;);
+    <span class="c-fn">expect</span>(actual.spinnerSize).<span class="c-fn">toBe</span>(expected.size);   <span class="c-com">// ← exact</span>
+    <span class="c-fn">expect</span>(actual.strokeWidth).<span class="c-fn">toBe</span>(expected.stroke); <span class="c-com">// ← exact</span>
+  &#125;);
+&#125;</pre>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div class="card">
+            <div class="card-num">What this catches</div>
+            <h4 class="h-4" style="margin-top: 10px; margin-bottom: 10px;">Design token drift.</h4>
+            <p class="body-sm">Someone bumps <span class="kw">--spinner-size</span> from 16→15px "to fit"? Fails in CI, blocks the PR.</p>
+          </div>
+          <div class="card">
+            <div class="card-num">What humans miss</div>
+            <h4 class="h-4" style="margin-top: 10px; margin-bottom: 10px;">Four sizes × two colors = 8 variants.</h4>
+            <p class="body-sm">No QA is going to eyeball every variant every release. Playwright does, silently.</p>
+          </div>
+          <div class="card brand">
+            <div class="card-num" style="color:var(--brand-soft)">Pattern</div>
+            <h4 class="h-4" style="margin-top: 10px;">This pattern repeats across 38 specs — every component has a Size/Color/State contract block.</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">05 / 10</span><span class="sep">·</span><span>real code</span>
+      <div class="right"><span><span class="status-dot"></span>pattern: size contract</span></div>
+    </div>
+  </section>
+
 </deck-stage>
