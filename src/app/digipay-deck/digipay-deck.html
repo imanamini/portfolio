@@ -282,4 +282,87 @@
     </div>
   </section>
 
+  <!-- ===== 6. CLAUDE + RULES ======================================== -->
+  <section class="slide" data-label="Claude and Rules">
+    <div class="glow-brand" style="top: -280px; left: -220px; opacity:0.55;"></div>
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">.claude <span class="sep">/</span> commands <span class="sep">/</span> <span class="file">write-package-test.md</span></div>
+      <div class="right"><div class="kv">ai: <b style="color:var(--brand-soft)">claude</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">06 · Claude AI — Rules &amp; Slash Commands</div>
+      <h2 class="h-2" style="margin-bottom: 36px;">We dictate the <span class="accent">rules</span>. Claude writes the assertions.</h2>
+
+      <div class="grid-2" style="gap: 40px; align-items: start;">
+        <div class="code framed">
+          <div class="code-head">
+            <span class="tag">memory</span>
+            <span class="fname">CLAUDE.md — project rules (excerpt)</span>
+          </div>
+<pre><span class="c-com"># Testing Conventions</span>
+
+<span class="c-kw">Use</span> <span class="c-attr">fixture.componentRef.setInput()</span> for signal inputs.
+
+<span class="c-kw">Every</span> component with <span class="c-str">OnPush</span> <span class="c-kw">MUST</span> include a
+<span class="c-str">'OnPush change detection'</span> describe block proving
+DOM does <span class="c-kw">NOT</span> update until detectChanges().
+
+<span class="c-com"># E2E Spec Structure — required sections:</span>
+  - Rendering
+  - Size / Color / State Contract
+  - Animation Contract
+  - Style Structure (backward-compat snapshot)
+  - Visual Regression (toHaveScreenshot)
+  - Responsive
+  - Input Variant Contract
+
+<span class="c-com"># Snapshot rule:</span>
+Never capture <span class="c-str">'background'</span> shorthand — contains
+animated scroll position. Use <span class="c-str">'backgroundImage'</span>.</pre>
+        </div>
+
+        <div class="code framed">
+          <div class="code-head">
+            <span class="tag">command</span>
+            <span class="fname">/write-package-test $COMPONENT_NAME</span>
+          </div>
+<pre><span class="c-com"># Full Input Coverage is MANDATORY.</span>
+
+Every <span class="c-attr">&#64;Input()</span> and every input signal
+<span class="c-kw">MUST</span> be covered.
+
+<span class="c-kw">If</span> the demo page does not expose a control or
+variant for a given input →
+  modify <span class="c-str">projects/demo/...</span> to add it.
+<span class="c-kw">Do not</span> skip the test.
+
+<span class="c-com"># Test Failure Learning Protocol (MANDATORY)</span>
+<span class="c-kw">When</span> a new rule is discovered from a failure:
+  1. Apply to <span class="c-kw">ALL</span> existing specs.
+  2. Document it in TESTING.md <span class="c-kw">AND</span>
+     in this command file.
+
+<span class="c-com"># Output:</span>
+  ✦ projects/&lt;name&gt;/src/lib/<span class="c-attr">*.spec.ts</span>
+  ✦ tests/e2e/<span class="c-attr">&lt;name&gt;.spec.ts</span></pre>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap;">
+        <span class="chip brand"><span class="dot"></span>Project memory</span>
+        <span class="chip brand"><span class="dot"></span>Reusable skill</span>
+        <span class="chip"><span class="dot"></span>Committed to git</span>
+        <span class="chip"><span class="dot"></span>Team-wide consistency</span>
+        <span class="chip"><span class="dot"></span>Every failure → new rule</span>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">06 / 10</span><span class="sep">·</span><span>CLAUDE.md + slash commands</span>
+      <div class="right"><span><span class="status-dot"></span>deterministic output</span></div>
+    </div>
+  </section>
+
 </deck-stage>
