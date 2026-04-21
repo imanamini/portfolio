@@ -440,4 +440,76 @@ variant for a given input →
     </div>
   </section>
 
+  <!-- ===== 8. RESULTS =============================================== -->
+  <section class="slide dot-bg" data-label="Results">
+    <div class="glow-brand" style="top: -280px; right: -240px;"></div>
+    <div class="chrome-top">
+      <div class="dots"><span class="dot ok"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">results.md</span></div>
+      <div class="right"><div class="kv">verdict: <b style="color:var(--ok);">shipping faster</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">08 · Results</div>
+      <h2 class="h-1" style="margin-bottom: 48px;">What changed.</h2>
+
+      <div class="grid-3" style="gap: 32px; margin-bottom: 40px;">
+        <div class="card" style="padding: 36px;">
+          <div class="card-num">TIME TO SPEC A COMPONENT</div>
+          <div style="display:flex; align-items:baseline; gap: 18px; margin: 20px 0; white-space: nowrap;">
+            <span style="font-size:64px; font-weight:700; letter-spacing:-0.04em; color:var(--ink-dim); text-decoration:line-through; text-decoration-color:rgba(255,255,255,0.2);">1d</span>
+            <span style="color:var(--brand-soft); font-family:var(--mono); font-size:24px;">→</span>
+            <span style="font-size:64px; font-weight:700; letter-spacing:-0.04em; color:var(--brand-soft);">&lt;1h</span>
+          </div>
+          <p class="body-md">Claude does the first pass. Dev reviews &amp; tunes edge cases.</p>
+        </div>
+
+        <div class="card" style="padding: 36px;">
+          <div class="card-num">QA REGRESSION LOAD</div>
+          <div style="margin: 20px 0;">
+            <div class="bar" style="margin-bottom: 10px;"><div class="fill" style="--pct: 1;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:14px; color:var(--ink-mute);">
+              <span>before</span><span>lib-level coverage: ~0%</span>
+            </div>
+            <div class="bar" style="margin-top: 22px; margin-bottom: 10px;"><div class="fill" style="--pct: 0.12;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:14px; color:var(--ink-mute);">
+              <span>after</span><span>only product-level flows</span>
+            </div>
+          </div>
+          <p class="body-md" style="margin-top: 6px;">QA now focuses on real user journeys — not library plumbing.</p>
+        </div>
+
+        <div class="card brand" style="padding: 36px;">
+          <div class="card-num" style="color:var(--brand-soft);">DEVELOPER CONFIDENCE</div>
+          <h4 class="h-2" style="margin: 20px 0; font-size: 48px;">"Refactor<br>without asking."</h4>
+          <p class="body-md">Tests are the contract. If CI's green, the change is safe.</p>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="metric">
+          <div class="num" style="font-size:56px;">1,000+</div>
+          <div class="label">assertions / release</div>
+        </div>
+        <div class="metric">
+          <div class="num" style="font-size:56px;">38</div>
+          <div class="label">E2E specs · all green</div>
+        </div>
+        <div class="metric">
+          <div class="num" style="font-size:56px;">0</div>
+          <div class="label">QA tickets for lib-level regressions (last cycle)</div>
+        </div>
+        <div class="metric">
+          <div class="num brand" style="font-size:56px;">1</div>
+          <div class="label">command to spec a new component</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">08 / 10</span><span class="sep">·</span><span>outcomes</span>
+      <div class="right"><span><span class="status-dot"></span>measurable wins</span></div>
+    </div>
+  </section>
+
 </deck-stage>
