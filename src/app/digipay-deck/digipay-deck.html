@@ -89,4 +89,74 @@
     </div>
   </section>
 
+  <!-- ===== 3. THE MONOREPO ========================================== -->
+  <section class="slide grid-bg" data-label="The Monorepo">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">projects/</span></div>
+      <div class="right"><div class="kv">packages: <b>76</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">03 · The Monorepo</div>
+      <h2 class="h-1" style="margin-bottom: 48px;">
+        76 shared libraries across Digipay.<br><span class="muted" style="font-weight:500;">One demo app as the test harness.</span>
+      </h2>
+
+      <div class="grid-2" style="gap: 80px; grid-template-columns: 1.1fr 1fr; align-items: start;">
+        <div class="code framed numbered">
+          <div class="code-head">
+            <span class="tag">tree</span>
+            <span class="fname">digipay-libs/projects</span>
+          </div>
+<pre><span class="ln">01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13</span><span><span class="c-com">// 76 publishable libraries — @digipay/*</span>
+<span class="c-kw">projects</span>/
+ ├── <span class="c-attr">ngx-button</span>/        <span class="c-com">// UI component</span>
+ ├── <span class="c-attr">ngx-spinner</span>/       <span class="c-com">// UI component</span>
+ ├── <span class="c-attr">ngx-checkbox</span>/      <span class="c-com">// UI component</span>
+ ├── <span class="c-attr">ngx-utils</span>/         <span class="c-com">// utility belt (sub-paths)</span>
+ ├── <span class="c-attr">payment</span>/           <span class="c-com">// platform bridge</span>
+ ├── <span class="c-attr">ngx-api-config</span>/    <span class="c-com">// config service</span>
+ ├── ... <span class="c-com">(70 more)</span>
+ └── <span class="c-attr">demo</span>/              <span class="c-com">// single test harness app</span>
+   └── /package/<span class="c-str">&lt;library-name&gt;</span>  <span class="c-com">// one URL per lib</span></span></pre>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <div class="card">
+            <div class="card-num">Design decision</div>
+            <h4 class="h-3" style="margin-top: 10px;">The demo app is the seam.</h4>
+            <p class="body-md" style="margin-top: 14px;">
+              Each library gets a standalone demo page at <span class="kw">/package/&lt;name&gt;</span>. Playwright navigates to that URL — no build step, no published package, no mocks.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-num">Why it matters</div>
+            <h4 class="h-3" style="margin-top: 10px;">Live source, not dist/.</h4>
+            <p class="body-md" style="margin-top: 14px;">
+              Demo imports libraries <span class="kw">directly from source</span>. A change shows up instantly — no publish loop to test.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">03 / 10</span><span class="sep">·</span><span>projects/*</span>
+      <div class="right"><span><span class="status-dot"></span>76 packages · 1 harness</span></div>
+    </div>
+  </section>
+
 </deck-stage>
