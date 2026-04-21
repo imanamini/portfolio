@@ -159,4 +159,61 @@
     </div>
   </section>
 
+  <!-- ===== 4. TEST ARCHITECTURE ===================================== -->
+  <section class="slide" data-label="Architecture">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">architecture.md</span></div>
+      <div class="right"><div class="kv">layers: <b>2</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">04 · Test Architecture</div>
+      <h2 class="h-1" style="margin-bottom: 60px;">Two layers. Different jobs.</h2>
+
+      <div class="grid-2" style="gap: 48px;">
+        <div class="card brand" style="padding: 40px;">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom: 20px;">
+            <span class="chip brand"><span class="dot"></span>UNIT</span>
+            <span class="muted" style="font-family:var(--mono);font-size:14px;">Karma + Jasmine</span>
+          </div>
+          <h3 class="h-2" style="margin-bottom: 24px;">Contract verification.</h3>
+          <p class="body-md" style="margin-bottom: 28px; color: var(--ink);">
+            Lives next to the component. Runs headless. Cheap. Fast. Asserts <span class="kw">what</span> the component does, not how it looks.
+          </p>
+          <ul class="arrow-list" style="font-size: 19px;">
+            <li>Default &amp; variant input values</li>
+            <li>Output signals &amp; event emission</li>
+            <li>OnPush change-detection behavior</li>
+            <li>Class / style bindings per state</li>
+            <li style="border-bottom:none;"><span class="accent">100% code coverage target</span></li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding: 40px; border-color: var(--line-strong);">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom: 20px;">
+            <span class="chip" style="color:var(--violet); border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.08);"><span class="dot"></span>E2E</span>
+            <span class="muted" style="font-family:var(--mono);font-size:14px;">Playwright · Chromium</span>
+          </div>
+          <h3 class="h-2" style="margin-bottom: 24px;">Visual + interaction contract.</h3>
+          <p class="body-md" style="margin-bottom: 28px; color: var(--ink);">
+            Navigates to the demo page. Measures <span class="kw">computed styles</span>, captures snapshots, clicks things. Catches regressions QA would catch — but in seconds, not days.
+          </p>
+          <ul class="arrow-list" style="font-size: 19px;">
+            <li>Computed CSS per variant (size, color, state)</li>
+            <li>Animation contracts (duration, easing, name)</li>
+            <li>Style &amp; visual snapshots per OS/browser</li>
+            <li>Responsive viewports (mobile / tablet / desktop)</li>
+            <li style="border-bottom:none;">Real user interactions against the live demo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">04 / 10</span><span class="sep">·</span><span>unit + e2e</span>
+      <div class="right"><span><span class="status-dot"></span>both layers required</span></div>
+    </div>
+  </section>
+
 </deck-stage>
