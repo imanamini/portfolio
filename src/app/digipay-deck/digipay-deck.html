@@ -512,4 +512,100 @@ variant for a given input →
     </div>
   </section>
 
+  <!-- ===== 9. LESSONS (3 items) ===================================== -->
+  <section class="slide" data-label="Lessons">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot warn"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">TESTING.md</span></div>
+      <div class="right"><div class="kv">rules: <b>learned the hard way</b></div></div>
+    </div>
+
+    <div class="slide-body" style="display:flex; flex-direction:column; justify-content:center;">
+      <div class="eyebrow">09 · Lessons Learned</div>
+      <h2 class="h-1" style="margin-bottom: 72px;">Every failure became a rule.</h2>
+
+      <div class="grid-3" style="gap: 40px;">
+        <div class="card" style="padding: 48px;">
+          <div class="card-num">01 · MISSING COVERAGE</div>
+          <h3 class="h-2" style="margin: 24px 0 20px;">"If the demo doesn't show it, add it."</h3>
+          <p class="body-md">
+            Claude would skip inputs the demo didn't expose. Rule: <span class="kw">modify the demo</span> to expose every variant. No skipping allowed.
+          </p>
+        </div>
+
+        <div class="card" style="padding: 48px;">
+          <div class="card-num">02 · ONPUSH SURPRISES</div>
+          <h3 class="h-2" style="margin: 24px 0 20px;">Setting an input doesn't render it.</h3>
+          <p class="body-md">
+            <span class="kw">OnPush</span> components need an explicit <span class="kw">detectChanges()</span>. We now test that contract <span class="kw">and</span> the negative case.
+          </p>
+        </div>
+
+        <div class="card brand" style="padding: 48px;">
+          <div class="card-num" style="color:var(--brand-soft);">03 · PROTOCOL</div>
+          <h3 class="h-2" style="margin: 24px 0 20px;">Learning is mandatory.</h3>
+          <p class="body-md">
+            Every new rule is applied to <span class="kw">all</span> existing specs and documented in <span class="kw">TESTING.md</span> + the slash-command. Failures compound into knowledge.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">09 / 10</span><span class="sep">·</span><span>learned rules</span>
+      <div class="right"><span><span class="status-dot"></span>knowledge compounding</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10. Q&A ================================================== -->
+  <section class="slide" data-label="Q and A">
+    <div class="glow-brand" style="top: -320px; left: -240px;"></div>
+    <div class="glow-brand" style="bottom: -360px; right: -200px; opacity:0.5;"></div>
+
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> digipay-libs <span class="sep">/</span> <span class="file">thank-you.md</span></div>
+      <div class="right"><div class="kv">$ <b>open questions</b></div></div>
+    </div>
+
+    <div class="slide-body" style="display:flex; flex-direction:column; justify-content:center;">
+      <div class="eyebrow">10 · Questions</div>
+      <h1 class="h-display" style="max-width: 1500px;">
+        The contract is<br>enforced by <span class="accent">machines</span>,<br>not memory.
+      </h1>
+
+      <div class="grid-3" style="margin-top: 80px; gap: 32px;">
+        <div>
+          <div class="card-num">LIBRARIES</div>
+          <div style="font-size:72px; font-weight:700; letter-spacing:-0.04em; color:var(--brand-soft); margin-top:8px;">76</div>
+          <p class="body-md">Shared packages — consumed across every Digipay product.</p>
+        </div>
+        <div>
+          <div class="card-num">ASSERTIONS / RELEASE</div>
+          <div style="font-size:72px; font-weight:700; letter-spacing:-0.04em; color:var(--brand-soft); margin-top:8px;">1k+</div>
+          <p class="body-md">Playwright + unit — running on every PR, every push.</p>
+        </div>
+        <div>
+          <div class="card-num">AUTHORED BY</div>
+          <div style="font-size:72px; font-weight:700; letter-spacing:-0.04em; color:var(--brand-soft); margin-top:8px;">dev&nbsp;+&nbsp;ai</div>
+          <p class="body-md">Rules live in git. Claude emits the code. Humans review.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 80px; display:flex; gap:16px; flex-wrap:wrap;">
+        <span class="chip brand"><span class="dot"></span>digipay-libs</span>
+        <span class="chip"><span class="dot"></span>Playwright</span>
+        <span class="chip"><span class="dot"></span>Karma + Jasmine</span>
+        <span class="chip"><span class="dot"></span>Claude AI</span>
+        <span class="chip"><span class="dot"></span>TESTING.md</span>
+        <span class="chip"><span class="dot"></span>CLAUDE.md</span>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">10 / 10</span><span class="sep">·</span><span>Q &amp; A — thank you</span>
+      <div class="right"><span><span class="status-dot"></span>end of deck</span></div>
+    </div>
+  </section>
+
 </deck-stage>
