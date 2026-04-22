@@ -40,6 +40,15 @@ const SPEAKER_NOTES: string[] = [
 })
 export class DigipayDeckComponent implements OnInit, OnDestroy {
   private injected: HTMLElement[] = [];
+  private presenterWindow: Window | null = null;
+  private onKey = (e: KeyboardEvent) => {
+    if (e.key === 'n' || e.key === 'N') this.openPresenter();
+  };
+  private onMessage = (e: MessageEvent) => {
+    if (e.data && typeof e.data.slideIndexChanged === 'number') {
+      this.showNote(e.data.slideIndexChanged);
+    }
+  };
 
   ngOnInit(): void {
     this.addLink({ rel: 'preconnect', href: 'https://fonts.googleapis.com' });
@@ -62,11 +71,50 @@ export class DigipayDeckComponent implements OnInit, OnDestroy {
     script.defer = true;
     document.body.appendChild(script);
     this.injected.push(script);
+
+    const isPresenter = new URLSearchParams(location.search).get('presenter') === '1';
+    if (isPresenter) {
+      // Presenter window: hide the deck, show notes panel, listen for messages
+      const deckStage = document.querySelector('deck-stage') as HTMLElement | null;
+      if (deckStage) deckStage.style.display = 'none';
+      const panel = document.getElementById('presenter-view');
+      if (panel) panel.style.display = 'block';
+      this.showNote(0);
+      window.addEventListener('message', this.onMessage);
+    } else {
+      // Main deck: press N to open presenter window
+      window.addEventListener('keydown', this.onKey);
+      // Forward slidechange events to any open presenter window
+      document.addEventListener('slidechange', (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        if (this.presenterWindow && !this.presenterWindow.closed) {
+          this.presenterWindow.postMessage({ slideIndexChanged: detail.index }, '*');
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
     this.injected.forEach(el => el.remove());
     this.injected = [];
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('message', this.onMessage);
+  }
+
+  private openPresenter(): void {
+    const url = location.pathname + '?presenter=1';
+    if (!this.presenterWindow || this.presenterWindow.closed) {
+      this.presenterWindow = window.open(url, 'digipay-presenter', 'width=900,height=600,resizable=yes');
+    } else {
+      this.presenterWindow.focus();
+    }
+  }
+
+  private showNote(index: number): void {
+    const noteEl = document.getElementById('presenter-note-text');
+    const numEl = document.getElementById('presenter-slide-num');
+    if (noteEl) noteEl.textContent = SPEAKER_NOTES[index] ?? '—';
+    if (numEl) numEl.textContent = `${index + 1} / ${SPEAKER_NOTES.length}`;
   }
 
   private addLink(attrs: Record<string, string>): void {
