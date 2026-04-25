@@ -51,7 +51,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">01 / 12</span>
+      <span class="slide-n">01 / 14</span>
       <span class="sep">·</span>
       <span>presented to: CTO &amp; Frontend Architect</span>
       <span class="sep">·</span>
@@ -103,7 +103,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">02 / 12</span><span class="sep">·</span><span>before</span>
+      <span class="slide-n">02 / 14</span><span class="sep">·</span><span>before</span>
       <div class="right"><span style="color:var(--warn)"><span class="status-dot" style="background:var(--warn);box-shadow:0 0 8px rgba(255,176,32,.6);"></span>QA bottleneck</span></div>
     </div>
   </section>
@@ -173,7 +173,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">03 / 12</span><span class="sep">·</span><span>projects/*</span>
+      <span class="slide-n">03 / 14</span><span class="sep">·</span><span>projects/*</span>
       <div class="right"><span><span class="status-dot"></span>76 packages · 1 harness</span></div>
     </div>
   </section>
@@ -230,7 +230,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">04 / 12</span><span class="sep">·</span><span>unit + e2e</span>
+      <span class="slide-n">04 / 14</span><span class="sep">·</span><span>unit + e2e</span>
       <div class="right"><span><span class="status-dot"></span>both layers required</span></div>
     </div>
   </section>
@@ -296,7 +296,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">05 / 12</span><span class="sep">·</span><span>real code</span>
+      <span class="slide-n">05 / 14</span><span class="sep">·</span><span>real code</span>
       <div class="right"><span><span class="status-dot"></span>pattern: size contract</span></div>
     </div>
   </section>
@@ -356,7 +356,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">06 / 12</span><span class="sep">·</span><span>e2e anatomy</span>
+      <span class="slide-n">06 / 14</span><span class="sep">·</span><span>e2e anatomy</span>
       <div class="right"><span style="color:var(--violet)"><span class="status-dot" style="background:var(--violet);box-shadow:0 0 8px rgba(167,139,250,.6);"></span>7 contracts · every component</span></div>
     </div>
   </section>
@@ -432,7 +432,7 @@
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">07 / 12</span><span class="sep">·</span><span>silent regressions → CI blocks</span>
+      <span class="slide-n">07 / 14</span><span class="sep">·</span><span>silent regressions → CI blocks</span>
       <div class="right"><span><span class="status-dot"></span>the PR doesn't merge</span></div>
     </div>
   </section>
@@ -515,7 +515,7 @@ variant for a given input →
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">08 / 12</span><span class="sep">·</span><span>CLAUDE.md + slash commands</span>
+      <span class="slide-n">08 / 14</span><span class="sep">·</span><span>CLAUDE.md + slash commands</span>
       <div class="right"><span><span class="status-dot"></span>deterministic output</span></div>
     </div>
   </section>
@@ -590,7 +590,7 @@ variant for a given input →
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">09 / 12</span><span class="sep">·</span><span>dev → ai → ci</span>
+      <span class="slide-n">09 / 14</span><span class="sep">·</span><span>dev → ai → ci</span>
       <div class="right"><span><span class="status-dot"></span>feedback loop closed</span></div>
     </div>
   </section>
@@ -662,7 +662,7 @@ variant for a given input →
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">10 / 12</span><span class="sep">·</span><span>outcomes</span>
+      <span class="slide-n">10 / 14</span><span class="sep">·</span><span>outcomes</span>
       <div class="right"><span><span class="status-dot"></span>measurable wins</span></div>
     </div>
   </section>
@@ -707,8 +707,177 @@ variant for a given input →
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">11 / 12</span><span class="sep">·</span><span>learned rules</span>
+      <span class="slide-n">11 / 14</span><span class="sep">·</span><span>learned rules</span>
       <div class="right"><span><span class="status-dot"></span>knowledge compounding</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 12. MCP OVERVIEW ======================================== -->
+  <section class="slide" data-label="MCP">
+    <div class="glow-brand" style="top: -300px; right: -240px; opacity:0.45;"></div>
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">~ <span class="sep">/</span> .claude <span class="sep">/</span> <span class="file">mcp.json</span></div>
+      <div class="right"><div class="kv">protocol: <b style="color:var(--brand-soft)">MCP</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">12 · Model Context Protocol</div>
+      <h2 class="h-1" style="margin-bottom: 40px;">Claude talks to your tools.<br><span class="muted" style="font-weight:500;">MCP connects AI to the services your team already uses.</span></h2>
+
+      <div class="grid-2" style="gap: 48px; grid-template-columns: 1fr 1.2fr; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div class="card brand" style="padding: 32px;">
+            <div class="card-num" style="color:var(--brand-soft);">WHAT IS MCP?</div>
+            <h4 class="h-3" style="margin: 14px 0 12px;">Open protocol. Real tools. Live data.</h4>
+            <p class="body-md">Model Context Protocol is an open standard that lets Claude call external services — read Figma frames, query Sentry errors, browse Google Drive — directly inside a session. No copy-paste, no context switching.</p>
+          </div>
+          <div class="card" style="padding: 32px;">
+            <div class="card-num">CONFIGURE ONCE · USE EVERYWHERE</div>
+            <div style="margin: 14px 0 16px; background:var(--bg-code); border:1px solid var(--line); border-radius:8px; padding:16px; font-family:var(--mono); font-size:14px; line-height:1.7;">
+              <span class="c-com">// .claude/settings.json</span><br>
+              &#123;<br>
+              &nbsp;&nbsp;<span class="c-str">"mcpServers"</span>: &#123;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">"figma"</span>: &#123; <span class="c-str">"command"</span>: <span class="c-str">"figma-mcp"</span> &#125;,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">"sentry"</span>: &#123; <span class="c-str">"command"</span>: <span class="c-str">"sentry-mcp"</span> &#125;<br>
+              &nbsp;&nbsp;&#125;<br>
+              &#125;
+            </div>
+            <p class="body-md">Add a server once. Claude Code loads it at startup — tools are live in every session, no re-prompting.</p>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family:var(--mono); font-size:12px; color:var(--ink-dim); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px;">Claude Code — built-in MCP servers</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--brand-soft); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">Figma</div>
+                <p class="body-sm">Read designs, extract tokens, implement components with pixel precision</p>
+              </div>
+            </div>
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--warn); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">Sentry</div>
+                <p class="body-sm">Query errors, analyze issues, get full stack traces in context</p>
+              </div>
+            </div>
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--ok); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">GitHub</div>
+                <p class="body-sm">Open PRs, review issues, manage branches — from one prompt</p>
+              </div>
+            </div>
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--cyan); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">Google Drive</div>
+                <p class="body-sm">Read docs, sheets, and design specs directly from Drive</p>
+              </div>
+            </div>
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--violet); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">Slack / Linear</div>
+                <p class="body-sm">Send messages, query tickets, close the dev loop automatically</p>
+              </div>
+            </div>
+            <div class="card" style="padding:18px 20px; display:flex; align-items:flex-start; gap:14px;">
+              <span style="color:var(--ink-dim); font-family:var(--mono); font-size:22px; line-height:1; margin-top:4px;">◈</span>
+              <div>
+                <div style="font-family:var(--mono); font-size:14px; font-weight:700; color:var(--ink); margin-bottom:6px;">Custom</div>
+                <p class="body-sm">Build your own MCP server for any internal API or data source</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">12 / 14</span><span class="sep">·</span><span>model context protocol</span>
+      <div class="right"><span><span class="status-dot"></span>Claude Code native</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 13. MCP IN PRACTICE ===================================== -->
+  <section class="slide" data-label="MCP in Practice">
+    <div class="chrome-top">
+      <div class="dots"><span class="dot brand"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="path">client-monorepo <span class="sep">/</span> <span class="file">CLAUDE.md</span></div>
+      <div class="right"><div class="kv">loaded via: <b style="color:var(--brand-soft)">Figma MCP</b></div></div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">13 · MCP in Practice — Digipay</div>
+      <h2 class="h-2" style="margin-bottom: 32px;">One Figma MCP session → permanent design system memory.<br><span class="muted">Claude never hardcodes styles — regardless of input source.</span></h2>
+
+      <div class="grid-2" style="gap: 40px; grid-template-columns: 1.15fr 1fr; align-items: start;">
+        <div class="code framed" style="font-size: 15px; line-height: 1.55;">
+          <div class="code-head">
+            <span class="tag">memory</span>
+            <span class="fname">client-monorepo/CLAUDE.md — design system rules</span>
+          </div>
+<pre><span class="c-com">## Typography &amp; Color — MANDATORY</span>
+
+<span class="c-kw">Never</span> write hardcoded <span class="c-str">font-size</span>, <span class="c-str">font-weight</span>,
+<span class="c-str">line-height</span>, or text <span class="c-str">color</span> in SCSS.
+<span class="c-kw">Always</span> use utility classes from
+<span class="c-attr">digipay-libs-workspace/projects/base-style</span>.
+
+<span class="c-com">// This applies regardless of source:</span>
+<span class="c-com">// Figma MCP · screenshot · manual spec</span>
+
+<span class="c-com">// Typography tokens</span>
+<span class="c-attr">t-5</span>   → 24px · weight 600 · lh 166%
+<span class="c-attr">t-6</span>   → 18px · weight 600 · lh 177%
+<span class="c-attr">st-1</span>  → 22px · weight 800 · lh 145%
+
+<span class="c-com">// Color tokens</span>
+<span class="c-attr">text-onback-brand</span>  → <span class="c-str">#1159FC</span>
+<span class="c-attr">text-onback-high</span>   → <span class="c-str">#000000</span>
+<span class="c-attr">text-oninvert-high</span> → <span class="c-str">#FFFFFF</span>
+
+<span class="c-com">// Spacing tokens</span>
+<span class="c-attr">p-medium</span> → 16px  <span class="c-attr">mt-huge</span>  → 32px
+<span class="c-attr">p-plus</span>   → 20px  <span class="c-attr">gap-minus</span> → 12px</pre>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div class="card" style="padding: 24px; border-color:rgba(255,176,32,0.3); background:rgba(255,176,32,0.04);">
+            <div class="card-num" style="color:var(--warn);">WITHOUT RULE · FIGMA OUTPUT</div>
+            <h4 class="h-4" style="margin: 10px 0 12px; color:var(--warn);">Hardcoded values from design file</h4>
+            <div style="background:var(--bg-code); border:1px solid rgba(255,176,32,0.2); border-radius:8px; padding:14px; font-family:var(--mono); font-size:13.5px; line-height:1.7;">
+              &lt;<span class="c-kw">span</span> <span style="color:var(--warn)">style</span>=<span class="c-str">"font-size: 24px;<br>&nbsp;&nbsp;&nbsp;font-weight: 600;<br>&nbsp;&nbsp;&nbsp;color: #1159FC;"</span>&gt;<br>
+              &nbsp;&nbsp;مانده<br>
+              &lt;/<span class="c-kw">span</span>&gt;
+            </div>
+          </div>
+
+          <div class="card brand" style="padding: 24px;">
+            <div class="card-num" style="color:var(--ok);">WITH MCP RULE · ACTUAL OUTPUT</div>
+            <h4 class="h-4" style="margin: 10px 0 12px; color:var(--ok);">Design system classes only</h4>
+            <div style="background:var(--bg-code); border:1px solid rgba(61,220,132,0.2); border-radius:8px; padding:14px; font-family:var(--mono); font-size:13.5px; line-height:1.7;">
+              &lt;<span class="c-kw">span</span> <span style="color:var(--ok)">class</span>=<span class="c-str">"t-5<br>&nbsp;&nbsp;&nbsp;text-onback-brand"</span>&gt;<br>
+              &nbsp;&nbsp;مانده<br>
+              &lt;/<span class="c-kw">span</span>&gt;
+            </div>
+          </div>
+
+          <div class="card" style="padding: 22px;">
+            <div class="card-num" style="color:var(--brand-soft);">THE KEY INSIGHT</div>
+            <p class="body-md" style="margin-top:10px; color:var(--ink);">Figma MCP reads design tokens once → rules are written to <span class="kw">CLAUDE.md</span> → every future session inherits the constraint. The design system becomes <span class="accent">Claude's permanent memory</span> — not just documentation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bottom">
+      <span class="slide-n">13 / 14</span><span class="sep">·</span><span>digipay · client-monorepo</span>
+      <div class="right"><span><span class="status-dot"></span>zero hardcoded styles</span></div>
     </div>
   </section>
 
@@ -724,7 +893,7 @@ variant for a given input →
     </div>
 
     <div class="slide-body" style="display:flex; flex-direction:column; justify-content:center;">
-      <div class="eyebrow">12 · Questions</div>
+      <div class="eyebrow">14 · Questions</div>
       <h1 class="h-display" style="max-width: 1500px;">
         The contract is<br>enforced by <span class="accent">machines</span>,<br>not memory.
       </h1>
@@ -758,7 +927,7 @@ variant for a given input →
     </div>
 
     <div class="chrome-bottom">
-      <span class="slide-n">12 / 12</span><span class="sep">·</span><span>Q &amp; A — thank you</span>
+      <span class="slide-n">14 / 14</span><span class="sep">·</span><span>Q &amp; A — thank you</span>
       <div class="right"><span><span class="status-dot"></span>end of deck</span></div>
     </div>
   </section>
