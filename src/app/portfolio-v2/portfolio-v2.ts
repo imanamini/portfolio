@@ -6,6 +6,16 @@ import { PrintService } from '../data/print.service';
 interface StackPrimary { name: string; years: number; }
 interface Highlight { tag: string; title: string; body: string; }
 interface ContactLink { label: string; value: string; href: string; }
+interface Project {
+  name: string;
+  sub: string;
+  stack: string[];
+  period: string;
+  role: string;
+  featured?: boolean;
+  body: string;
+  bullets?: string[];
+}
 
 @Component({
   selector: 'app-portfolio-v2',
@@ -92,12 +102,63 @@ export class PortfolioV2Component {
 
   stackPrimary: StackPrimary[] = [
     { name: 'Angular', years: 5 },
+    { name: 'React / Next.js', years: 4 },
     { name: 'TypeScript', years: 5 },
-    { name: 'RxJS', years: 5 },
     { name: 'NX Monorepo', years: 3 },
   ];
-  stackSecondary = ['React', 'Next.js', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS/CSS'];
-  stackFamiliar = ['Git', 'REST APIs', 'Figma', 'Agile/Scrum'];
+  stackSecondary = ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'];
+  stackFamiliar = ['WebSockets', 'Pusher', 'Laravel Echo', 'Docker', 'Git', 'REST APIs', 'Figma', 'Agile/Scrum'];
+
+  projects: Project[] = [
+    {
+      name: 'Pita',
+      sub: 'Restaurant Kiosk + Kitchen Display System',
+      stack: ['React', 'NX Monorepo', 'WebSockets', 'Docker', 'TypeScript'],
+      period: '2024 — 2025',
+      role: 'Architect & Lead Frontend',
+      featured: true,
+      body: 'Two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries and deployed as separate Docker images behind nginx routing.',
+      bullets: [
+        'Integrated Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback — probes configured IP first, then scans localhost proxy ports for USB printers, with mobile-device and browser-print fallbacks.',
+        'Real-time order sync between kiosk and kitchen via Laravel Echo + Pusher WebSockets, with a 10-second polling safety net and a live KDS board showing in-process vs ready orders.',
+        'Zero-downtime version checker for always-on kiosk hardware — polls /version.json with cache-busting every 5 minutes and forces a hard reload on a new build, so kiosks never run stale code without manual intervention.',
+      ],
+    },
+    {
+      name: 'Pharma',
+      sub: 'Prescription Drug E-commerce PWA',
+      stack: ['Angular 17', 'PWA', 'Signals', 'Service Worker'],
+      period: '2024',
+      role: 'Frontend Engineer',
+      featured: true,
+      body: 'Full Angular 17 PWA for prescription pharmaceutical e-commerce with a server-driven adaptive questionnaire engine and offline support.',
+      bullets: [
+        'Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched dynamically from the API based on the previous answer, enabling personalised eligibility screening.',
+        'Signal-based session management replacing BehaviorSubject, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app order support chat, and Service Worker for offline use.',
+      ],
+    },
+    {
+      name: 'Talent Academy',
+      sub: 'Interactive video learning platform',
+      stack: ['Vue', 'Custom video player', 'SSO'],
+      period: '2021',
+      role: 'Frontend Developer',
+      body: 'Custom interactive video player with playlists, Instagram-live-style instructor praise and improve messages, plus global SSO for internal platforms.',
+    },
+    {
+      name: 'Majid',
+      sub: 'Online form builder (confidential)',
+      stack: ['Angular', 'Complex JSON'],
+      period: '2020',
+      role: 'Frontend Developer',
+      body: 'Drag-and-drop form builder along the lines of JotForm — schema-driven UI with deep nested JSON handling and live preview.',
+    },
+  ];
+
+  get featuredProjects(): Project[] { return this.projects.filter(p => p.featured); }
+  get otherProjects(): Project[] { return this.projects.filter(p => !p.featured); }
+
+  isReactTag(s: string): boolean { return s.toLowerCase().includes('react'); }
 
   highlights: Highlight[] = [
     {

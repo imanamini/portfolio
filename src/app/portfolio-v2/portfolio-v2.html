@@ -6,6 +6,7 @@
     </a>
     <div class="nav__links">
       <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
       <a href="#stack">Stack</a>
       <a href="#education">Background</a>
       <a href="#contact">Contact</a>
@@ -109,8 +110,61 @@
     </div>
   </section>
 
+  <section id="projects" class="section">
+    <div class="kicker"><span class="kicker__num">02</span><span class="kicker__bar"></span><span class="kicker__label">Projects</span></div>
+    <h2 class="heading-xl">
+      Products I&rsquo;ve shipped
+      <span class="heading-display-italic">end-to-end.</span>
+    </h2>
+    <p class="projects__intro">Outside of fintech, I architect and lead React and Angular products from scratch — kiosks, PWAs, video platforms, form builders.</p>
+
+    <div class="projects__featured">
+      <article *ngFor="let p of featuredProjects; let i = index" class="projects__card">
+        <div class="projects__rail">
+          <div>
+            <div class="projects__featured-label">Featured &middot; {{ pad(i) }}</div>
+            <div class="projects__name">{{ p.name }}</div>
+            <div class="projects__sub">{{ p.sub }}</div>
+          </div>
+          <div>
+            <div class="projects__role-label">{{ p.role }}</div>
+            <div class="projects__period">{{ p.period }}</div>
+          </div>
+        </div>
+        <div class="projects__content">
+          <div class="projects__tags">
+            <span *ngFor="let s of p.stack" class="projects__tag" [class.projects__tag--react]="isReactTag(s)">{{ s }}</span>
+          </div>
+          <p class="projects__body">{{ p.body }}</p>
+          <ul *ngIf="p.bullets" class="projects__bullets">
+            <li *ngFor="let b of p.bullets">
+              <span class="projects__bullet-dot"></span>
+              <span>{{ b }}</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div *ngIf="otherProjects.length" class="projects__other">
+      <div class="projects__other-label">Also</div>
+      <div class="projects__other-list">
+        <div *ngFor="let p of otherProjects; let i = index" class="projects__other-item" [class.projects__other-item--bordered]="i > 0">
+          <div>
+            <div class="projects__other-name">{{ p.name }}</div>
+            <div class="projects__other-sub">{{ p.sub }}</div>
+          </div>
+          <div class="projects__other-body">{{ p.body }}</div>
+          <div class="projects__other-tags">
+            <span *ngFor="let s of p.stack.slice(0, 2)" class="projects__other-tag">{{ s }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
-    <div class="kicker"><span class="kicker__num">02</span><span class="kicker__bar"></span><span class="kicker__label">Selected work</span></div>
+    <div class="kicker"><span class="kicker__num">03</span><span class="kicker__bar"></span><span class="kicker__label">Selected work</span></div>
     <h2 class="heading-xl">Problems I&rsquo;ve enjoyed solving.</h2>
     <div class="highlights">
       <div *ngFor="let it of highlights" class="highlights__item">
@@ -122,7 +176,7 @@
   </section>
 
   <section id="stack" class="section">
-    <div class="kicker"><span class="kicker__num">03</span><span class="kicker__bar"></span><span class="kicker__label">Toolkit</span></div>
+    <div class="kicker"><span class="kicker__num">04</span><span class="kicker__bar"></span><span class="kicker__label">Toolkit</span></div>
     <h2 class="heading-xl">The stack I reach for.</h2>
     <div class="stack">
       <div class="stack__col">
@@ -148,7 +202,7 @@
   </section>
 
   <section id="education" class="section">
-    <div class="kicker"><span class="kicker__num">04</span><span class="kicker__bar"></span><span class="kicker__label">Background</span></div>
+    <div class="kicker"><span class="kicker__num">05</span><span class="kicker__bar"></span><span class="kicker__label">Background</span></div>
     <h2 class="heading-xl">Education &amp; continuous learning.</h2>
     <div class="bg">
       <div class="bg__col">
@@ -176,7 +230,7 @@
 
   <section id="contact" class="section section--contact">
     <div class="contact">
-      <div class="kicker"><span class="kicker__num">05</span><span class="kicker__bar"></span><span class="kicker__label">Let&rsquo;s talk</span></div>
+      <div class="kicker"><span class="kicker__num">06</span><span class="kicker__bar"></span><span class="kicker__label">Let&rsquo;s talk</span></div>
       <h2 class="heading-xl contact__title">
         Got a hard frontend problem?
         <span class="contact__italic">I&rsquo;d love to hear about it.</span>
