@@ -1,0 +1,373 @@
+<div class="progress" aria-hidden="true">
+  <div class="progress__bar" [style.transform]="'scaleX(' + progress() + ')'"></div>
+</div>
+
+<aside class="rail" aria-label="Section navigation">
+  <a href="#intro" class="rail__mark">IA<span>.</span></a>
+  <nav class="rail__nav">
+    @for (s of sections; track s.id) {
+      <a
+        [href]="'#' + s.id"
+        class="rail__link"
+        [class.rail__link--active]="activeSection() === s.id"
+      >
+        <span class="rail__dot"></span>
+        <span class="rail__label">{{ s.label }}</span>
+      </a>
+    }
+  </nav>
+  <div class="rail__bottom">
+    <button type="button" class="theme-btn" (click)="toggleTheme()" aria-label="Toggle theme">
+      @if (theme() === 'paper') {
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      } @else {
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+          />
+        </svg>
+      }
+    </button>
+    <span class="rail__year">©26</span>
+  </div>
+</aside>
+
+<header class="topbar" [class.topbar--scrolled]="scrolled()">
+  <a href="#intro" class="topbar__mark">IA<span>.</span></a>
+  <button type="button" class="theme-btn" (click)="toggleTheme()" aria-label="Toggle theme">
+    @if (theme() === 'paper') {
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+      >
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    } @else {
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+      >
+        <circle cx="12" cy="12" r="4" />
+        <path
+          d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+        />
+      </svg>
+    }
+  </button>
+</header>
+
+<main class="page">
+  <!-- ── Intro ───────────────────────────────────────────── -->
+  <section id="intro" class="hero">
+    <p class="hero__eyebrow reveal">
+      <span class="hero__pulse"><span></span></span>
+      Open to senior frontend roles · Remote-friendly · Tehran, Iran
+    </p>
+
+    <h1 class="hero__name reveal" (click)="onNameClick()">
+      <span class="hero__first">Iman</span>
+      <span class="hero__last">Amini</span>
+    </h1>
+
+    <div class="hero__role reveal">
+      <span class="hero__role-main">Senior Frontend Engineer</span>
+      <span class="hero__role-sep">/</span>
+      <span class="hero__rotator">
+        @for (w of rotatorWords; track w; let i = $index) {
+          <em class="hero__word" [class.hero__word--on]="rotatorIndex() === i">{{ w }}</em>
+        }
+      </span>
+    </div>
+
+    <p class="hero__pitch reveal">
+      I lead frontend for <strong>Credit &amp; BNPL flows serving 10M+ users</strong> at
+      Iran&rsquo;s largest digital-payment platform &mdash; architecting
+      <em>14 shared packages</em>, taming a <em>75-package monorepo</em>, and keeping a multi-layer
+      testing strategy fast and boring.
+    </p>
+
+    <div class="hero__ctas reveal">
+      <a href="#contact" class="btn btn--solid">
+        Get in touch
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M7 17L17 7M9 7h8v8" />
+        </svg>
+      </a>
+      <a href="Iman Amini Resume.pdf" class="btn btn--ghost">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+        </svg>
+        Download CV
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Ticker ──────────────────────────────────────────── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      @for (rep of [0, 1]; track rep) {
+        <div class="ticker__group">
+          @for (t of tickerItems; track t) {
+            <span class="ticker__item">{{ t }}</span>
+            <span class="ticker__star">✦</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- ── Stats ───────────────────────────────────────────── -->
+  <section class="stats reveal">
+    @for (s of stats; track s.label) {
+      <div class="stats__cell">
+        <span class="stats__value">{{ s.value }}</span>
+        <span class="stats__label">{{ s.label }}</span>
+      </div>
+    }
+  </section>
+
+  <!-- ── Experience ──────────────────────────────────────── -->
+  <section id="experience" class="section">
+    <header class="sec-head reveal">
+      <span class="sec-head__no">01</span>
+      <h2 class="sec-head__title">Experience<span class="sec-head__dot">.</span></h2>
+      <p class="sec-head__sub">Five years of shipping fintech at scale.</p>
+    </header>
+
+    @for (job of jobs; track job.company; let i = $index) {
+      <article class="job reveal">
+        <div class="job__rule">
+          <span class="job__no">№ {{ no(i) }}</span>
+        </div>
+        <div class="job__grid">
+          <div class="job__meta">
+            <h3 class="job__company">{{ job.company }}</h3>
+            <p class="job__role">{{ job.role }}</p>
+            <p class="job__period">{{ job.period }}</p>
+            <p class="job__location">{{ job.location }}</p>
+            <div class="job__tags">
+              @for (t of job.tags; track t) {
+                <span class="tag">{{ t }}</span>
+              }
+            </div>
+          </div>
+          <div class="job__body">
+            @if (job.summary) {
+              <p class="job__summary">{{ job.summary }}</p>
+            }
+            <ul class="job__featured">
+              @for (f of job.featured; track f) {
+                <li>
+                  <span class="job__dash"></span><span>{{ f }}</span>
+                </li>
+              }
+            </ul>
+            @if (job.archive.length) {
+              <button type="button" class="job__toggle" (click)="toggleExpanded(i)">
+                <span>{{
+                  isExpanded(i)
+                    ? 'Hide the details'
+                    : 'Unfold ' + job.archive.length + ' more details'
+                }}</span>
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="job__chev"
+                  [class.job__chev--open]="isExpanded(i)"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              @if (isExpanded(i)) {
+                <ul class="job__archive">
+                  @for (b of job.archive; track b; let j = $index) {
+                    <li>
+                      <span class="job__idx">{{ no(j) }}</span
+                      ><span>{{ b }}</span>
+                    </li>
+                  }
+                </ul>
+              }
+            }
+          </div>
+        </div>
+      </article>
+    }
+  </section>
+
+  <!-- ── Selected work ───────────────────────────────────── -->
+  <section id="work" class="section">
+    <header class="sec-head reveal">
+      <span class="sec-head__no">02</span>
+      <h2 class="sec-head__title">Selected work<span class="sec-head__dot">.</span></h2>
+      <p class="sec-head__sub">Problems I&rsquo;ve genuinely enjoyed solving.</p>
+    </header>
+
+    <div class="bento">
+      @for (c of caseStudies; track c.title) {
+        <article class="bento__card reveal" [class.bento__card--wide]="c.span === 'wide'">
+          <span class="bento__tag">{{ c.tag }}</span>
+          <h3 class="bento__title">{{ c.title }}</h3>
+          <p class="bento__body">{{ c.body }}</p>
+          <span class="bento__corner" aria-hidden="true">✦</span>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- ── Toolkit ─────────────────────────────────────────── -->
+  <section id="stack" class="section">
+    <header class="sec-head reveal">
+      <span class="sec-head__no">03</span>
+      <h2 class="sec-head__title">Toolkit<span class="sec-head__dot">.</span></h2>
+      <p class="sec-head__sub">The stack I reach for, by depth.</p>
+    </header>
+
+    <div class="stack reveal">
+      <div class="stack__core">
+        <p class="stack__heading">Core — daily drivers</p>
+        @for (s of coreSkills; track s.name) {
+          <div class="stack__row">
+            <span class="stack__name">{{ s.name }}</span>
+            <span class="stack__bar"
+              ><span class="stack__fill" [style.width.%]="(s.years / 5) * 100"></span
+            ></span>
+            <span class="stack__years">{{ s.years }}y</span>
+          </div>
+        }
+      </div>
+      <div class="stack__rest">
+        <p class="stack__heading">Proficient</p>
+        <div class="stack__chips">
+          @for (t of proficient; track t) {
+            <span class="tag tag--lg">{{ t }}</span>
+          }
+        </div>
+        <p class="stack__heading stack__heading--gap">Also familiar</p>
+        <p class="stack__familiar">
+          @for (t of familiar; track t; let last = $last) {
+            {{ t }}
+            @if (!last) {
+              <span class="stack__sep"> · </span>
+            }
+          }
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Background ──────────────────────────────────────── -->
+  <section id="background" class="section">
+    <header class="sec-head reveal">
+      <span class="sec-head__no">04</span>
+      <h2 class="sec-head__title">Background<span class="sec-head__dot">.</span></h2>
+      <p class="sec-head__sub">Education &amp; continuous learning.</p>
+    </header>
+
+    <div class="bg reveal">
+      <div class="bg__col">
+        <p class="stack__heading">Education</p>
+        @for (e of r.education; track e.institution) {
+          <div class="bg__edu">
+            <p class="bg__degree">{{ e.degree }}</p>
+            <p class="bg__school">{{ e.institution }}</p>
+            <p class="bg__period">{{ e.period }}</p>
+          </div>
+        }
+      </div>
+      <div class="bg__col">
+        <p class="stack__heading">Recent courses</p>
+        @for (c of r.courses; track c.name) {
+          <div class="bg__course">
+            <div>
+              <p class="bg__course-name">{{ c.name }}</p>
+              <p class="bg__course-provider">{{ c.provider }}</p>
+            </div>
+            <span class="bg__course-year">{{ c.year }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ─────────────────────────────────────────── -->
+  <section id="contact" class="section section--contact">
+    <header class="sec-head reveal">
+      <span class="sec-head__no">05</span>
+      <h2 class="sec-head__title">Let&rsquo;s talk<span class="sec-head__dot">.</span></h2>
+    </header>
+
+    <p class="contact__line reveal">
+      Got a hard frontend problem?<br />
+      <em>I&rsquo;d love to hear about it.</em>
+    </p>
+
+    <div class="contact__links reveal">
+      @for (c of contactLinks; track c.label) {
+        <a [href]="c.href" target="_blank" rel="noopener" class="contact__link">
+          <span class="contact__label">{{ c.label }}</span>
+          <span class="contact__value">{{ c.value }}</span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            class="contact__arrow"
+          >
+            <path d="M7 17L17 7M9 7h8v8" />
+          </svg>
+        </a>
+      }
+    </div>
+
+    <footer class="footer">
+      <span>© 2026 Iman Amini</span>
+      <span>Set in Instrument Serif &amp; Geist · the fable edition</span>
+    </footer>
+  </section>
+</main>
