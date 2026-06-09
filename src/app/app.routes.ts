@@ -27,6 +27,10 @@ export const routes: Routes = [
     loadComponent: () => import('./new-fable/new-fable').then((m) => m.NewFableComponent),
   },
   {
+    path: 'new-opus',
+    loadComponent: () => import('./new-opus/new-opus').then((m) => m.NewOpusComponent),
+  },
+  {
     path: 'deck/digipay-libs',
     loadComponent: () => import('./digipay-deck/digipay-deck').then((m) => m.DigipayDeckComponent),
   },
