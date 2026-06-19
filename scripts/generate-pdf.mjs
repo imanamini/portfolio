@@ -5,42 +5,58 @@
  * Usage:  node scripts/generate-pdf.mjs
  *    or:  npm run pdf
  *
- * Requirements: Google Chrome at /usr/bin/google-chrome
- *               (override with env var CHROME_PATH)
+ * Requirements: Google Chrome / Chromium.
+ *               Looked up in this order:
+ *                 1. env var CHROME_PATH
+ *                 2. a puppeteer-cached Chrome under ~/.cache/puppeteer
+ *                 3. /usr/bin/google-chrome
  *
- * Update the resume data constants at the top of this file
- * whenever the content changes, then re-run to regenerate the PDF.
+ * Fonts (Inter + JetBrains Mono) are embedded from scripts/fonts/fonts.css,
+ * so the PDF renders identically with or without network access. To refresh
+ * the embedded fonts, re-run scripts/fonts/embed-fonts.mjs.
+ *
+ * Update the resume data constants at the top of this file whenever the
+ * content changes, then re-run to regenerate the PDF.
  */
 
 import { execSync } from 'child_process';
-import { writeFileSync, rmSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { writeFileSync, rmSync, readFileSync, existsSync, readdirSync } from 'fs';
+import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { homedir } from 'os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const TMP = '/tmp/_iman_resume.html';
 const OUTPUT = resolve(ROOT, 'public', 'Iman Amini Resume.pdf');
-const CHROME = process.env.CHROME_PATH ?? '/usr/bin/google-chrome';
+const FONTS_CSS = resolve(__dirname, 'fonts', 'fonts.css');
 
 // ─── Resume data ─────────────────────────────────────────────────────────────
 
 const PROFILE = {
   name: 'Iman Amini',
-  role: 'Frontend Engineer',
-  availability: 'Remote · Hybrid · On-site',
-  email: 'iman.fa88@gmail.com',
-  linkedin: 'linkedin.com/in/imanamini78',
-  github: 'github.com/imanamini',
-  website: 'imanamini.ir',
-  pitch: 'Frontend engineer leading Credit & BNPL frontend at a 10M+ user fintech, with 5+ years across Angular and React in production. Setting technical direction, mentoring engineers, and shipping financial journeys that 10M+ people rely on daily. Open to roles on international teams — remote, hybrid, or on-site.',
+  role: 'Senior Front-End Engineer',
+  tagline: 'I build financial products that 10M+ people trust with their money.',
+  availability: 'Open to international roles · Remote / Hybrid / On-site · Fluent English',
+  links: [
+    { label: 'Portfolio', value: 'imanamini.ir',                 href: 'https://imanamini.ir',                     primary: true },
+    { label: 'Email',     value: 'iman.fa88@gmail.com',          href: 'mailto:iman.fa88@gmail.com' },
+    { label: 'LinkedIn',  value: 'linkedin.com/in/imanamini78',  href: 'https://www.linkedin.com/in/imanamini78' },
+    { label: 'GitHub',    value: 'github.com/imanamini',         href: 'https://github.com/imanamini' },
+  ],
+  pitch:
+    'Senior frontend engineer who turns complex financial journeys into flows that feel effortless. ' +
+    'For the past five years I have built and led the Credit & BNPL frontend at Digipay — Iran’s largest digital-payments platform — ' +
+    'where the screens I own are used by more than 10 million people. I architect shared design systems, set technical direction, ' +
+    'and lift the engineers around me. Equally fluent in Angular, React / Next.js and Vue, I learn new stacks fast and I am looking ' +
+    'for an international team to do my best work with.',
 };
 
 const STATS = [
   { value: '10M+', label: 'users on flows I own' },
   { value: '5+',   label: 'years in fintech frontend' },
-  { value: 'Lead', label: 'Credit & BNPL team' },
-  { value: '14',   label: 'shared npm packages' },
+  { value: '14',   label: 'shared npm packages shipped' },
+  { value: '75',   label: 'package monorepo I help steer' },
 ];
 
 const EXPERIENCE = [
@@ -49,22 +65,22 @@ const EXPERIENCE = [
     role: 'Senior Front-End Engineer',
     period: 'Dec 2021 — Present',
     location: 'Tehran',
-    tags: ['Angular', 'TypeScript', 'NX Monorepo', 'RxJS'],
+    tags: ['Angular', 'TypeScript', 'NX Monorepo', 'RxJS', 'Signals'],
     featured: [
-      'Led frontend for Credit & BNPL journeys serving 10M+ users — complex multi-step financial flows in Angular + TypeScript.',
-      'Architected and published 14 shared npm packages, reducing cross-team code duplication and accelerating delivery across all product lines.',
-      'Leading the Credit & BNPL line, mentoring engineers and setting the technical direction.',
+      'Lead the Credit & BNPL frontend — multi-step financial journeys in Angular + TypeScript that 10M+ people rely on every day.',
+      'Architected and shipped 14 shared npm packages, cutting cross-team duplication and accelerating delivery across every product line.',
+      'Set the technical direction for the Credit & BNPL line and mentor the engineers building it.',
     ],
     bullets: [
-      'Migrated three standalone Angular apps into a unified NX monorepo with shared libs, consolidating dependencies and enabling cross-app code reuse.',
-      'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine unit tests, Playwright E2E, and a dual snapshot system (style + visual) as backward-compatibility guards.',
-      'Engineered a 7-step credit pre-registration state machine with conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL↔step sync.',
-      'Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives — multi-touch distance calculation, boundary-constrained CSS transforms, rAF-throttled magnifier.',
-      'Designed a Claude AI-assisted test generation pipeline for 75 Angular packages — a 900-line reusable prompt specification encoding testing principles and Angular patterns.',
-      'Built a zero-maintenance test collection CLI that auto-discovers spec files, counts test cases via regex, and generates a typed data file powering a live status dashboard.',
-      'Adopted Angular 17+ standalone components, OnPush change detection, and signal-based computed properties across the Credit/BNPL library.',
-      'Implemented custom Angular preloading strategy using route metadata with retryImport wrappers for network-resilient lazy module loading.',
-      'Built biometric identity verification with selfie-video capture and liveness photo for digital document signing.',
+      'Unified three standalone Angular apps into a single NX monorepo with shared libraries — consolidating dependencies and unlocking cross-app reuse.',
+      'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine units, Playwright E2E, and a dual snapshot system (style + visual) guarding backward compatibility.',
+      'Engineered a 7-step credit pre-registration state machine — conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL ↔ step sync.',
+      'Built zero-dependency pinch-to-zoom, pan and double-tap gesture directives — multi-touch distance math, boundary-constrained transforms, and an rAF-throttled magnifier.',
+      'Designed a Claude-AI-assisted test-generation pipeline for 75 packages, encoding our testing principles into a 900-line reusable prompt specification.',
+      'Wrote a zero-maintenance test-catalog CLI that auto-discovers specs, counts cases via regex, and feeds a typed data file powering a live status dashboard.',
+      'Drove adoption of Angular 17+ standalone components, OnPush change detection and signal-based computed properties across the Credit/BNPL library.',
+      'Implemented a network-resilient preloading strategy using route metadata with retryImport wrappers for lazy module loading.',
+      'Shipped biometric identity verification — selfie-video capture and liveness photo for digital document signing.',
     ],
   },
   {
@@ -74,9 +90,9 @@ const EXPERIENCE = [
     location: 'Tehran',
     tags: ['Vue', 'Nuxt', 'Agile'],
     bullets: [
-      'Developed internal panels for marketing, accounting and other departments using Vue/Nuxt.',
-      'Researched and implemented agile process with the product team.',
-      'Mentored a front-end developer intern.',
+      'Built internal panels for marketing, accounting and other departments with Vue / Nuxt.',
+      'Researched and rolled out an agile workflow alongside the product team.',
+      'Mentored a frontend developer intern.',
     ],
   },
   {
@@ -87,8 +103,8 @@ const EXPERIENCE = [
     tags: ['Nuxt', 'SEO'],
     bullets: [
       'Built a responsive freight-forwarding platform with pixel-perfect implementations.',
-      'Implemented a Nuxt.js app for SEO optimization.',
-      'Documented components and wrote test cases for all methods.',
+      'Implemented a Nuxt.js app tuned for SEO.',
+      'Documented components and wrote test cases for every method.',
     ],
   },
 ];
@@ -100,11 +116,11 @@ const PROJECTS = [
     role: 'Architect & Lead Frontend',
     period: '2024 — 2025',
     stack: ['React', 'NX Monorepo', 'WebSockets', 'Docker', 'TypeScript'],
-    body: 'Two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries, deployed as separate Docker images behind nginx routing.',
+    body: 'A two-app React/NX monorepo for self-service restaurant ordering — a customer-facing kiosk and a kitchen display — sharing @pita/api and @pita/ui, deployed as separate Docker images behind nginx routing.',
     bullets: [
-      'Integrated Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback — probes configured IP first, then scans localhost proxy ports for USB printers, with mobile-device and browser-print fallbacks.',
-      'Real-time order sync between kiosk and kitchen via Laravel Echo + Pusher WebSockets, with a 10-second polling safety net and a live KDS board showing in-process vs ready orders.',
-      'Zero-downtime version checker for always-on kiosk hardware — polls /version.json with cache-busting every 5 min and forces a hard reload on new builds.',
+      'Integrated the Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback, plus mobile-device and browser-print safety nets.',
+      'Real-time order sync between kiosk and kitchen over Laravel Echo + Pusher WebSockets, with a 10-second polling backup and a live in-process vs ready KDS board.',
+      'Zero-downtime version checker for always-on hardware — polls a cache-busted /version.json and forces a hard reload on new builds.',
     ],
     featured: true,
   },
@@ -114,21 +130,21 @@ const PROJECTS = [
     role: 'Frontend Engineer',
     period: '2024',
     stack: ['Angular 17', 'PWA', 'Signals', 'Service Worker'],
-    body: 'Full Angular 17 PWA for prescription pharmaceutical e-commerce with a server-driven adaptive questionnaire engine and offline support.',
+    body: 'A full Angular 17 PWA for prescription pharmaceutical e-commerce, built around a server-driven adaptive questionnaire engine with offline support.',
     bullets: [
-      'Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched dynamically from the API based on the previous answer, enabling personalised eligibility screening.',
-      'Signal-based session management, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app support chat, and Service Worker for offline use.',
+      'Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched from the API based on the previous answer for personalised eligibility screening.',
+      'Signal-based session management, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app support chat, and a Service Worker for offline use.',
     ],
     featured: true,
   },
-  { name: 'Talent Academy', sub: 'Interactive video learning platform',  stack: ['Vue', 'Custom video player'], body: 'Interactive video player with playlists, instructor feedback messages, and global SSO for internal platforms.' },
-  { name: 'Majid',         sub: 'Online form builder (confidential)',      stack: ['Angular', 'Complex JSON'],   body: 'Drag-and-drop form builder (JotForm-style) — schema-driven UI with deep nested JSON handling and live preview.' },
+  { name: 'Talent Academy', sub: 'Interactive video learning platform', stack: ['Vue', 'Custom video player'], body: 'Interactive video player with playlists, instructor feedback messages, and global SSO for internal platforms.' },
+  { name: 'Majid',          sub: 'Online form builder (confidential)',   stack: ['Angular', 'Complex JSON'],    body: 'Drag-and-drop, JotForm-style form builder — schema-driven UI with deep nested-JSON handling and live preview.' },
 ];
 
 const STACK = {
-  core:      [['Angular', '5y'], ['React / Next.js', '4y'], ['TypeScript', '5y'], ['NX Monorepo', '3y']],
+  core:       [['Angular', '5y'], ['React / Next.js', '4y'], ['TypeScript', '5y'], ['NX Monorepo', '3y']],
   proficient: ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'],
-  familiar:  ['WebSockets', 'Pusher', 'Laravel Echo', 'Docker', 'Git', 'REST APIs', 'Figma', 'Agile/Scrum'],
+  familiar:   ['WebSockets', 'Pusher', 'Laravel Echo', 'Docker', 'Git', 'REST APIs', 'Figma', 'Agile/Scrum'],
 };
 
 const EDUCATION = [
@@ -159,6 +175,12 @@ const bullets = (items, type = 'dot') =>
       <span>${e(b)}</span>
     </li>`).join('')}</ul>`;
 
+// Font CSS — embedded if available (offline-safe), else fall back to Google Fonts.
+function fontCss() {
+  if (existsSync(FONTS_CSS)) return readFileSync(FONTS_CSS, 'utf-8');
+  return `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');`;
+}
+
 // ─── HTML template ───────────────────────────────────────────────────────────
 
 function buildHtml() {
@@ -170,124 +192,215 @@ function buildHtml() {
 <head>
 <meta charset="utf-8">
 <title>${e(PROFILE.name)} — Resume</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@page { size: A4; margin: 17mm 20mm 13mm; }
+${fontCss()}
+
+@page { size: A4; margin: 13mm 15mm 13mm; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #16a34a;
+  --green-deep: #0f7a38;
+  --green-tint: #f3faf5;
+  --ink: #0a0a0a;
+  --body: #2b2b2b;
+  --muted: #6b7280;
+  --faint: #9aa0a6;
+  --line: #e7e7e7;
+}
 
 body {
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
   font-size: 8.8pt;
-  color: #1a1a1a;
+  color: var(--body);
   background: #fff;
-  line-height: 1.42;
+  line-height: 1.45;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+
+a { color: inherit; text-decoration: none; }
+
+/* ── repeated page footer (prints on every page) ── */
+.page-footer {
+  position: fixed;
+  left: 0; right: 0; bottom: 6mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7pt;
+  color: var(--faint);
+  letter-spacing: 0.02em;
+}
+.page-footer__site { color: var(--green-deep); font-weight: 500; }
+.page-footer__site b { font-weight: 500; }
 
 /* ── header ── */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  padding-bottom: 11px;
-  border-bottom: 2px solid #1e8c47;
-  margin-bottom: 12px;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--green);
+  margin-bottom: 13px;
 }
-.header__name {
-  font-size: 26pt;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  color: #0a0a0a;
-  line-height: 1;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 9px;
 }
-.header__role {
-  margin-top: 4px;
-  font-size: 9.5pt;
-  color: #555;
-}
-.header__avail {
-  margin-top: 5px;
+.brand__mark {
+  width: 17px; height: 17px;
+  border-radius: 5px;
+  background: var(--green);
+  color: #fff;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7.5pt;
-  color: #1e8c47;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.02em;
 }
-.header__links {
-  text-align: right;
+.brand__word {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 8pt;
-  color: #555;
-  line-height: 1.8;
+  color: var(--muted);
+  letter-spacing: 0.01em;
 }
+.brand__word b { color: var(--ink); font-weight: 500; }
+.brand__dot { color: var(--green); }
+
+.header__name {
+  font-size: 27pt;
+  font-weight: 700;
+  letter-spacing: -0.038em;
+  color: var(--ink);
+  line-height: 0.98;
+}
+.header__role {
+  margin-top: 5px;
+  font-size: 10pt;
+  font-weight: 500;
+  color: var(--green-deep);
+}
+.header__tagline {
+  margin-top: 6px;
+  font-size: 9.5pt;
+  color: var(--body);
+  max-width: 46ch;
+  line-height: 1.4;
+}
+.header__avail {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7pt;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+/* contact rail */
+.contact {
+  flex-shrink: 0;
+  display: grid;
+  gap: 6px;
+  min-width: 168px;
+}
+.contact__row {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: baseline;
+  gap: 8px;
+}
+.contact__label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 6.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+.contact__value {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7.8pt;
+  color: var(--body);
+  text-align: right;
+}
+.contact__row--primary .contact__value {
+  font-size: 9pt;
+  font-weight: 500;
+  color: var(--green-deep);
+}
+.contact__row--primary .contact__label { color: var(--green); }
 
 /* ── stats strip ── */
 .stats {
   display: flex;
-  gap: 0;
-  border: 0.5px solid #e5e5e5;
-  border-radius: 7px;
+  border: 0.75px solid var(--line);
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 11px;
-  background: #fafafa;
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, #fff 0%, var(--green-tint) 100%);
 }
 .stat {
   flex: 1;
-  padding: 7px 12px;
-  border-right: 0.5px solid #e5e5e5;
+  padding: 8px 13px;
+  border-right: 0.75px solid var(--line);
 }
 .stat:last-child { border-right: none; }
 .stat__value {
-  font-size: 13pt;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #0a0a0a;
+  font-size: 14pt;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--green-deep);
   line-height: 1;
 }
 .stat__label {
-  margin-top: 2px;
-  font-size: 7pt;
-  color: #888;
+  margin-top: 3px;
+  font-size: 6.8pt;
+  color: var(--muted);
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 /* ── pitch ── */
 .pitch {
   font-size: 9pt;
   line-height: 1.5;
-  color: #333;
-  margin-bottom: 14px;
-  font-weight: 400;
+  color: var(--body);
+  margin-bottom: 12px;
 }
+.pitch b { font-weight: 600; color: var(--ink); }
 
 /* ── section ── */
-.section { margin-bottom: 13px; }
+.section { margin-bottom: 9px; }
 
 .kicker {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7.5pt;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #1e8c47;
+  color: var(--green);
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 }
+.kicker__num { font-weight: 500; }
+.kicker__label { color: var(--ink); font-weight: 500; }
 .kicker::after {
   content: '';
   flex: 1;
-  height: 0.5px;
-  background: #ddd;
+  height: 0.75px;
+  background: var(--line);
 }
 
 /* ── experience entry ── */
 .exp {
-  margin-bottom: 11px;
+  margin-bottom: 10px;
   page-break-inside: avoid;
 }
 .exp__head {
@@ -296,68 +409,79 @@ body {
   align-items: baseline;
 }
 .exp__company {
-  font-size: 12pt;
+  font-size: 12.5pt;
   font-weight: 600;
   letter-spacing: -0.015em;
-  color: #0a0a0a;
+  color: var(--ink);
 }
 .exp__period {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7.5pt;
-  color: #999;
+  color: var(--muted);
 }
 .exp__role-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
-.exp__role  { font-size: 8.5pt; color: #555; }
-.exp__loc   { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: #999; }
+.exp__role  { font-size: 8.8pt; color: var(--green-deep); font-weight: 500; }
+.exp__loc   { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: var(--faint); }
 
 .tags {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .tag {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7pt;
-  padding: 1.5px 6px;
-  border-radius: 4px;
-  background: #f2f2f2;
-  color: #555;
-  border: 0.5px solid #ddd;
+  padding: 1.5px 7px;
+  border-radius: 5px;
+  background: #f4f4f5;
+  color: var(--muted);
+  border: 0.5px solid var(--line);
 }
+
+/* featured highlight block */
+.featured {
+  background: var(--green-tint);
+  border-left: 2.5px solid var(--green);
+  border-radius: 0 6px 6px 0;
+  padding: 8px 11px 8px 12px;
+  margin-bottom: 8px;
+}
+.featured .bullet { color: #1f2937; font-size: 8.7pt; }
+.featured .b-dot { color: var(--green); }
 
 /* ── bullets ── */
 .bullets { list-style: none; display: grid; gap: 3px; }
 .bullet {
   display: grid;
   grid-template-columns: 14px 1fr;
-  gap: 5px;
+  gap: 6px;
   font-size: 8.5pt;
-  line-height: 1.45;
-  color: #333;
+  line-height: 1.48;
+  color: var(--body);
   align-items: start;
 }
 .b-dot {
-  color: #1e8c47;
+  color: var(--green);
   font-weight: 700;
-  font-size: 10pt;
-  line-height: 1.25;
+  font-size: 9pt;
+  line-height: 1.3;
 }
 .b-num {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7pt;
-  color: #c0c0c0;
-  line-height: 1.65;
+  color: #c4c4c4;
+  line-height: 1.7;
 }
 
 /* ── project card ── */
 .project {
-  margin-bottom: 11px;
+  margin-bottom: 10px;
   page-break-inside: avoid;
 }
 .project__head {
@@ -366,87 +490,120 @@ body {
   align-items: baseline;
 }
 .project__name {
-  font-size: 11.5pt;
+  font-size: 12pt;
   font-weight: 600;
-  color: #0a0a0a;
+  color: var(--ink);
 }
-.project__sub  { font-size: 8pt; color: #666; margin-bottom: 3px; }
+.project__sub  { font-size: 8pt; color: var(--muted); margin-bottom: 4px; }
 .project__stack {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7.5pt;
-  color: #1e8c47;
-  margin-bottom: 4px;
+  color: var(--green-deep);
+  margin-bottom: 5px;
 }
-.project__body { font-size: 8.5pt; line-height: 1.45; color: #444; margin-bottom: 5px; }
+.project__body { font-size: 8.5pt; line-height: 1.48; color: var(--body); margin-bottom: 6px; }
 
 /* ── compact "also" list ── */
-.also { border-top: 0.5px solid #eaeaea; padding-top: 7px; margin-top: 5px; }
+.also { border-top: 0.75px solid var(--line); padding-top: 7px; margin-top: 5px; }
 .also__label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7pt;
-  color: #c0c0c0;
-  letter-spacing: 0.1em;
+  color: var(--faint);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
-.also__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 28px; }
-.also__name  { font-size: 8.5pt; font-weight: 600; }
-.also__stack { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7pt; color: #999; margin-left: 6px; }
-.also__body  { font-size: 7.5pt; color: #666; margin-top: 1px; line-height: 1.4; }
+.also__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 30px; }
+.also__name  { font-size: 8.7pt; font-weight: 600; color: var(--ink); }
+.also__stack { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7pt; color: var(--green-deep); margin-left: 6px; }
+.also__body  { font-size: 7.6pt; color: var(--muted); margin-top: 2px; line-height: 1.42; }
 
 /* ── toolkit ── */
 .stack-grid {
   display: grid;
-  grid-template-columns: 58px 1fr;
-  gap: 4px 14px;
+  grid-template-columns: 62px 1fr;
+  gap: 5px 14px;
   align-items: baseline;
 }
 .stack-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7.5pt;
-  color: #999;
+  color: var(--faint);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.stack-val  { font-size: 8.5pt; color: #333; }
-.stack-dim  { color: #bbb; }
-.stack-fam  { color: #666; }
+.stack-val  { font-size: 8.6pt; color: var(--body); }
+.stack-dim  { color: #b8b8b8; }
+.stack-fam  { color: var(--muted); }
 
 /* ── background ── */
 .bg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-.edu__degree  { font-size: 9.5pt; font-weight: 500; }
-.edu__school  { font-size: 8.5pt; color: #555; margin-top: 1px; }
-.edu__period  { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: #999; margin-top: 3px; }
+.edu__degree  { font-size: 9.5pt; font-weight: 600; color: var(--ink); }
+.edu__school  { font-size: 8.5pt; color: var(--muted); margin-top: 2px; }
+.edu__period  { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: var(--faint); margin-top: 3px; }
 .courses-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7pt;
-  color: #c0c0c0;
-  letter-spacing: 0.1em;
+  color: var(--faint);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
-.course { margin-bottom: 4px; }
-.course__name { font-size: 8.5pt; font-weight: 500; }
-.course__meta { font-size: 7.5pt; color: #888; }
+.course { margin-bottom: 5px; }
+.course__name { font-size: 8.6pt; font-weight: 500; color: var(--ink); }
+.course__meta { font-size: 7.6pt; color: var(--muted); }
 
-/* ── page break ── */
-.page-2 { page-break-before: always; }
+/* ── closing line ── */
+.closing {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 0.75px solid var(--line);
+  page-break-inside: avoid;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+}
+.closing__text { font-size: 8.6pt; color: var(--body); }
+.closing__text b { color: var(--ink); font-weight: 600; }
+.closing__cta {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 8.5pt;
+  font-weight: 500;
+  color: var(--green-deep);
+  white-space: nowrap;
+}
+
+/* ── flow control ── */
+.page-2 { } /* sections flow naturally; cards avoid internal breaks */
 </style>
 </head>
 <body>
 
+<!-- repeated footer on every page -->
+<div class="page-footer">
+  <span class="page-footer__site"><b>imanamini.ir</b> — interactive portfolio ↗</span>
+  <span>${e(PROFILE.name)} · ${e(PROFILE.role)}</span>
+</div>
+
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div>
+    <a class="brand" href="https://imanamini.ir">
+      <span class="brand__mark">IA</span>
+      <span class="brand__word">iman<span class="brand__dot">.</span>amini</span>
+    </a>
     <div class="header__name">${e(PROFILE.name)}</div>
     <div class="header__role">${e(PROFILE.role)}</div>
+    <div class="header__tagline">${e(PROFILE.tagline)}</div>
     <div class="header__avail">${e(PROFILE.availability)}</div>
   </div>
-  <div class="header__links">
-    ${e(PROFILE.email)}<br>
-    ${e(PROFILE.linkedin)}<br>
-    ${e(PROFILE.github)}<br>
-    ${e(PROFILE.website)}
+  <div class="contact">
+    ${PROFILE.links.map(l => `
+    <a class="contact__row${l.primary ? ' contact__row--primary' : ''}" href="${l.href}">
+      <span class="contact__label">${e(l.label)}</span>
+      <span class="contact__value">${e(l.value)}</span>
+    </a>`).join('')}
   </div>
 </div>
 
@@ -464,7 +621,7 @@ body {
 
 <!-- ─── EXPERIENCE ─── -->
 <div class="section">
-  <div class="kicker"><span>01 — Experience</span></div>
+  <div class="kicker"><span class="kicker__num">01</span><span class="kicker__label">Experience</span></div>
 
   ${EXPERIENCE.map(job => `
   <div class="exp">
@@ -477,7 +634,7 @@ body {
       <div class="exp__loc">${e(job.location)}</div>
     </div>
     <div class="tags">${tags(job.tags)}</div>
-    ${job.featured ? bullets(job.featured, 'dot') : ''}
+    ${job.featured ? `<div class="featured">${bullets(job.featured, 'dot')}</div>` : ''}
     ${job.bullets  ? bullets(job.bullets,  'num') : ''}
   </div>`).join('')}
 </div>
@@ -487,7 +644,7 @@ body {
 
 <!-- ─── PROJECTS ─── -->
 <div class="section">
-  <div class="kicker"><span>02 — Projects</span></div>
+  <div class="kicker"><span class="kicker__num">02</span><span class="kicker__label">Projects</span></div>
 
   ${featuredProjects.map(p => `
   <div class="project">
@@ -502,7 +659,7 @@ body {
   </div>`).join('')}
 
   <div class="also">
-    <div class="also__label">Also</div>
+    <div class="also__label">Also shipped</div>
     <div class="also__grid">
       ${otherProjects.map(p => `
       <div>
@@ -515,7 +672,7 @@ body {
 
 <!-- ─── TOOLKIT ─── -->
 <div class="section">
-  <div class="kicker"><span>03 — Toolkit</span></div>
+  <div class="kicker"><span class="kicker__num">03</span><span class="kicker__label">Toolkit</span></div>
   <div class="stack-grid">
     <div class="stack-label">Core</div>
     <div class="stack-val">${STACK.core.map(([n, y]) => `${e(n)} <span class="stack-dim">${e(y)}</span>`).join(' · ')}</div>
@@ -528,7 +685,7 @@ body {
 
 <!-- ─── BACKGROUND ─── -->
 <div class="section">
-  <div class="kicker"><span>04 — Background</span></div>
+  <div class="kicker"><span class="kicker__num">04</span><span class="kicker__label">Background</span></div>
   <div class="bg-grid">
     <div>
       ${EDUCATION.map(ed => `
@@ -539,7 +696,7 @@ body {
       </div>`).join('')}
     </div>
     <div>
-      <div class="courses-label">Recent Courses</div>
+      <div class="courses-label">Recent courses</div>
       ${COURSES.map(c => `
       <div class="course">
         <span class="course__name">${e(c.name)}</span>
@@ -549,17 +706,45 @@ body {
   </div>
 </div>
 
+<!-- ─── CLOSING ─── -->
+<div class="closing">
+  <div class="closing__text">Thanks for reading to the end — <b>let’s build something great together.</b></div>
+  <a class="closing__cta" href="https://imanamini.ir">imanamini.ir ↗</a>
+</div>
+
 </div><!-- end .page-2 -->
 </body>
 </html>`;
 }
 
+// ─── Chrome lookup ─────────────────────────────────────────────────────────
+
+function findChrome() {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+
+  // puppeteer cache: ~/.cache/puppeteer/chrome/<platform-version>/chrome-linux64/chrome
+  const cacheRoot = join(homedir(), '.cache', 'puppeteer', 'chrome');
+  try {
+    const builds = readdirSync(cacheRoot).sort().reverse();
+    for (const b of builds) {
+      for (const sub of ['chrome-linux64/chrome', 'chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing']) {
+        const candidate = join(cacheRoot, b, sub);
+        if (existsSync(candidate)) return candidate;
+      }
+    }
+  } catch { /* no puppeteer cache */ }
+
+  return '/usr/bin/google-chrome';
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
+
+const CHROME = findChrome();
 
 console.log('▸ Building HTML…');
 writeFileSync(TMP, buildHtml(), 'utf-8');
 
-console.log('▸ Running Chrome headless…');
+console.log(`▸ Running Chrome headless (${CHROME})…`);
 try {
   execSync(
     `"${CHROME}" ` +
