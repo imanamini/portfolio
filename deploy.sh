@@ -13,8 +13,9 @@ echo "==> Preparing artifacts..."
 cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
 cp "$REPO_ROOT/CNAME" "$DIST_DIR/CNAME"
 touch "$DIST_DIR/.nojekyll"
-# Preserve PDF in the deploy output
-[ -f "$REPO_ROOT/Iman Amini Resume.pdf" ] && cp "$REPO_ROOT/Iman Amini Resume.pdf" "$DIST_DIR/"
+# Ensure the redesigned CV (public/) is the one served — never overwrite it
+# with the older reference copy kept at the repo root.
+[ -f "$REPO_ROOT/public/Iman Amini Resume.pdf" ] && cp "$REPO_ROOT/public/Iman Amini Resume.pdf" "$DIST_DIR/"
 # .gitignore for master: ignore caches and dependencies
 cat > "$DIST_DIR/.gitignore" <<'GITIGNORE'
 node_modules/

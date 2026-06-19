@@ -32,7 +32,8 @@ jobs:
           cp dist/resume-app/browser/index.html dist/resume-app/browser/404.html
           cp CNAME dist/resume-app/browser/CNAME
           touch dist/resume-app/browser/.nojekyll
-          [ -f "Iman Amini Resume.pdf" ] && cp "Iman Amini Resume.pdf" dist/resume-app/browser/ || true
+          # Serve the redesigned CV from public/, not the older root reference copy.
+          [ -f "public/Iman Amini Resume.pdf" ] && cp "public/Iman Amini Resume.pdf" dist/resume-app/browser/ || true
 
       - name: Deploy to master
         uses: JamesIves/github-pages-deploy-action@v4
