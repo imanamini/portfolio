@@ -222,21 +222,6 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* ── repeated page footer (prints on every page) ── */
-.page-footer {
-  position: fixed;
-  left: 0; right: 0; bottom: 6mm;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
-  color: var(--faint);
-  letter-spacing: 0.02em;
-}
-.page-footer__site { color: var(--green-deep); font-weight: 500; }
-.page-footer__site b { font-weight: 500; }
-
 /* ── header ── */
 .header {
   display: flex;
@@ -579,12 +564,6 @@ a { color: inherit; text-decoration: none; }
 </style>
 </head>
 <body>
-
-<!-- repeated footer on every page -->
-<div class="page-footer">
-  <span class="page-footer__site"><b>imanamini.ir</b> — interactive portfolio ↗</span>
-  <span>${e(PROFILE.name)} · ${e(PROFILE.role)}</span>
-</div>
 
 <!-- ─── HEADER ─── -->
 <div class="header">
