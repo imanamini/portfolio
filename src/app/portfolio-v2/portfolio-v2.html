@@ -105,6 +105,12 @@
               </li>
             </ul>
           </ng-container>
+          <div *ngIf="job.backendBullets?.length" class="exp__backend">
+            <div class="exp__backend-label">Backend Contributions · Java / Spring Boot · PHP</div>
+            <ul class="exp__backend-list">
+              <li *ngFor="let b of job.backendBullets">{{ b }}</li>
+            </ul>
+          </div>
         </div>
       </article>
     </div>
@@ -192,6 +198,10 @@
         <div class="stack__heading">Proficient</div>
         <div class="stack__chips">
           <span *ngFor="let t of stackSecondary" class="stack__chip">{{ t }}</span>
+        </div>
+        <div class="stack__heading stack__heading--small stack__heading--backend">Backend</div>
+        <div class="stack__chips stack__chips--backend">
+          <span *ngFor="let t of stackBackend" class="stack__chip stack__chip--backend">{{ t }}</span>
         </div>
         <div class="stack__heading stack__heading--small">Also familiar</div>
         <div class="stack__familiar">

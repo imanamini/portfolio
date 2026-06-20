@@ -69,6 +69,12 @@ export class PortfolioV2Component {
         'Adopted Angular 17+ standalone components, OnPush change detection, and signal-based computed properties across the Credit/BNPL library.',
         'Built a biometric identity verification feature with selfie-video capture and liveness photo for digital document signing.',
       ],
+      backendBullets: [
+        'Instrumented Credit Onboarding Java (Spring Boot) service with Micrometer metrics end-to-end — covering SMC scoring, ICS OTP, BNPL inquiry/allocation, campaign wallet, sequential and volunteer flows.',
+        'Fixed production Java bugs: NullPointerException in blocking-detail service, journal double-linking on duplicate trackingCodes, and BNPL SMS double-activation — each with unit test coverage.',
+        'Implemented configurable time-window scoring-provider switch in SMC Java service (ICS ↔ BANK_SCORE).',
+        'Built Credit Club (Mellat & Tejarat) and Installment Cheque landing pages in PHP, integrating credit-installment REST APIs.',
+      ],
     },
     {
       company: 'Adowing',
@@ -107,6 +113,7 @@ export class PortfolioV2Component {
     { name: 'NX Monorepo', years: 3 },
   ];
   stackSecondary = ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'];
+  stackBackend = ['Java / Spring Boot', 'PHP'];
   stackFamiliar = ['WebSockets', 'Pusher', 'Laravel Echo', 'Docker', 'Git', 'REST APIs', 'Figma', 'Agile/Scrum'];
 
   projects: Project[] = [

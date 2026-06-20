@@ -15,11 +15,11 @@ github_label: github.com/imanamini
 
 ## Pitch
 
-Senior frontend engineer who turns complex financial journeys into flows that feel effortless. For the past five years I have built and led the Credit & BNPL frontend at Digipay — Iran's largest digital-payments platform — where the screens I own are used by more than 10 million people. I architect shared design systems, set technical direction, and lift the engineers around me. Equally fluent in Angular, React / Next.js and Vue, I learn new stacks fast and I am looking for an international team to do my best work with.
+Senior frontend engineer who turns complex financial journeys into flows that feel effortless. For the past five years I have built and led the Credit & BNPL frontend at Digipay — Iran's largest digital-payments platform — where the screens I own are used by more than 10 million people. I architect shared design systems, set technical direction, and lift the engineers around me. Equally fluent in Angular, React / Next.js and Vue, with additional backend contributions in Java (Spring Boot) microservices and PHP — I learn new stacks fast and I am looking for an international team to do my best work with.
 
 ## Summary
 
-Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in collaborative, cross-functional teams.
+Frontend-heavy engineer with cross-stack experience — 5+ years specializing in Angular and TypeScript at scale in fintech, with backend contributions in Java (Spring Boot) microservices and PHP. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in cross-functional teams.
 
 ## Stats
 
@@ -30,7 +30,7 @@ Senior Frontend Engineer with 5+ years of experience in fintech, specializing in
 
 ## Skills
 
-Angular, TypeScript, RxJS, NX Monorepo, React, Next.js, Vue, Nuxt, Playwright, Karma/Jasmine, SCSS/CSS, Git, REST APIs, Figma, Agile/Scrum
+Angular, TypeScript, RxJS, NX Monorepo, React, Next.js, Vue, Nuxt, Playwright, Karma/Jasmine, SCSS/CSS, Java / Spring Boot, PHP, Git, REST APIs, Figma, Agile/Scrum
 
 ## Experience
 
@@ -131,8 +131,11 @@ Angular · 5y, React / Next.js · 4y, TypeScript · 5y, NX Monorepo · 3y
 ### proficient
 RxJS, Vue, Nuxt, Playwright, Karma/Jasmine, SCSS / Tailwind, PWA / Service Workers
 
+### backend
+Java / Spring Boot, PHP
+
 ### familiar
-Java / Spring Boot, PHP, WebSockets, Pusher, Laravel Echo, Docker, Git, REST APIs, Figma, Agile/Scrum
+WebSockets, Pusher, Laravel Echo, Docker, Git, REST APIs, Figma, Agile/Scrum
 
 ## Education
 

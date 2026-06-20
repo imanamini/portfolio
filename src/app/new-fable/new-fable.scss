@@ -806,6 +806,13 @@ ul {
     font-size: 0.72rem;
     padding: 0.42rem 0.9rem;
   }
+
+  &--backend {
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+    background: #eff6ff;
+    font-weight: 600;
+  }
 }
 
 // ── bento / selected work ────────────────────────────────────
@@ -899,6 +906,17 @@ ul {
     &--gap {
       margin-top: 2rem;
     }
+
+    &--backend {
+      color: #1d4ed8 !important;
+    }
+  }
+
+  &__chips--backend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   &__row {

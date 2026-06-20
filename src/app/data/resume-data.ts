@@ -36,7 +36,7 @@ export const RESUME = {
   phone: "+98-9034646366",
   linkedinUrl: "https://www.linkedin.com/in/imanamini78",
 
-  summary: "Senior Frontend Engineer with 5+ years of experience in fintech, specializing in Angular and TypeScript at scale. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in collaborative, cross-functional teams.",
+  summary: "Frontend-heavy engineer with cross-stack experience — 5+ years specializing in Angular and TypeScript at scale in fintech, with backend contributions in Java (Spring Boot) microservices and PHP. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in cross-functional teams.",
 
   skills: [
     "Angular",
@@ -50,6 +50,8 @@ export const RESUME = {
     "Playwright",
     "Karma/Jasmine",
     "SCSS/CSS",
+    "Java / Spring Boot",
+    "PHP",
     "Git",
     "REST APIs",
     "Figma",

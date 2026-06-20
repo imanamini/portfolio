@@ -443,29 +443,32 @@ a { color: inherit; text-decoration: none; }
 
 /* ── backend contributions sub-section ── */
 .backend-block {
-  margin-top: 8px;
-  border-top: 0.75px dashed var(--line);
-  padding-top: 6px;
+  margin-top: 10px;
+  background: #eff6ff;
+  border-left: 2.5px solid #3b82f6;
+  border-radius: 0 6px 6px 0;
+  padding: 8px 11px 8px 12px;
 }
+.backend-block .bullet { color: #1e3a5f; font-size: 8.5pt; }
+.backend-block .b-dot { color: #3b82f6; }
 .backend-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 6.8pt;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #6b7280;
-  margin-bottom: 5px;
+  color: #1d4ed8;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .backend-label::after {
-  content: 'Java · PHP';
-  background: #f4f4f5;
-  border: 0.5px solid var(--line);
-  border-radius: 4px;
-  padding: 1px 6px;
+  content: 'Java / Spring Boot  ·  PHP';
+  font-weight: 400;
   font-size: 6.5pt;
-  color: #9aa0a6;
+  color: #3b82f6;
+  letter-spacing: 0.04em;
 }
 
 /* ── flow control ── */
@@ -522,9 +525,9 @@ a { color: inherit; text-decoration: none; }
       <div class="exp__loc">${e(job.location)}</div>
     </div>
     <div class="tags">${tags(job.tags)}</div>
-    ${job.featured ? `<div class="featured">${bullets(job.featured, 'dot')}</div>` : ''}
-    ${job.bullets  ? bullets(job.bullets,  'num') : ''}
-    ${job.backendBullets ? `
+    ${job.featured && job.featured.length ? `<div class="featured">${bullets(job.featured, 'dot')}</div>` : ''}
+    ${job.bullets  && job.bullets.length  ? bullets(job.bullets,  'num') : ''}
+    ${job.backendBullets && job.backendBullets.length ? `
     <div class="backend-block">
       <div class="backend-label">Backend Contributions</div>
       ${bullets(job.backendBullets, 'dot')}
@@ -571,6 +574,9 @@ a { color: inherit; text-decoration: none; }
     <div class="stack-val">${STACK.core.map(([n, y]) => `${e(n)} <span class="stack-dim">${e(y)}</span>`).join(' · ')}</div>
     <div class="stack-label">Proficient</div>
     <div class="stack-val">${STACK.proficient.map(e).join(' · ')}</div>
+    ${STACK.backend && STACK.backend.length ? `
+    <div class="stack-label" style="color:#1d4ed8">Backend</div>
+    <div class="stack-val" style="color:#1d4ed8;font-weight:500">${STACK.backend.map(e).join(' · ')}</div>` : ''}
     <div class="stack-label">Familiar</div>
     <div class="stack-val stack-fam">${STACK.familiar.map(e).join(' · ')}</div>
   </div>

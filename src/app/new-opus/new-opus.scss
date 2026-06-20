@@ -683,6 +683,19 @@
 .chip--ghost {
   background: none;
 }
+.chip--backend {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  font-weight: 600;
+}
+.cluster--backend {
+  border-left: 2px solid #3b82f6;
+  padding-left: 12px;
+}
+.cluster__title--backend {
+  color: #1d4ed8 !important;
+}
 .job__list {
   list-style: none;
   display: grid;

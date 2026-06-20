@@ -286,6 +286,12 @@
             <span class="tag tag--lg">{{ t }}</span>
           }
         </div>
+        <p class="stack__heading stack__heading--gap stack__heading--backend">Backend</p>
+        <div class="stack__chips stack__chips--backend">
+          @for (t of backendSkills; track t) {
+            <span class="tag tag--lg tag--backend">{{ t }}</span>
+          }
+        </div>
         <p class="stack__heading stack__heading--gap">Also familiar</p>
         <p class="stack__familiar">
           @for (t of familiar; track t; let last = $last) {

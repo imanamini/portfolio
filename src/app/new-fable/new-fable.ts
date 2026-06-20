@@ -115,6 +115,9 @@ export class NewFableComponent implements AfterViewInit, OnDestroy {
         'Built a zero-maintenance test catalog CLI that auto-discovers specs across all 75 packages and generates a typed data file powering a live status dashboard.',
         'Adopted Angular 17+ standalone components, OnPush change detection, and signal-based computed state across the Credit/BNPL library.',
         'Built a biometric identity-verification feature with selfie-video capture and liveness photo for digital document signing.',
+        '[Backend] Instrumented Credit Onboarding Java (Spring Boot) service with Micrometer metrics end-to-end — SMC scoring, ICS OTP, BNPL inquiry/allocation, campaign wallet, sequential and volunteer activation flows.',
+        '[Backend] Fixed production Java bugs: NullPointerException in blocking-detail service, journal double-linking on duplicate trackingCodes, and BNPL SMS double-activation — each covered with unit tests.',
+        '[Backend] Built Credit Club (Mellat & Tejarat) and Installment Cheque landing pages in PHP, integrating credit-installment REST APIs.',
       ],
     },
     {
@@ -181,6 +184,7 @@ export class NewFableComponent implements AfterViewInit, OnDestroy {
     { name: 'NX Monorepo', years: 3 },
   ];
   proficient = ['React', 'Next.js', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS/CSS'];
+  backendSkills = ['Java / Spring Boot', 'PHP'];
   familiar = ['Git', 'REST APIs', 'Figma', 'Agile/Scrum'];
 
   contactLinks: ContactLink[] = [

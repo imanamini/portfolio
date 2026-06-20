@@ -157,7 +157,7 @@ function parseProjects(text) {
 }
 
 function parseToolkit(text) {
-  const result = { core: [], proficient: [], familiar: [] };
+  const result = { core: [], proficient: [], backend: [], familiar: [] };
   for (const { header, body } of splitEntries(text)) {
     const key = header.trim().toLowerCase();
     const raw = body.trim();
