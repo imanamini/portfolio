@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "pdf": "node scripts/generate-pdf.mjs"
+    "pdf": "node scripts/generate-pdf.mjs",
+    "sync": "node scripts/sync-resume.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.12.1",

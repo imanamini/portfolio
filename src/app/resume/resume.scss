@@ -217,6 +217,30 @@ $white: #ffffff;
   }
 }
 
+// ─── Backend sub-section ───────────────────────────────────────────
+.entry__backend {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed $border;
+}
+
+.entry__backend-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $text-muted;
+  margin-bottom: 0.4rem;
+
+  &::after {
+    content: ' · Java · PHP';
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+  }
+}
+
 // ─── Courses ───────────────────────────────────────────────────────
 .courses-list {
   list-style: none;

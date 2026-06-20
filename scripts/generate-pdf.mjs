@@ -5,18 +5,10 @@
  * Usage:  node scripts/generate-pdf.mjs
  *    or:  npm run pdf
  *
+ * Data source: RESUME.md (parsed by scripts/parse-resume.mjs)
+ * To update resume content, edit RESUME.md and run: npm run pdf
+ *
  * Requirements: Google Chrome / Chromium.
- *               Looked up in this order:
- *                 1. env var CHROME_PATH
- *                 2. a puppeteer-cached Chrome under ~/.cache/puppeteer
- *                 3. /usr/bin/google-chrome
- *
- * Fonts (Inter + JetBrains Mono) are embedded from scripts/fonts/fonts.css,
- * so the PDF renders identically with or without network access. To refresh
- * the embedded fonts, re-run scripts/fonts/embed-fonts.mjs.
- *
- * Update the resume data constants at the top of this file whenever the
- * content changes, then re-run to regenerate the PDF.
  */
 
 import { execSync } from 'child_process';
@@ -24,6 +16,7 @@ import { writeFileSync, rmSync, readFileSync, existsSync, readdirSync } from 'fs
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
+import { parseResume } from './parse-resume.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -31,131 +24,21 @@ const TMP = '/tmp/_iman_resume.html';
 const OUTPUT = resolve(ROOT, 'public', 'Iman Amini Resume.pdf');
 const FONTS_CSS = resolve(__dirname, 'fonts', 'fonts.css');
 
-// ─── Resume data ─────────────────────────────────────────────────────────────
+// ─── Resume data (from RESUME.md via parse-resume.mjs) ───────────────────────
 
-const PROFILE = {
-  name: 'Iman Amini',
-  role: 'Senior Front-End Engineer',
-  tagline: 'I build financial products that 10M+ people trust with their money.',
-  availability: 'Open to international roles · Remote / Hybrid / On-site · Fluent English',
-  links: [
-    { label: 'Portfolio', value: 'imanamini.ir',                 href: 'https://imanamini.ir',                     primary: true },
-    { label: 'Email',     value: 'iman.fa88@gmail.com',          href: 'mailto:iman.fa88@gmail.com' },
-    { label: 'LinkedIn',  value: 'linkedin.com/in/imanamini78',  href: 'https://www.linkedin.com/in/imanamini78' },
-    { label: 'GitHub',    value: 'github.com/imanamini',         href: 'https://github.com/imanamini' },
-  ],
-  pitch:
-    'Senior frontend engineer who turns complex financial journeys into flows that feel effortless. ' +
-    'For the past five years I have built and led the Credit & BNPL frontend at Digipay — Iran’s largest digital-payments platform — ' +
-    'where the screens I own are used by more than 10 million people. I architect shared design systems, set technical direction, ' +
-    'and lift the engineers around me. Equally fluent in Angular, React / Next.js and Vue, I learn new stacks fast and I am looking ' +
-    'for an international team to do my best work with.',
-};
+const R = parseResume();
 
-const STATS = [
-  { value: '10M+', label: 'users on flows I own' },
-  { value: '5+',   label: 'years in fintech frontend' },
-  { value: '14',   label: 'shared npm packages shipped' },
-  { value: '75',   label: 'package monorepo I help steer' },
-];
-
-const EXPERIENCE = [
-  {
-    company: 'Digipay',
-    role: 'Senior Front-End Engineer',
-    period: 'Dec 2021 — Present',
-    location: 'Tehran',
-    tags: ['Angular', 'TypeScript', 'NX Monorepo', 'RxJS', 'Signals'],
-    featured: [
-      'Lead the Credit & BNPL frontend — multi-step financial journeys in Angular + TypeScript that 10M+ people rely on every day.',
-      'Architected and shipped 14 shared npm packages, cutting cross-team duplication and accelerating delivery across every product line.',
-      'Set the technical direction for the Credit & BNPL line and mentor the engineers building it.',
-    ],
-    bullets: [
-      'Unified three standalone Angular apps into a single NX monorepo with shared libraries — consolidating dependencies and unlocking cross-app reuse.',
-      'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine units, Playwright E2E, and a dual snapshot system (style + visual) guarding backward compatibility.',
-      'Engineered a 7-step credit pre-registration state machine — conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL ↔ step sync.',
-      'Built zero-dependency pinch-to-zoom, pan and double-tap gesture directives — multi-touch distance math, boundary-constrained transforms, and an rAF-throttled magnifier.',
-      'Designed a Claude-AI-assisted test-generation pipeline for 75 packages, encoding our testing principles into a 900-line reusable prompt specification.',
-      'Wrote a zero-maintenance test-catalog CLI that auto-discovers specs, counts cases via regex, and feeds a typed data file powering a live status dashboard.',
-      'Drove adoption of Angular 17+ standalone components, OnPush change detection and signal-based computed properties across the Credit/BNPL library.',
-      'Implemented a network-resilient preloading strategy using route metadata with retryImport wrappers for lazy module loading.',
-      'Shipped biometric identity verification — selfie-video capture and liveness photo for digital document signing.',
-    ],
-  },
-  {
-    company: 'Adowing',
-    role: 'Front-End Developer',
-    period: 'Oct 2019 — Dec 2021',
-    location: 'Tehran',
-    tags: ['Vue', 'Nuxt', 'Agile'],
-    bullets: [
-      'Built internal panels for marketing, accounting and other departments with Vue / Nuxt.',
-      'Researched and rolled out an agile workflow alongside the product team.',
-      'Mentored a frontend developer intern.',
-    ],
-  },
-  {
-    company: 'Carnotic',
-    role: 'Front-End Developer',
-    period: 'Oct 2019 — Dec 2021',
-    location: 'Tehran',
-    tags: ['Nuxt', 'SEO'],
-    bullets: [
-      'Built a responsive freight-forwarding platform with pixel-perfect implementations.',
-      'Implemented a Nuxt.js app tuned for SEO.',
-      'Documented components and wrote test cases for every method.',
-    ],
-  },
-];
-
-const PROJECTS = [
-  {
-    name: 'Pita',
-    sub: 'Restaurant Kiosk + Kitchen Display System',
-    role: 'Architect & Lead Frontend',
-    period: '2024 — 2025',
-    stack: ['React', 'NX Monorepo', 'WebSockets', 'Docker', 'TypeScript'],
-    body: 'A two-app React/NX monorepo for self-service restaurant ordering — a customer-facing kiosk and a kitchen display — sharing @pita/api and @pita/ui, deployed as separate Docker images behind nginx routing.',
-    bullets: [
-      'Integrated the Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback, plus mobile-device and browser-print safety nets.',
-      'Real-time order sync between kiosk and kitchen over Laravel Echo + Pusher WebSockets, with a 10-second polling backup and a live in-process vs ready KDS board.',
-      'Zero-downtime version checker for always-on hardware — polls a cache-busted /version.json and forces a hard reload on new builds.',
-    ],
-    featured: true,
-  },
-  {
-    name: 'Pharma',
-    sub: 'Prescription Drug E-commerce PWA',
-    role: 'Frontend Engineer',
-    period: '2024',
-    stack: ['Angular 17', 'PWA', 'Signals', 'Service Worker'],
-    body: 'A full Angular 17 PWA for prescription pharmaceutical e-commerce, built around a server-driven adaptive questionnaire engine with offline support.',
-    bullets: [
-      'Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched from the API based on the previous answer for personalised eligibility screening.',
-      'Signal-based session management, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app support chat, and a Service Worker for offline use.',
-    ],
-    featured: true,
-  },
-  { name: 'Talent Academy', sub: 'Interactive video learning platform', stack: ['Vue', 'Custom video player'], body: 'Interactive video player with playlists, instructor feedback messages, and global SSO for internal platforms.' },
-  { name: 'Majid',          sub: 'Online form builder (confidential)',   stack: ['Angular', 'Complex JSON'],    body: 'Drag-and-drop, JotForm-style form builder — schema-driven UI with deep nested-JSON handling and live preview.' },
-];
-
-const STACK = {
-  core:       [['Angular', '5y'], ['React / Next.js', '4y'], ['TypeScript', '5y'], ['NX Monorepo', '3y']],
-  proficient: ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'],
-  familiar:   ['WebSockets', 'Pusher', 'Laravel Echo', 'Docker', 'Git', 'REST APIs', 'Figma', 'Agile/Scrum'],
-};
-
-const EDUCATION = [
-  { degree: 'B.Sc. Computer Engineering', school: 'Islamic Azad University, Tehran', period: '2017 — 2022' },
-];
-
-const COURSES = [
-  { name: 'Claude Code in Action',                               source: 'Anthropic', year: '2026' },
-  { name: 'The Complete Guide to Becoming a Software Architect', source: 'Udemy',     year: '2025' },
-  { name: 'Angular — The Complete Guide',                        source: 'Udemy',     year: '2024' },
-];
+const PROFILE  = { ...R.profile, pitch: R.pitch };
+const STATS    = R.stats;
+const EXPERIENCE = R.experience;
+const PROJECTS = R.projects;
+const STACK    = R.toolkit;
+const EDUCATION = R.education.map(ed => ({
+  degree: ed.degree,
+  school: ed.location ? ed.institution + ', ' + ed.location : ed.institution,
+  period: ed.period,
+}));
+const COURSES = R.courses.map(c => ({ name: c.name, source: c.provider, year: c.year || '' }));
 
 // ─── HTML builder helpers ────────────────────────────────────────────────────
 
@@ -386,7 +269,6 @@ a { color: inherit; text-decoration: none; }
 /* ── experience entry ── */
 .exp {
   margin-bottom: 10px;
-  page-break-inside: avoid;
 }
 .exp__head {
   display: flex;
@@ -559,6 +441,33 @@ a { color: inherit; text-decoration: none; }
   white-space: nowrap;
 }
 
+/* ── backend contributions sub-section ── */
+.backend-block {
+  margin-top: 8px;
+  border-top: 0.75px dashed var(--line);
+  padding-top: 6px;
+}
+.backend-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 6.8pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.backend-label::after {
+  content: 'Java · PHP';
+  background: #f4f4f5;
+  border: 0.5px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 6.5pt;
+  color: #9aa0a6;
+}
+
 /* ── flow control ── */
 .page-2 { } /* sections flow naturally; cards avoid internal breaks */
 </style>
@@ -615,6 +524,11 @@ a { color: inherit; text-decoration: none; }
     <div class="tags">${tags(job.tags)}</div>
     ${job.featured ? `<div class="featured">${bullets(job.featured, 'dot')}</div>` : ''}
     ${job.bullets  ? bullets(job.bullets,  'num') : ''}
+    ${job.backendBullets ? `
+    <div class="backend-block">
+      <div class="backend-label">Backend Contributions</div>
+      ${bullets(job.backendBullets, 'dot')}
+    </div>` : ''}
   </div>`).join('')}
 </div>
 
@@ -687,7 +601,7 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ─── CLOSING ─── -->
 <div class="closing">
-  <div class="closing__text">Thanks for reading to the end — <b>let’s build something great together.</b></div>
+  <div class="closing__text">Thanks for reading to the end — <b>let's build something great together.</b></div>
   <a class="closing__cta" href="https://imanamini.ir">imanamini.ir ↗</a>
 </div>
 

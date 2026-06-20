@@ -47,6 +47,14 @@
           <ul class="entry__bullets">
             <li *ngFor="let bullet of exp.bullets">{{ bullet }}</li>
           </ul>
+          @if (exp.backendBullets && exp.backendBullets.length) {
+            <div class="entry__backend">
+              <span class="entry__backend-label">Backend Contributions</span>
+              <ul class="entry__bullets">
+                <li *ngFor="let bullet of exp.backendBullets">{{ bullet }}</li>
+              </ul>
+            </div>
+          }
         </div>
       </div>
     </section>
