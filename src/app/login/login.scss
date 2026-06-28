@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #0F172A;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #1A2332;
+  border: 1px solid #2A4060;
+  border-radius: 16px;
+  padding: 40px 36px;
+  text-align: center;
+
+  &__logo {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #F1F5F9;
+    margin: 0 0 6px;
+  }
+
+  &__sub {
+    font-size: 14px;
+    color: #5E7A99;
+    margin: 0 0 32px;
+  }
+}
+
+.login-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8FA8C8;
+  }
+
+  &__input {
+    background: #0F172A;
+    border: 1px solid #2A4060;
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    color: #F1F5F9;
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+    box-sizing: border-box;
+
+    &::placeholder { color: #3A5070; }
+
+    &:focus { border-color: #3B82F6; }
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__error {
+    background: rgba(239,68,68,.1);
+    border: 1px solid rgba(239,68,68,.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #FCA5A5;
+  }
+
+  &__btn {
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 4px;
+
+    &:hover:not(:disabled) { background: #1D4ED8; }
+
+    &:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+  }
+}

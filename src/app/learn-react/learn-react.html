@@ -1,0 +1,218 @@
+<div class="lr-page">
+
+  <!-- ═══════════════════════════ LESSON DETAIL VIEW ═══════════════════════ -->
+  @if (activeLesson()) {
+    <div class="lr-reader">
+
+      <!-- Top bar -->
+      <div class="lr-reader__bar">
+        <button class="lr-reader__back" (click)="closeLesson()">
+          ← Back to list
+        </button>
+        <div class="lr-reader__day-badge" [style.background]="getCategoryColor(activeLesson()!.category)">
+          Day {{ activeLesson()!.day }} — {{ activeLesson()!.category }}
+        </div>
+        @if (!isCompleted(activeLesson()!.day)) {
+          <button class="lr-reader__done" (click)="markCompleted(activeLesson()!.day)">
+            ✅ Done!
+          </button>
+        } @else {
+          <span class="lr-reader__done-badge">✅ Completed</span>
+        }
+      </div>
+
+      <!-- Title -->
+      <h1 class="lr-reader__title">{{ activeLesson()!.title }}</h1>
+      <p class="lr-reader__desc">{{ activeLesson()!.description }}</p>
+      <div class="lr-reader__file">📂 Project file: <code>{{ activeLesson()!.file }}</code></div>
+
+      <!-- Tabs -->
+      <div class="lr-tabs">
+        <button class="lr-tab" [class.lr-tab--active]="activeTab() === 'lesson'" (click)="setTab('lesson')">
+          ⚛️ React Concept
+        </button>
+        <button class="lr-tab" [class.lr-tab--active]="activeTab() === 'angular'" (click)="setTab('angular')">
+          🅰️ Angular Comparison
+        </button>
+      </div>
+
+      <!-- REACT LESSON TAB -->
+      @if (activeTab() === 'lesson') {
+        <div class="lr-content">
+
+          <!-- Key Points -->
+          <div class="lr-section">
+            <h2 class="lr-section__title">🔑 Key Points</h2>
+            <ul class="lr-keypoints">
+              @for (point of activeLesson()!.keyPoints; track point) {
+                <li class="lr-keypoint">{{ point }}</li>
+              }
+            </ul>
+          </div>
+
+          <!-- Code Examples -->
+          @for (block of activeLesson()!.codeBlocks; track block.label) {
+            <div class="lr-section">
+              <h3 class="lr-code-label">{{ block.label }}</h3>
+              <pre class="lr-code"><code>{{ block.code }}</code></pre>
+            </div>
+          }
+
+          <!-- Reference link -->
+          <div class="lr-section lr-section--reference">
+            <a [href]="activeLesson()!.referenceUrl" target="_blank" rel="noopener" class="lr-reference-link">
+              📚 {{ activeLesson()!.referenceLabel }} →
+            </a>
+          </div>
+
+        </div>
+      }
+
+      <!-- ANGULAR COMPARISON TAB -->
+      @if (activeTab() === 'angular') {
+        <div class="lr-content">
+          <div class="lr-section">
+            <h2 class="lr-section__title">🅰️ Angular Equivalent</h2>
+            <div class="lr-angular-text">{{ activeLesson()!.angularEquivalent }}</div>
+          </div>
+
+          <div class="lr-section">
+            <h3 class="lr-code-label">Angular vs React — side-by-side code</h3>
+            <pre class="lr-code lr-code--angular"><code>{{ activeLesson()!.angularCode }}</code></pre>
+          </div>
+
+          <div class="lr-section lr-section--tip">
+            <p>💡 Your Angular experience is a superpower here — React is similar in intent, different in syntax. Pay attention to <strong>immutability</strong> and <strong>re-renders</strong>.</p>
+          </div>
+        </div>
+      }
+
+      <!-- Bottom Action -->
+      <div class="lr-reader__footer">
+        @if (!isCompleted(activeLesson()!.day)) {
+          <button class="lr-reader__done-big" (click)="markCompleted(activeLesson()!.day)">
+            ✅ I've read this — move to Day {{ activeLesson()!.day + 1 }}
+          </button>
+        } @else {
+          <div class="lr-reader__already-done">✅ Already completed</div>
+        }
+        <button class="lr-reader__back-btn" (click)="closeLesson()">← Back to list</button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ═══════════════════════════ LIST VIEW ═════════════════════════════════ -->
+  @if (!activeLesson()) {
+    <div>
+
+      <!-- Header -->
+      <div class="lr-header">
+        <div class="lr-header__top">
+          <div class="lr-header__badge">⚛️ React Learning Journey</div>
+          <div class="lr-header__meta">Based on the Pita-front project · {{ lessons.length }} concepts</div>
+        </div>
+        <div class="lr-header__title-row">
+          <h1 class="lr-header__title">Learning React</h1>
+          <button class="lr-logout" (click)="logout()">Sign out</button>
+        </div>
+        <p class="lr-header__sub">30 minutes a day · Real project examples · Angular comparisons</p>
+
+        <!-- Progress -->
+        <div class="lr-progress">
+          <div class="lr-progress__top">
+            <span>Overall progress</span>
+            <span>{{ completedCount() }} / {{ lessons.length }}</span>
+          </div>
+          <div class="lr-progress__bar">
+            <div class="lr-progress__fill" [style.width.%]="progress()"></div>
+          </div>
+          <div class="lr-progress__pct">{{ progress() }}%</div>
+        </div>
+
+        <!-- Category badges -->
+        <div class="lr-cats">
+          @for (cat of categories; track cat) {
+            <div class="lr-cat" [style.border-color]="getCategoryColor(cat)">
+              <span class="lr-cat__dot" [style.background]="getCategoryColor(cat)"></span>
+              <span class="lr-cat__name">{{ cat }}</span>
+              <span class="lr-cat__count" [style.color]="getCategoryColor(cat)">
+                {{ getCompletedInCategory(cat) }}/{{ getTotalInCategory(cat) }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Today banner -->
+      @if (todayLesson() && !isCompleted(todayLesson()!.day)) {
+        <div class="lr-today" (click)="openLesson(todayLesson()!.day)">
+          <div class="lr-today__left">
+            <div class="lr-today__label">📖 Today's lesson — Day {{ todayLesson()!.day }}</div>
+            <div class="lr-today__title">{{ todayLesson()!.title }}</div>
+            <div class="lr-today__desc">{{ todayLesson()!.description }}</div>
+          </div>
+          <div class="lr-today__arrow">→</div>
+        </div>
+      }
+
+      @if (progress() === 100) {
+        <div class="lr-done-banner">🎉 Congrats! You've completed all {{ lessons.length }} concepts!</div>
+      }
+
+      <!-- Concept List -->
+      <div class="lr-list">
+        @for (lesson of lessons; track lesson.day) {
+
+          @if (isWeekStart(lesson.day)) {
+            <div class="lr-week">{{ getWeekLabel(lesson.day) }}</div>
+          }
+
+          <div
+            class="lr-item"
+            [class.lr-item--done]="isCompleted(lesson.day)"
+            [class.lr-item--today]="lesson.day === currentDay() && !isCompleted(lesson.day)"
+            (click)="openLesson(lesson.day)"
+          >
+            <!-- Day circle -->
+            <div
+              class="lr-item__circle"
+              [style.background]="isCompleted(lesson.day) ? '#10B981' : getCategoryColor(lesson.category)"
+            >
+              @if (isCompleted(lesson.day)) { ✓ } @else { {{ lesson.day }} }
+            </div>
+
+            <!-- Text -->
+            <div class="lr-item__body">
+              <div class="lr-item__row">
+                <span class="lr-item__title">{{ lesson.title }}</span>
+                <span class="lr-item__cat" [style.color]="getCategoryColor(lesson.category)">
+                  {{ lesson.category }}
+                </span>
+              </div>
+              <div class="lr-item__desc">{{ lesson.description }}</div>
+            </div>
+
+            <!-- Tick button -->
+            <div class="lr-item__actions" (click)="$event.stopPropagation()">
+              @if (!isCompleted(lesson.day)) {
+                <button class="lr-item__tick" (click)="markCompleted(lesson.day)" title="Mark as done">✓</button>
+              } @else {
+                <button class="lr-item__untick" (click)="unmarkCompleted(lesson.day)" title="Undo">↩</button>
+              }
+            </div>
+          </div>
+
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="lr-footer">
+        <p>Concepts from real code in the <strong>Pita-front</strong> project</p>
+        <a href="https://github.com/imanamini95" target="_blank">github.com/imanamini95</a>
+      </div>
+
+    </div>
+  }
+
+</div>

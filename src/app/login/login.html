@@ -1,0 +1,47 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-card__logo">⚛️</div>
+    <h1 class="login-card__title">Learning Portal</h1>
+    <p class="login-card__sub">Sign in to access your lessons</p>
+
+    <form class="login-form" (submit)="onSubmit($event)">
+      <div class="login-form__field">
+        <label class="login-form__label" for="email">Email</label>
+        <input
+          id="email"
+          class="login-form__input"
+          type="email"
+          autocomplete="email"
+          required
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+          [disabled]="loading()"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <div class="login-form__field">
+        <label class="login-form__label" for="password">Password</label>
+        <input
+          id="password"
+          class="login-form__input"
+          type="password"
+          autocomplete="current-password"
+          required
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          [disabled]="loading()"
+          placeholder="••••••••"
+        />
+      </div>
+
+      @if (error()) {
+        <div class="login-form__error">{{ error() }}</div>
+      }
+
+      <button class="login-form__btn" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+  </div>
+</div>

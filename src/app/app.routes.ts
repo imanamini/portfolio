@@ -1,10 +1,15 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./portfolio-v2/portfolio-v2').then((m) => m.PortfolioV2Component),
     pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login').then((m) => m.LoginComponent),
   },
   {
     path: 'resume',
@@ -33,6 +38,11 @@ export const routes: Routes = [
   {
     path: 'deck/digipay-libs',
     loadComponent: () => import('./digipay-deck/digipay-deck').then((m) => m.DigipayDeckComponent),
+  },
+  {
+    path: 'learn-react',
+    canActivate: [authGuard],
+    loadComponent: () => import('./learn-react/learn-react').then((m) => m.LearnReactComponent),
   },
   {
     path: '**',
