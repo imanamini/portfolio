@@ -2,6 +2,7 @@ import { Component, HostBinding, inject, signal } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { RESUME } from '../data/resume-data';
 import { PrintService } from '../data/print.service';
+import { AuthService } from '../core/auth.service';
 
 interface StackPrimary { name: string; years: number; }
 interface Highlight { tag: string; title: string; body: string; }
@@ -26,6 +27,7 @@ interface Project {
 export class PortfolioV2Component {
   r = RESUME;
   private print = inject(PrintService);
+  auth = inject(AuthService);
 
   @HostBinding('attr.data-theme') get themeAttr() { return this.theme(); }
 

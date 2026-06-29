@@ -25,7 +25,7 @@ export class LoginComponent {
     if (result.error) {
       this.error.set(result.error);
     } else {
-      this.router.navigate(['/learn-react']);
+      this.router.navigate(['/learn']);
     }
   }
 }

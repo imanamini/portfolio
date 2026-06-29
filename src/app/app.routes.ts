@@ -40,6 +40,11 @@ export const routes: Routes = [
     loadComponent: () => import('./digipay-deck/digipay-deck').then((m) => m.DigipayDeckComponent),
   },
   {
+    path: 'learn',
+    canActivate: [authGuard],
+    loadComponent: () => import('./learn-hub/learn-hub').then((m) => m.LearnHubComponent),
+  },
+  {
     path: 'learn-react',
     canActivate: [authGuard],
     loadComponent: () => import('./learn-react/learn-react').then((m) => m.LearnReactComponent),
