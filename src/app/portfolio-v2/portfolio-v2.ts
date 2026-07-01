@@ -1,8 +1,11 @@
 import { Component, HostBinding, inject, signal } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 import { RESUME } from '../data/resume-data';
 import { PrintService } from '../data/print.service';
 import { AuthService } from '../core/auth.service';
+
+interface MenuLink { label: string; icon: string; route: string; }
 
 interface StackPrimary { name: string; years: number; }
 interface Highlight { tag: string; title: string; body: string; }
@@ -27,6 +30,7 @@ interface Project {
 export class PortfolioV2Component {
   r = RESUME;
   private print = inject(PrintService);
+  private router = inject(Router);
   auth = inject(AuthService);
 
   @HostBinding('attr.data-theme') get themeAttr() { return this.theme(); }
@@ -34,6 +38,19 @@ export class PortfolioV2Component {
   theme = signal<'dark' | 'light'>('dark');
   scrolled = signal(false);
   expanded = signal<Record<number, boolean>>({ 0: true });
+  menuOpen = signal(false);
+
+  // Private hub links, only shown in the small menu when logged in.
+  menuLinks: MenuLink[] = [
+    { label: 'Hub', icon: '\u{1F3E0}', route: '/home' },
+    { label: 'Finance', icon: '\u{1F4B0}', route: '/finance' },
+    { label: 'Expenses', icon: '\u{1F9FE}', route: '/expenses' },
+    { label: 'Learn', icon: '\u{1F4DA}', route: '/learn' },
+  ];
+
+  // Secret login gate: 10 rapid clicks on the name navigate to /login.
+  private loginClicks = 0;
+  private loginClickTimer: ReturnType<typeof setTimeout> | null = null;
 
   firstName = 'Iman';
   lastName = 'Amini';
@@ -218,7 +235,37 @@ export class PortfolioV2Component {
   }
 
   onNameClick(): void {
-    this.print.registerNameClick(() => this.print.printAsPdf());
+    // When logged in the name keeps its resume-print easter egg (5 clicks).
+    if (this.auth.isLoggedIn()) {
+      this.print.registerNameClick(() => this.print.printAsPdf());
+      return;
+    }
+
+    // When logged out, 10 rapid clicks reveal the hidden login page.
+    this.loginClicks++;
+    if (this.loginClickTimer) clearTimeout(this.loginClickTimer);
+
+    if (this.loginClicks >= 10) {
+      this.loginClicks = 0;
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.loginClickTimer = setTimeout(() => (this.loginClicks = 0), 2000);
+  }
+
+  toggleMenu(): void {
+    this.menuOpen.update(v => !v);
+  }
+
+  goTo(route: string): void {
+    this.menuOpen.set(false);
+    this.router.navigate([route]);
+  }
+
+  async logout(): Promise<void> {
+    this.menuOpen.set(false);
+    await this.auth.logout();
   }
 
   pad(n: number): string {
