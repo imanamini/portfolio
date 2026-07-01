@@ -10,6 +10,9 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  // Paints behind the transparent status bar / notch and on overscroll
+  // when installed to the home screen (matches manifest theme_color).
+  background: #0B1120;
 }
 
 body {
@@ -17,6 +20,17 @@ body {
   background: #f8f8f6;
   color: #1a1a1a;
   line-height: 1.6;
+}
+
+// Installed to the home screen: the status bar is transparent
+// (black-translucent), so keep content clear of it and paint the safe
+// areas in the app theme so they blend with the dark pages.
+@media (display-mode: standalone) {
+  body {
+    background: #0B1120;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 a {

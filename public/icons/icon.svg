@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Aurora monogram gradient: sky → blue → violet -->
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7DD3FC"/>
+      <stop offset=".55" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <!-- Ambient glows echoing the site's page background -->
+    <radialGradient id="glowBlue" cx=".85" cy=".05" r=".9">
+      <stop offset="0" stop-color="#3B82F6" stop-opacity=".38"/>
+      <stop offset=".6" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowViolet" cx=".05" cy=".95" r=".9">
+      <stop offset="0" stop-color="#A78BFA" stop-opacity=".28"/>
+      <stop offset=".6" stop-color="#A78BFA" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="squircle">
+      <rect width="512" height="512" rx="115"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#squircle)">
+    <rect width="512" height="512" fill="#0B1120"/>
+    <rect width="512" height="512" fill="url(#glowBlue)"/>
+    <rect width="512" height="512" fill="url(#glowViolet)"/>
+
+    <!-- Monogram: geometric lowercase "ia" -->
+    <!-- i · stem -->
+    <rect x="133" y="230" width="46" height="150" rx="23" fill="url(#ink)"/>
+    <!-- i · amber dot (the spark) -->
+    <circle cx="156" cy="166" r="30" fill="#FBBF24"/>
+    <!-- a · bowl -->
+    <circle cx="303" cy="305" r="53" fill="none" stroke="url(#ink)" stroke-width="44"/>
+    <!-- a · stem -->
+    <rect x="333" y="230" width="46" height="150" rx="23" fill="url(#ink)"/>
+  </g>
+</svg>
