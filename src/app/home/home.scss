@@ -1,0 +1,138 @@
+@use '../shared/design-system' as ds;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  @include ds.page-bg;
+  font-family: ds.$font-fa;
+  color: ds.$text-body;
+  -webkit-font-smoothing: antialiased;
+}
+
+.home-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 24px 96px;
+}
+
+// ── Header ──────────────────────────────────────────────────────────────────
+.home-header {
+  margin-bottom: 44px;
+
+  &__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__badge {
+    @include ds.badge(ds.$accent);
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    color: ds.$text-primary;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+
+  &__sub {
+    font-size: 15px;
+    color: ds.$text-secondary;
+    margin: 0;
+  }
+}
+
+.home-logout {
+  @include ds.btn-ghost;
+  flex-shrink: 0;
+  &:hover { border-color: rgba(ds.$red, .5); color: ds.$red; }
+}
+
+// ── Grid ────────────────────────────────────────────────────────────────────
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.home-card {
+  @include ds.card-interactive;
+  overflow: hidden;
+  text-align: right;
+  padding: 26px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: inherit;
+
+  &:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  &__glow {
+    position: absolute;
+    inset: -60% 30% auto -30%;
+    height: 180px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%);
+    filter: blur(24px);
+    opacity: .55;
+    pointer-events: none;
+    transition: opacity ds.$dur ds.$ease;
+  }
+
+  &:hover &__glow { opacity: .9; }
+
+  &__icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: ds.$r-md;
+    font-size: 28px;
+    line-height: 1;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  &__title {
+    position: relative;
+    font-size: 20px;
+    font-weight: 700;
+    color: ds.$text-primary;
+    margin: 0;
+  }
+
+  &__desc {
+    position: relative;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: ds.$text-secondary;
+    margin: 0;
+    flex: 1;
+  }
+
+  &__cta {
+    position: relative;
+    align-self: flex-start;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-page { padding: 40px 16px 80px; }
+  .home-grid { grid-template-columns: 1fr; }
+}
