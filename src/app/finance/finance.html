@@ -1,222 +1,264 @@
-<div class="fin-page" dir="rtl">
+<div class="fin-page" [class.fin-page--light]="theme() === 'light'" dir="rtl">
 
-  <div class="fin-header">
-    <div class="fin-header__inner">
-      <div>
-        <div class="fin-header__badge">💰 دارایی‌ها</div>
-        <h1 class="fin-header__title">وضعیت مالی</h1>
-        <p class="fin-header__sub">
-          @if (view() === 'dashboard') {
-            نمای کلی دارایی‌ها
-          } @else {
-            اکسل پرتفوی مفید رو آپلود کن و بقیه رو دستی وارد کن
-          }
-        </p>
-      </div>
-      <div class="fin-header__actions">
-        <a class="fin-link" routerLink="/home">خانه</a>
-        <a class="fin-link" routerLink="/expenses">هزینه‌ها</a>
-        <button class="fin-logout" (click)="logout()">خروج</button>
-      </div>
-    </div>
-  </div>
+  <button
+    class="fin-theme-toggle"
+    (click)="toggleTheme()"
+    [title]="theme() === 'light' ? 'حالت دارک' : 'حالت لایت'"
+  >{{ theme() === 'light' ? '🌙' : '☀️' }}</button>
 
-  <div class="fin-body">
+  <div class="fin-shell">
 
-    @if (view() === 'dashboard') {
+    <!-- top nav -->
+    <header class="fin-nav">
+      <a class="fin-brand" routerLink="/home">
+        <span class="fin-brand__logo">💎</span>
+        <span class="fin-brand__text">
+          <span class="fin-brand__title">دارایی‌ها</span>
+          <span class="fin-brand__sub">نمای کلی پرتفوی</span>
+        </span>
+      </a>
+      <nav class="fin-nav__links">
+        <a class="fin-pill" routerLink="/expenses">هزینه‌ها</a>
+        <a class="fin-pill" routerLink="/learn">یادگیری</a>
+        <button class="fin-pill fin-pill--muted" (click)="logout()">خروج</button>
+      </nav>
+    </header>
 
-      <!-- Hero: grand total -->
-      <section class="fin-hero">
-        <div class="fin-hero__glow"></div>
-        <span class="fin-hero__label">جمع کل دارایی</span>
-        <div class="fin-hero__value">
-          {{ pieTotal() | number:'1.0-0' }}
-          <span class="fin-hero__unit">میلیون تومان</span>
-        </div>
-        <div class="fin-hero__meta">{{ pieSegments().length }} دارایی</div>
-      </section>
+    <div class="fin-body">
 
-      <!-- Composition pie chart -->
-      <section class="fin-card">
-        <div class="fin-card__header">
-          <h2 class="fin-card__title">ترکیب دارایی‌ها</h2>
-        </div>
-        <div class="fin-pie-wrap">
-          <div class="fin-canvas-box fin-canvas-box--pie">
-            <canvas #pieCanvas></canvas>
-          </div>
-        </div>
-      </section>
+      @if (view() === 'dashboard') {
 
-      <!-- Trend over time -->
-      @if (history().length > 1) {
-        <section class="fin-card">
-          <h2 class="fin-card__title">روند جمع کل دارایی</h2>
-          <div class="fin-canvas-box fin-canvas-box--line">
-            <canvas #lineCanvas></canvas>
+        <!-- Hero: grand total -->
+        <section class="fin-hero">
+          <div class="fin-hero__glow fin-hero__glow--blue"></div>
+          <div class="fin-hero__glow fin-hero__glow--purple"></div>
+          <div class="fin-hero__content">
+            <div class="fin-hero__label">
+              <span class="fin-hero__dot"></span>
+              جمع کل دارایی
+            </div>
+            <div class="fin-hero__row">
+              <span class="fin-hero__value">{{ fmt(pieTotal()) }}</span>
+              <span class="fin-hero__unit">میلیون تومان</span>
+            </div>
+            <div class="fin-hero__meta">
+              @if (delta(); as d) {
+                <span class="fin-hero__delta" [class.fin-hero__delta--down]="!d.up">
+                  {{ d.up ? '▲' : '▼' }} {{ fmt1(d.pct) }}٪ در {{ fmt(d.days) }} روز
+                </span>
+              }
+              <span class="fin-hero__count">{{ fmt(legend().length) }} دارایی فعال</span>
+            </div>
           </div>
         </section>
+
+        <!-- Composition donut -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">ترکیب دارایی‌ها</h2>
+          <div class="fin-donut-wrap">
+            <div class="fin-donut">
+              <div class="fin-donut__ring" [style.background]="donutGradient()"></div>
+              <div class="fin-donut__center">
+                <span class="fin-donut__total">{{ fmt(pieTotal()) }}</span>
+                <span class="fin-donut__unit">میلیون تومان</span>
+              </div>
+            </div>
+            <div class="fin-legend">
+              @for (seg of legend(); track seg.label) {
+                <div class="fin-legend__row">
+                  <span class="fin-legend__swatch" [style.background]="seg.color"></span>
+                  <span class="fin-legend__label">{{ seg.label }}</span>
+                  <span class="fin-legend__value">{{ fmt(seg.value) }}</span>
+                  <span class="fin-legend__pct">{{ fmt(seg.percent) }}٪</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- Trend over time -->
+        @if (trendPaths(); as t) {
+          <section class="fin-card">
+            <div class="fin-card__header">
+              <h2 class="fin-card__title">روند جمع کل دارایی</h2>
+              <span class="fin-card__hint">{{ fmt(history().length) }} ثبت</span>
+            </div>
+            <svg class="fin-trend" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="fin-area" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#60A5FA" stop-opacity=".38" />
+                  <stop offset="1" stop-color="#60A5FA" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path [attr.d]="t.area" fill="url(#fin-area)" />
+              <path
+                class="fin-trend__line"
+                [attr.d]="t.line"
+                pathLength="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </svg>
+          </section>
+        }
+
+        <button class="fin-cta" (click)="showForm()">＋ افزودن دیتای جدید</button>
+
+      } @else {
+
+        <button class="fin-pill fin-back" (click)="showDashboard()">→ بازگشت به داشبورد</button>
+
+        <!-- Upload -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">۱. آپلود اکسل پرتفو</h2>
+          <label class="fin-upload">
+            <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" hidden />
+            <span>📄 {{ fileName() || 'انتخاب فایل Portfolio-export.xlsx' }}</span>
+          </label>
+          @if (error()) {
+            <p class="fin-error">{{ error() }}</p>
+          }
+        </section>
+
+        <!-- Auto-filled from excel -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">۲. مقادیر استخراج‌شده (قابل ویرایش)</h2>
+          <div class="fin-grid">
+            <label class="fin-field">
+              <span>عیار</span>
+              <input type="number" [ngModel]="ayar()" (ngModelChange)="ayar.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>گنج</span>
+              <input type="number" [ngModel]="ganj()" (ngModelChange)="ganj.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>نهال</span>
+              <input type="number" [ngModel]="nahal()" (ngModelChange)="nahal.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>تمشک</span>
+              <input type="number" [ngModel]="tamashk()" (ngModelChange)="tamashk.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>سینرژی</span>
+              <input type="number" [ngModel]="synergy()" (ngModelChange)="synergy.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>نقران</span>
+              <input type="number" [ngModel]="noghran()" (ngModelChange)="noghran.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>نقرابی</span>
+              <input type="number" [ngModel]="noghrabi()" (ngModelChange)="noghrabi.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>کل پرتفو مفید</span>
+              <input type="number" [ngModel]="mofidPortfolioTotal()" (ngModelChange)="mofidPortfolioTotal.set($event)" />
+            </label>
+          </div>
+        </section>
+
+        <!-- Manual inputs -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">۳. مقادیر دستی</h2>
+          <div class="fin-grid">
+            <label class="fin-field fin-field--date">
+              <span>تاریخ (شمسی)</span>
+              <div class="fin-date">
+                <input type="number" [ngModel]="jalaliYear()" (ngModelChange)="jalaliYear.set($event)" placeholder="سال" />
+                <input type="number" [ngModel]="jalaliMonth()" (ngModelChange)="jalaliMonth.set($event)" placeholder="ماه" min="1" max="12" />
+                <input type="number" [ngModel]="jalaliDay()" (ngModelChange)="jalaliDay.set($event)" placeholder="روز" min="1" max="31" />
+              </div>
+            </label>
+            <label class="fin-field">
+              <span>طلای فیزیکی (گرم)</span>
+              <input type="number" [ngModel]="physicalGoldGrams()" (ngModelChange)="physicalGoldGrams.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>قیمت هر گرم طلا (میلیون تومان)</span>
+              <input type="number" [ngModel]="goldPricePerGram()" (ngModelChange)="goldPricePerGram.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>کریپتو</span>
+              <input type="number" [ngModel]="crypto()" (ngModelChange)="crypto.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>میزان دلار</span>
+              <input type="number" [ngModel]="dollarAmount()" (ngModelChange)="dollarAmount.set($event)" />
+            </label>
+            <label class="fin-field">
+              <span>قیمت هر دلار (هزار تومان)</span>
+              <input type="number" [ngModel]="dollarPricePerUnit()" (ngModelChange)="dollarPricePerUnit.set($event)" />
+            </label>
+          </div>
+        </section>
+
+        <!-- Custom assets -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">۴. دارایی‌های کاستوم</h2>
+          <div class="fin-custom-list">
+            @for (item of customAssets(); track $index) {
+              <div class="fin-custom-row">
+                <input
+                  type="text"
+                  class="fin-custom-row__label"
+                  placeholder="مثلاً طلای کاریزما"
+                  [ngModel]="item.label"
+                  (ngModelChange)="updateCustomLabel($index, $event)"
+                />
+                <input
+                  type="number"
+                  class="fin-custom-row__value"
+                  placeholder="مقدار"
+                  [ngModel]="item.value"
+                  (ngModelChange)="updateCustomValue($index, $event)"
+                />
+                <button type="button" class="fin-custom-row__remove" (click)="removeCustomAsset($index)">✕</button>
+              </div>
+            }
+          </div>
+          <button type="button" class="fin-custom-add" (click)="addCustomAsset()">+ افزودن دارایی کاستوم</button>
+        </section>
+
+        <!-- Computed totals -->
+        <section class="fin-card">
+          <h2 class="fin-card__title">۵. جمع‌بندی</h2>
+          <div class="fin-totals">
+            <div class="fin-total">
+              <span class="fin-total__label">طلا</span>
+              <span class="fin-total__value">{{ fmt1(totals().gold_total) }}</span>
+            </div>
+            <div class="fin-total">
+              <span class="fin-total__label">نقره</span>
+              <span class="fin-total__value">{{ fmt1(totals().silver_total) }}</span>
+            </div>
+            <div class="fin-total">
+              <span class="fin-total__label">سهام</span>
+              <span class="fin-total__value">{{ fmt1(totals().stocks_total) }}</span>
+            </div>
+            <div class="fin-total">
+              <span class="fin-total__label">دلار</span>
+              <span class="fin-total__value">{{ fmt1(totals().dollar_total) }}</span>
+            </div>
+            <div class="fin-total fin-total--grand">
+              <span class="fin-total__label">جمع کل</span>
+              <span class="fin-total__value">{{ fmt1(totals().grand_total) }}</span>
+            </div>
+          </div>
+
+          <button class="fin-cta" [disabled]="saving()" (click)="save()">
+            {{ saving() ? 'در حال ذخیره...' : 'ذخیره امروز' }}
+          </button>
+          @if (saved()) {
+            <p class="fin-saved">✅ ذخیره شد</p>
+          }
+          @if (error()) {
+            <p class="fin-error">{{ error() }}</p>
+          }
+        </section>
+
       }
 
-      <button class="fin-save" (click)="showForm()">
-        <span>افزودن دیتای جدید</span>
-      </button>
-
-    } @else {
-
-      <button class="fin-back" (click)="showDashboard()">→ بازگشت به داشبورد</button>
-
-      <!-- Upload -->
-      <section class="fin-card">
-        <h2 class="fin-card__title">۱. آپلود اکسل پرتفو</h2>
-        <label class="fin-upload">
-          <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" hidden />
-          <span>📄 {{ fileName() || 'انتخاب فایل Portfolio-export.xlsx' }}</span>
-        </label>
-        @if (error()) {
-          <p class="fin-error">{{ error() }}</p>
-        }
-      </section>
-
-      <!-- Auto-filled from excel -->
-      <section class="fin-card">
-        <h2 class="fin-card__title">۲. مقادیر استخراج‌شده (قابل ویرایش)</h2>
-        <div class="fin-grid">
-          <label class="fin-field">
-            <span>عیار</span>
-            <input type="number" [ngModel]="ayar()" (ngModelChange)="ayar.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>گنج</span>
-            <input type="number" [ngModel]="ganj()" (ngModelChange)="ganj.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>نهال</span>
-            <input type="number" [ngModel]="nahal()" (ngModelChange)="nahal.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>تمشک</span>
-            <input type="number" [ngModel]="tamashk()" (ngModelChange)="tamashk.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>سینرژی</span>
-            <input type="number" [ngModel]="synergy()" (ngModelChange)="synergy.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>نقران</span>
-            <input type="number" [ngModel]="noghran()" (ngModelChange)="noghran.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>نقرابی</span>
-            <input type="number" [ngModel]="noghrabi()" (ngModelChange)="noghrabi.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>کل پرتفو مفید</span>
-            <input type="number" [ngModel]="mofidPortfolioTotal()" (ngModelChange)="mofidPortfolioTotal.set($event)" />
-          </label>
-        </div>
-      </section>
-
-      <!-- Manual inputs -->
-      <section class="fin-card">
-        <h2 class="fin-card__title">۳. مقادیر دستی</h2>
-        <div class="fin-grid">
-          <label class="fin-field fin-field--date">
-            <span>تاریخ (شمسی)</span>
-            <div class="fin-date">
-              <input type="number" [ngModel]="jalaliYear()" (ngModelChange)="jalaliYear.set($event)" placeholder="سال" />
-              <input type="number" [ngModel]="jalaliMonth()" (ngModelChange)="jalaliMonth.set($event)" placeholder="ماه" min="1" max="12" />
-              <input type="number" [ngModel]="jalaliDay()" (ngModelChange)="jalaliDay.set($event)" placeholder="روز" min="1" max="31" />
-            </div>
-          </label>
-          <label class="fin-field">
-            <span>طلای فیزیکی (گرم)</span>
-            <input type="number" [ngModel]="physicalGoldGrams()" (ngModelChange)="physicalGoldGrams.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>قیمت هر گرم طلا (میلیون تومان)</span>
-            <input type="number" [ngModel]="goldPricePerGram()" (ngModelChange)="goldPricePerGram.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>کریپتو</span>
-            <input type="number" [ngModel]="crypto()" (ngModelChange)="crypto.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>میزان دلار</span>
-            <input type="number" [ngModel]="dollarAmount()" (ngModelChange)="dollarAmount.set($event)" />
-          </label>
-          <label class="fin-field">
-            <span>قیمت هر دلار (هزار تومان)</span>
-            <input type="number" [ngModel]="dollarPricePerUnit()" (ngModelChange)="dollarPricePerUnit.set($event)" />
-          </label>
-        </div>
-      </section>
-
-      <!-- Custom assets -->
-      <section class="fin-card">
-        <h2 class="fin-card__title">۴. دارایی‌های کاستوم</h2>
-        <div class="fin-custom-list">
-          @for (item of customAssets(); track $index) {
-            <div class="fin-custom-row">
-              <input
-                type="text"
-                class="fin-custom-row__label"
-                placeholder="مثلاً طلای کاریزما"
-                [ngModel]="item.label"
-                (ngModelChange)="updateCustomLabel($index, $event)"
-              />
-              <input
-                type="number"
-                class="fin-custom-row__value"
-                placeholder="مقدار"
-                [ngModel]="item.value"
-                (ngModelChange)="updateCustomValue($index, $event)"
-              />
-              <button type="button" class="fin-custom-row__remove" (click)="removeCustomAsset($index)">✕</button>
-            </div>
-          }
-        </div>
-        <button type="button" class="fin-custom-add" (click)="addCustomAsset()">+ افزودن دارایی کاستوم</button>
-      </section>
-
-      <!-- Computed totals -->
-      <section class="fin-card">
-        <h2 class="fin-card__title">۵. جمع‌بندی</h2>
-        <div class="fin-totals">
-          <div class="fin-total">
-            <span class="fin-total__label">طلا</span>
-            <span class="fin-total__value">{{ totals().gold_total | number:'1.1-1' }}</span>
-          </div>
-          <div class="fin-total">
-            <span class="fin-total__label">نقره</span>
-            <span class="fin-total__value">{{ totals().silver_total | number:'1.1-1' }}</span>
-          </div>
-          <div class="fin-total">
-            <span class="fin-total__label">سهام</span>
-            <span class="fin-total__value">{{ totals().stocks_total | number:'1.1-1' }}</span>
-          </div>
-          <div class="fin-total">
-            <span class="fin-total__label">دلار</span>
-            <span class="fin-total__value">{{ totals().dollar_total | number:'1.1-1' }}</span>
-          </div>
-          <div class="fin-total fin-total--grand">
-            <span class="fin-total__label">جمع کل</span>
-            <span class="fin-total__value">{{ totals().grand_total | number:'1.1-1' }}</span>
-          </div>
-        </div>
-
-        <button class="fin-save" [disabled]="saving()" (click)="save()">
-          {{ saving() ? 'در حال ذخیره...' : 'ذخیره امروز' }}
-        </button>
-        @if (saved()) {
-          <p class="fin-saved">✅ ذخیره شد</p>
-        }
-        @if (error()) {
-          <p class="fin-error">{{ error() }}</p>
-        }
-      </section>
-
-    }
-
+    </div>
   </div>
 </div>

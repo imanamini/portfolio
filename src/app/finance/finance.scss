@@ -1,149 +1,343 @@
-@use '../shared/design-system' as ds;
+// ============================================================================
+//  Aurora Finance — glassmorphism dashboard over an aurora gradient backdrop.
+//  Tokens come from the Aurora Finance design (Claude Design). Dark is the
+//  default; .fin-page--light flips every CSS variable for the light theme.
+// ============================================================================
 
 :host {
   display: block;
-  min-height: 100vh;
-  @include ds.page-bg;
-  font-family: ds.$font-fa;
-  color: ds.$text-body;
+  font-family: 'Vazirmatn', Tahoma, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+@keyframes fin-rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fin-pop-in {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fin-draw-line {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
 .fin-page {
-  max-width: 760px;
+  --ease: cubic-bezier(.22, .7, .2, 1);
+  --gold: #F6B23E;
+  --stock: #4F8DF7;
+  --dollar: #2DD4A7;
+  --crypto: #A78BFA;
+  --silver: #9AA7BE;
+  --custom: #FB7699;
+
+  --bg-base: #090D18;
+  --page-grad:
+    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .20), transparent 60%),
+    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .15), transparent 55%),
+    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .13), transparent 55%);
+  --glass: rgba(255, 255, 255, .045);
+  --glass-2: rgba(255, 255, 255, .075);
+  --glass-strong: rgba(255, 255, 255, .11);
+  --glass-border: rgba(255, 255, 255, .11);
+  --glass-border-hi: rgba(255, 255, 255, .20);
+  --card-shadow: 0 26px 60px -30px rgba(0, 0, 0, .85);
+  --text-hi: #F4F8FF;
+  --text: #C6D4EC;
+  --text-dim: #8194B6;
+  --text-faint: #56688A;
+  --accent: #60A5FA;
+  --hairline: rgba(255, 255, 255, .09);
+  --track: rgba(255, 255, 255, .07);
+
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--page-grad), var(--bg-base);
+  background-attachment: fixed;
+  transition: background .5s var(--ease), color .3s var(--ease);
+}
+
+.fin-page--light {
+  --bg-base: #E9EEF8;
+  --page-grad:
+    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .26), transparent 60%),
+    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .22), transparent 55%),
+    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .20), transparent 55%);
+  --glass: rgba(255, 255, 255, .58);
+  --glass-2: rgba(255, 255, 255, .72);
+  --glass-strong: rgba(255, 255, 255, .88);
+  --glass-border: rgba(255, 255, 255, .75);
+  --glass-border-hi: rgba(255, 255, 255, .95);
+  --card-shadow: 0 24px 50px -28px rgba(30, 52, 96, .42);
+  --text-hi: #0E1B33;
+  --text: #33435E;
+  --text-dim: #62759A;
+  --text-faint: #93A2BE;
+  --accent: #2563EB;
+  --hairline: rgba(15, 30, 60, .10);
+  --track: rgba(15, 30, 60, .08);
+}
+
+// ── Glass building blocks ───────────────────────────────────────────────────
+@mixin glass($bg: var(--glass), $border: var(--glass-border), $blur: 24px, $saturate: 140%) {
+  background: $bg;
+  border: 1px solid $border;
+  backdrop-filter: blur($blur) saturate($saturate);
+  -webkit-backdrop-filter: blur($blur) saturate($saturate);
+  box-shadow: var(--card-shadow);
+}
+
+@mixin input {
+  width: 100%;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: var(--text-hi);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+
+  &::placeholder { color: var(--text-faint); }
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, .18);
+    background: var(--glass-2);
+  }
+}
+
+// ── Layout ──────────────────────────────────────────────────────────────────
+.fin-shell {
+  width: min(720px, 100%);
   margin: 0 auto;
-  padding: 48px 24px 96px;
+  padding: clamp(28px, 5vw, 48px) clamp(16px, 4vw, 24px) 80px;
 }
 
-// ── Header ──────────────────────────────────────────────────────────────────
-.fin-header {
-  margin-bottom: 32px;
-
-  &__inner {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  &__badge {
-    @include ds.badge(ds.$gold);
-    margin-bottom: 16px;
-  }
-
-  &__title {
-    font-size: 30px;
-    font-weight: 800;
-    letter-spacing: -.01em;
-    color: ds.$text-primary;
-    margin: 0 0 8px;
-    line-height: 1.25;
-  }
-
-  &__sub {
-    font-size: 14px;
-    color: ds.$text-secondary;
-    margin: 0;
-  }
-
-  &__actions {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-}
-
-.fin-link { @include ds.btn-ghost; }
-
-.fin-logout {
-  @include ds.btn-ghost;
-  &:hover { border-color: rgba(ds.$red, .5); color: ds.$red; }
-}
-
-// ── Body ────────────────────────────────────────────────────────────────────
 .fin-body {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(14px, 3vw, 18px);
 }
 
-// ── Hero total ──────────────────────────────────────────────────────────────
+// ── Theme toggle ────────────────────────────────────────────────────────────
+.fin-theme-toggle {
+  position: fixed;
+  top: 16px;
+  inset-inline-start: 16px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-hi);
+  border-radius: 14px;
+  @include glass(var(--glass-2), var(--glass-border-hi), 14px, 100%);
+}
+
+// ── Top nav ─────────────────────────────────────────────────────────────────
+.fin-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(20px, 4vw, 30px);
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+.fin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-decoration: none;
+
+  &__logo {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold), #F97316);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    box-shadow: 0 10px 24px -10px rgba(246, 178, 62, .6);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: clamp(17px, 4.5vw, 20px);
+    font-weight: 800;
+    color: var(--text-hi);
+    line-height: 1.2;
+  }
+
+  &__sub {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+}
+
+.fin-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 8px 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+
+  &:hover {
+    background: var(--glass-2);
+    border-color: var(--glass-border-hi);
+    color: var(--text-hi);
+  }
+
+  &--muted { color: var(--text-dim); }
+}
+
+.fin-back { align-self: flex-start; }
+
+// ── Hero ────────────────────────────────────────────────────────────────────
 .fin-hero {
   position: relative;
   overflow: hidden;
-  border-radius: ds.$r-xl;
-  border: 1px solid rgba(ds.$gold, .22);
-  background:
-    radial-gradient(120% 140% at 100% 0%, rgba(251, 191, 36, .14), transparent 55%),
-    linear-gradient(180deg, ds.$bg-surface-2, ds.$bg-surface);
-  box-shadow: ds.$shadow-lg;
-  padding: 30px 28px;
-  text-align: center;
+  border-radius: 26px;
+  padding: clamp(22px, 5vw, 30px);
+  animation: fin-rise-in .5s var(--ease) both;
+  @include glass(var(--glass-strong), var(--glass-border-hi), 30px, 150%);
 
   &__glow {
     position: absolute;
-    inset: -40% 40% auto -40%;
-    height: 220px;
-    background: radial-gradient(circle, rgba(251, 191, 36, .18), transparent 70%);
-    filter: blur(20px);
+    height: 240px;
     pointer-events: none;
+
+    &--blue {
+      inset: -50% 30% auto -20%;
+      background: radial-gradient(circle, rgba(96, 165, 250, .35), transparent 70%);
+      filter: blur(28px);
+    }
+
+    &--purple {
+      inset: auto -25% -60% 30%;
+      background: radial-gradient(circle, rgba(167, 139, 250, .28), transparent 70%);
+      filter: blur(30px);
+    }
   }
 
+  &__content { position: relative; }
+
   &__label {
-    position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: ds.$text-secondary;
-    margin-bottom: 12px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--dollar);
+    box-shadow: 0 0 10px var(--dollar);
+  }
+
+  &__row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
   &__value {
-    position: relative;
-    font-size: 44px;
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -.02em;
-    color: ds.$text-primary;
-    background: linear-gradient(135deg, #FDE68A, ds.$gold 60%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: clamp(42px, 13vw, 58px);
+    font-weight: 900;
+    line-height: .95;
+    letter-spacing: -.03em;
+    color: var(--text-hi);
   }
 
   &__unit {
-    -webkit-text-fill-color: initial;
-    color: ds.$text-secondary;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
-    margin-inline-start: 6px;
+    color: var(--text-dim);
   }
 
   &__meta {
-    position: relative;
-    margin-top: 12px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  &__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dollar);
+    background: rgba(45, 212, 167, .14);
+    border: 1px solid rgba(45, 212, 167, .28);
+    border-radius: 999px;
+    padding: 6px 12px;
+
+    &--down {
+      color: var(--custom);
+      background: rgba(251, 118, 153, .14);
+      border-color: rgba(251, 118, 153, .28);
+    }
+  }
+
+  &__count {
     font-size: 12px;
-    font-weight: 600;
-    color: ds.$text-muted;
-    background: rgba(255, 255, 255, .04);
-    border: 1px solid ds.$border-subtle;
-    border-radius: ds.$r-pill;
-    padding: 4px 12px;
+    color: var(--text-faint);
   }
 }
 
 // ── Cards ───────────────────────────────────────────────────────────────────
 .fin-card {
-  @include ds.card;
-  padding: 24px;
+  border-radius: 24px;
+  padding: clamp(20px, 4vw, 26px);
+  animation: fin-rise-in .5s var(--ease) both;
+  @include glass;
 
   &__title {
     font-size: 15px;
     font-weight: 700;
-    color: ds.$text-primary;
-    margin: 0 0 18px;
+    color: var(--text-hi);
+    margin: 0 0 22px;
   }
 
   &__header {
@@ -156,48 +350,188 @@
     .fin-card__title { margin: 0; }
   }
 
-  &__total {
-    font-size: 15px;
-    font-weight: 700;
-    color: ds.$gold;
-    white-space: nowrap;
+  &__hint {
+    font-size: 11.5px;
+    color: var(--text-faint);
   }
 }
 
+// stagger the cards under the hero
+.fin-body > :nth-child(2) { animation-delay: .07s; }
+.fin-body > :nth-child(3) { animation-delay: .14s; }
+.fin-body > :nth-child(4) { animation-delay: .21s; }
+
+// ── Donut ───────────────────────────────────────────────────────────────────
+.fin-donut-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 30px);
+  flex-wrap: wrap;
+}
+
+.fin-donut {
+  position: relative;
+  width: 186px;
+  height: 186px;
+  flex-shrink: 0;
+  animation: fin-pop-in .55s var(--ease) both;
+
+  &__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: 0 12px 40px -14px rgba(0, 0, 0, .6);
+  }
+
+  &__center {
+    position: absolute;
+    inset: 26%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  &__total {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-hi);
+    line-height: 1;
+  }
+
+  &__unit {
+    font-size: 10.5px;
+    color: var(--text-dim);
+    margin-top: 3px;
+  }
+}
+
+.fin-legend {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 220px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-hi);
+  }
+
+  &__pct {
+    font-size: 11.5px;
+    color: var(--text-faint);
+    width: 38px;
+    text-align: left;
+  }
+}
+
+// ── Trend ───────────────────────────────────────────────────────────────────
+.fin-trend {
+  width: 100%;
+  height: clamp(130px, 30vw, 160px);
+  overflow: visible;
+
+  &__line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    animation: fin-draw-line 1.1s var(--ease) .25s both;
+  }
+}
+
+// ── CTA / save button ───────────────────────────────────────────────────────
+.fin-cta {
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: #06210F;
+  background: linear-gradient(135deg, var(--dollar), #14B88A);
+  border: none;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 14px 34px -14px rgba(45, 212, 167, .7);
+  transition: transform .2s var(--ease), filter .2s var(--ease);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  &:active:not(:disabled) { transform: none; }
+
+  &:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+  }
+}
+
+// ── Form ────────────────────────────────────────────────────────────────────
 .fin-upload {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1.5px dashed ds.$border-normal;
-  border-radius: ds.$r-md;
+  border: 1.5px dashed var(--glass-border-hi);
+  border-radius: 14px;
   padding: 22px;
-  color: ds.$text-secondary;
+  color: var(--text-dim);
   font-size: 14px;
   cursor: pointer;
-  transition: border-color ds.$dur ds.$ease, color ds.$dur ds.$ease, background ds.$dur ds.$ease;
+  transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
 
   &:hover {
-    border-color: ds.$accent;
-    color: ds.$text-body;
-    background: rgba(96, 165, 250, .05);
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--glass);
   }
 }
 
 .fin-error {
-  color: ds.$red;
+  color: var(--custom);
   font-size: 13px;
   margin: 12px 0 0;
 }
 
 .fin-saved {
-  color: ds.$green-soft;
+  color: var(--dollar);
   font-size: 13px;
   font-weight: 600;
   margin: 12px 0 0;
 }
 
-// ── Fields ──────────────────────────────────────────────────────────────────
 .fin-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -214,11 +548,11 @@
   span {
     font-size: 12px;
     font-weight: 500;
-    color: ds.$text-secondary;
+    color: var(--text-dim);
   }
 
   input {
-    @include ds.input;
+    @include input;
     text-align: right;
   }
 }
@@ -239,9 +573,9 @@
 }
 
 .fin-total {
-  background: ds.$bg-inset;
-  border: 1px solid ds.$border-subtle;
-  border-radius: ds.$r-md;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
   padding: 15px 16px;
   display: flex;
   flex-direction: column;
@@ -249,48 +583,22 @@
 
   &__label {
     font-size: 12px;
-    color: ds.$text-secondary;
+    color: var(--text-dim);
   }
 
   &__value {
     font-size: 21px;
     font-weight: 700;
-    color: ds.$text-primary;
+    color: var(--text-hi);
   }
 
   &--grand {
     grid-column: 1 / -1;
-    border-color: rgba(ds.$gold, .35);
-    background: linear-gradient(180deg, rgba(251, 191, 36, .06), ds.$bg-inset);
+    border-color: rgba(45, 212, 167, .35);
+    background: linear-gradient(180deg, rgba(45, 212, 167, .10), var(--glass));
 
-    .fin-total__value { color: ds.$gold; }
+    .fin-total__value { color: var(--dollar); }
   }
-}
-
-.fin-save {
-  @include ds.btn-primary;
-  width: 100%;
-}
-
-.fin-back {
-  @include ds.btn-ghost;
-  align-self: flex-start;
-}
-
-// ── Charts ──────────────────────────────────────────────────────────────────
-.fin-pie-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.fin-canvas-box {
-  position: relative;
-  width: 100%;
-
-  &--pie  { height: 280px; }
-  &--line { height: 200px; }
 }
 
 // ── Custom assets ───────────────────────────────────────────────────────────
@@ -307,7 +615,7 @@
   gap: 8px;
 
   input {
-    @include ds.input;
+    @include input;
     text-align: right;
   }
 
@@ -318,23 +626,38 @@
     flex-shrink: 0;
     width: 38px;
     height: 38px;
-    background: rgba(ds.$red, .1);
-    border: 1px solid rgba(ds.$red, .3);
-    border-radius: ds.$r-sm;
-    color: ds.$red;
+    background: rgba(251, 118, 153, .12);
+    border: 1px solid rgba(251, 118, 153, .32);
+    border-radius: 12px;
+    color: var(--custom);
     font-size: 14px;
     cursor: pointer;
-    transition: background ds.$dur ds.$ease;
+    transition: background .2s var(--ease);
 
-    &:hover { background: rgba(ds.$red, .2); }
+    &:hover { background: rgba(251, 118, 153, .22); }
   }
 }
 
-.fin-custom-add { @include ds.btn-dashed; }
+.fin-custom-add {
+  width: 100%;
+  background: transparent;
+  border: 1.5px dashed var(--glass-border-hi);
+  border-radius: 14px;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 13px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--glass);
+  }
+}
 
 @media (max-width: 560px) {
-  .fin-page { padding: 32px 16px 80px; }
   .fin-grid,
   .fin-totals { grid-template-columns: 1fr; }
-  .fin-hero__value { font-size: 36px; }
 }

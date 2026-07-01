@@ -1,22 +1,16 @@
-import { Component, computed, signal, inject, afterNextRender, effect, viewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, signal, inject, afterNextRender, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import {
-  Chart, ArcElement, DoughnutController, LineController, LineElement,
-  PointElement, CategoryScale, LinearScale, Tooltip, Legend, Filler,
-} from 'chart.js';
 import { AuthService } from '../core/auth.service';
 import { FinanceService, FinanceSnapshot } from '../core/finance.service';
 import { parsePortfolioExport } from './finance-parser';
 import { computeFinanceTotals, FinanceInputs } from './finance-calc';
 import { todayJalali, jalaliToIso } from './jalali';
 
-Chart.register(ArcElement, DoughnutController, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Filler);
-Chart.defaults.color = '#8FA8C8';
-Chart.defaults.font.family = 'Vazirmatn, Tahoma, sans-serif';
-
 type FinanceView = 'dashboard' | 'form';
+type Theme = 'dark' | 'light';
+
+const THEME_KEY = 'aurora-theme';
 
 interface CustomAsset {
   label: string;
@@ -25,17 +19,17 @@ interface CustomAsset {
 
 // fixed categories always tracked; custom entries are layered on top per snapshot
 const FIXED_CATEGORIES: { key: 'stocks_total' | 'gold_total' | 'crypto' | 'silver_total' | 'nahal' | 'tamashk' | 'synergy' | 'dollar_total'; label: string; color: string }[] = [
-  { key: 'stocks_total', label: 'سهام',   color: '#4285F4' },
-  { key: 'gold_total',   label: 'طلا',    color: '#EA4335' },
-  { key: 'crypto',       label: 'کریپتو', color: '#FBBC04' },
-  { key: 'silver_total', label: 'نقره',   color: '#34A853' },
-  { key: 'nahal',        label: 'نهال',   color: '#FF6D01' },
-  { key: 'tamashk',      label: 'تمشک',   color: '#46BDC6' },
-  { key: 'synergy',      label: 'سینرژی', color: '#7BAAF7' },
-  { key: 'dollar_total', label: 'دلار',   color: '#AB47BC' },
+  { key: 'gold_total',   label: 'طلا',    color: 'var(--gold)' },
+  { key: 'stocks_total', label: 'سهام',   color: 'var(--stock)' },
+  { key: 'dollar_total', label: 'دلار',   color: 'var(--dollar)' },
+  { key: 'crypto',       label: 'کریپتو', color: 'var(--crypto)' },
+  { key: 'silver_total', label: 'نقره',   color: 'var(--silver)' },
+  { key: 'nahal',        label: 'نهال',   color: '#FF8A4C' },
+  { key: 'tamashk',      label: 'تمشک',   color: '#F472B6' },
+  { key: 'synergy',      label: 'سینرژی', color: '#22D3EE' },
 ];
 
-const CUSTOM_COLORS = ['#F07B72', '#FCD04F', '#71C287', '#C084FC', '#FB923C', '#38BDF8'];
+const CUSTOM_COLORS = ['var(--custom)', '#FCD34D', '#4ADE80', '#C084FC', '#FB923C', '#38BDF8'];
 
 function customAssetsToRecord(list: CustomAsset[]): Record<string, number> {
   const record: Record<string, number> = {};
@@ -53,7 +47,7 @@ function recordToCustomAssets(record: Record<string, number> | null | undefined)
 @Component({
   selector: 'app-finance',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './finance.html',
   styleUrl: './finance.scss',
 })
@@ -69,6 +63,7 @@ export class FinanceComponent {
   error    = signal('');
   fileName = signal('');
   history  = signal<FinanceSnapshot[]>([]);
+  theme    = signal<Theme>('dark');
 
   private readonly initialJalali = todayJalali();
   jalaliYear  = signal(this.initialJalali.jy);
@@ -140,7 +135,8 @@ export class FinanceComponent {
 
   pieTotal = computed(() => this.pieSource().grand_total);
 
-  pieSegments = computed(() => {
+  // active segments sorted largest-first — drives both the donut and its legend
+  legend = computed(() => {
     const source = this.pieSource();
     const fixed = FIXED_CATEGORIES.map((def) => ({
       label: def.label,
@@ -154,16 +150,83 @@ export class FinanceComponent {
         color: CUSTOM_COLORS[idx % CUSTOM_COLORS.length],
         value: Math.max(value, 0),
       }));
-    return [...fixed, ...custom];
+
+    const segments = [...fixed, ...custom]
+      .filter((s) => s.value > 0)
+      .sort((a, b) => b.value - a.value);
+    const total = segments.reduce((sum, s) => sum + s.value, 0) || 1;
+
+    return segments.map((s) => ({ ...s, percent: Math.round((s.value / total) * 100) }));
   });
 
-  private pieCanvas  = viewChild<ElementRef<HTMLCanvasElement>>('pieCanvas');
-  private lineCanvas = viewChild<ElementRef<HTMLCanvasElement>>('lineCanvas');
-  private pieChart?: Chart;
-  private lineChart?: Chart;
+  donutGradient = computed(() => {
+    const segments = this.legend();
+    const total = segments.reduce((sum, s) => sum + s.value, 0);
+    if (!total) return 'var(--track)';
+
+    let acc = 0;
+    const stops = segments.map((s) => {
+      const start = (acc / total) * 100;
+      acc += s.value;
+      const end = (acc / total) * 100;
+      return `${s.color} ${start.toFixed(2)}% ${end.toFixed(2)}%`;
+    });
+    return `conic-gradient(${stops.join(', ')})`;
+  });
+
+  // grand-total history mapped into the 320×130 trend viewBox
+  trendPaths = computed(() => {
+    const rows = this.history();
+    if (rows.length < 2) return null;
+
+    const values = rows.map((r) => r.grand_total);
+    const min = Math.min(...values);
+    const span = (Math.max(...values) - min) || 1;
+    const x = (i: number) => 10 + (i * 300) / (values.length - 1);
+    const y = (v: number) => 110 - ((v - min) / span) * 95;
+
+    const points = values.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+    const line = 'M' + points.join(' L');
+    return { line, area: `${line} L310,120 L10,120 Z` };
+  });
+
+  // change vs the newest snapshot at least ~30 days old (or the oldest one)
+  delta = computed(() => {
+    const rows = this.history();
+    if (rows.length < 2) return null;
+
+    const latest = rows[rows.length - 1];
+    const target = new Date(latest.snapshot_date).getTime() - 30 * 86400000;
+    let base = rows[0];
+    for (const row of rows.slice(0, -1)) {
+      if (new Date(row.snapshot_date).getTime() <= target) base = row;
+    }
+    if (!base.grand_total || base === latest) return null;
+
+    const pct = ((latest.grand_total - base.grand_total) / base.grand_total) * 100;
+    const days = Math.max(1, Math.round(
+      (new Date(latest.snapshot_date).getTime() - new Date(base.snapshot_date).getTime()) / 86400000
+    ));
+    return { pct: Math.abs(pct), up: pct >= 0, days };
+  });
+
+  private nf  = new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 });
+  private nf1 = new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 1 });
+
+  fmt(value: number): string {
+    return this.nf.format(value || 0);
+  }
+
+  fmt1(value: number): string {
+    return this.nf1.format(value || 0);
+  }
 
   constructor() {
-    afterNextRender(() => this.loadHistory());
+    afterNextRender(() => {
+      const stored = localStorage.getItem(THEME_KEY);
+      if (stored === 'light' || stored === 'dark') this.theme.set(stored);
+      this.loadHistory();
+    });
 
     // if the selected day already has a saved snapshot, load it for editing
     // instead of silently overwriting it with a half-filled form on next save
@@ -187,97 +250,12 @@ export class FinanceComponent {
       this.dollarPricePerUnit.set(existing.dollar_price_per_unit);
       this.customAssets.set(recordToCustomAssets(existing.custom_assets));
     });
+  }
 
-    effect(() => {
-      const canvasRef = this.pieCanvas();
-      const segments = this.pieSegments();
-
-      if (!canvasRef) {
-        this.pieChart?.destroy();
-        this.pieChart = undefined;
-        return;
-      }
-
-      const labels = segments.map((s) => s.label);
-      const data = segments.map((s) => s.value);
-      const colors = segments.map((s) => s.color);
-
-      if (this.pieChart) {
-        this.pieChart.data.labels = labels;
-        this.pieChart.data.datasets[0].data = data;
-        this.pieChart.data.datasets[0].backgroundColor = colors;
-        this.pieChart.update();
-      } else {
-        this.pieChart = new Chart(canvasRef.nativeElement, {
-          type: 'doughnut',
-          data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '65%',
-            plugins: {
-              legend: { position: 'bottom', rtl: true, labels: { padding: 16 } },
-              tooltip: {
-                rtl: true,
-                callbacks: {
-                  label: (ctx) => {
-                    const values = ctx.dataset.data as number[];
-                    const total = values.reduce((a, b) => a + b, 0) || 1;
-                    const percent = ((ctx.parsed / total) * 100).toFixed(0);
-                    return `${ctx.label}: ${ctx.parsed.toLocaleString()} (${percent}٪)`;
-                  },
-                },
-              },
-            },
-          },
-        });
-      }
-    });
-
-    effect(() => {
-      const canvasRef = this.lineCanvas();
-      const rows = this.history();
-
-      if (!canvasRef) {
-        this.lineChart?.destroy();
-        this.lineChart = undefined;
-        return;
-      }
-
-      const labels = rows.map((r) => r.snapshot_date);
-      const data = rows.map((r) => r.grand_total);
-
-      if (this.lineChart) {
-        this.lineChart.data.labels = labels;
-        this.lineChart.data.datasets[0].data = data;
-        this.lineChart.update();
-      } else {
-        this.lineChart = new Chart(canvasRef.nativeElement, {
-          type: 'line',
-          data: {
-            labels,
-            datasets: [{
-              data,
-              borderColor: '#22C55E',
-              backgroundColor: 'rgba(34, 197, 94, 0.15)',
-              fill: true,
-              tension: 0.3,
-              pointRadius: 3,
-              pointBackgroundColor: '#22C55E',
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: { grid: { color: '#1E2A3D' }, ticks: { color: '#8FA8C8' } },
-              y: { grid: { color: '#1E2A3D' }, ticks: { color: '#8FA8C8' } },
-            },
-          },
-        });
-      }
-    });
+  toggleTheme(): void {
+    const next: Theme = this.theme() === 'light' ? 'dark' : 'light';
+    this.theme.set(next);
+    localStorage.setItem(THEME_KEY, next);
   }
 
   private async loadHistory(): Promise<void> {
