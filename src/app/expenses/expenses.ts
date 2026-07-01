@@ -1,15 +1,15 @@
 import { Component, computed, signal, inject, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { AuroraThemeService } from '../core/aurora-theme.service';
 import { ExpenseService, ExpenseEntry } from '../core/expense.service';
 import { todayJalali, jalaliMonthLabel, shiftJalaliMonth } from '../finance/jalali';
 
 @Component({
   selector: 'app-expenses',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './expenses.html',
   styleUrl: './expenses.scss',
 })
@@ -17,6 +17,7 @@ export class ExpensesComponent {
   private auth       = inject(AuthService);
   private expenseSvc = inject(ExpenseService);
   private router     = inject(Router);
+  themeSvc           = inject(AuroraThemeService);
 
   private readonly initialJalali = todayJalali();
   jalaliYear  = signal(this.initialJalali.jy);
@@ -35,6 +36,12 @@ export class ExpensesComponent {
   incomeTotal  = computed(() => this.incomeEntries().reduce((sum, e) => sum + (Number(e.amount) || 0), 0));
   expenseTotal = computed(() => this.expenseEntries().reduce((sum, e) => sum + (Number(e.amount) || 0), 0));
   balance      = computed(() => this.incomeTotal() - this.expenseTotal());
+
+  private nf = new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 });
+
+  fmt(value: number): string {
+    return this.nf.format(value || 0);
+  }
 
   constructor() {
     // depend on both signals so switching either axis reloads the row set;

@@ -1,26 +1,29 @@
 import { Component, computed, signal, inject, afterNextRender } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LESSONS, Lesson } from './learn-react-data';
 import { AuthService } from '../core/auth.service';
+import { AuroraThemeService } from '../core/aurora-theme.service';
 import { ProgressService } from '../core/progress.service';
 
 const STORAGE_KEY = 'react-learning-completed';
 const DAY_KEY     = 'react-learning-current-day';
 const TOPIC       = 'react';
 
+// aurora palette — matches the CSS vars in shared/_aurora.scss
 const CATEGORY_COLORS: Record<string, string> = {
-  'Basics':       '#3B82F6',
-  'Hooks':        '#8B5CF6',
-  'Patterns':     '#10B981',
-  'Advanced':     '#F59E0B',
-  'Architecture': '#EF4444',
+  'Basics':       '#4F8DF7',
+  'Hooks':        '#A78BFA',
+  'Patterns':     '#2DD4A7',
+  'Advanced':     '#F6B23E',
+  'Architecture': '#FB7699',
 };
+
+const DONE_COLOR = '#2DD4A7';
 
 @Component({
   selector: 'app-learn-react',
   standalone: true,
-  imports: [CommonModule],
+  imports: [RouterLink],
   templateUrl: './learn-react.html',
   styleUrl: './learn-react.scss',
 })
@@ -28,6 +31,9 @@ export class LearnReactComponent {
   private auth        = inject(AuthService);
   private progressSvc = inject(ProgressService);
   private router      = inject(Router);
+  themeSvc            = inject(AuroraThemeService);
+
+  doneColor = DONE_COLOR;
 
   lessons = LESSONS;
 
@@ -139,7 +145,7 @@ export class LearnReactComponent {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  getCategoryColor(cat: string): string { return CATEGORY_COLORS[cat] || '#6B7280'; }
+  getCategoryColor(cat: string): string { return CATEGORY_COLORS[cat] || '#9AA7BE'; }
 
   isWeekStart(day: number): boolean { return day === 1 || day === 8 || day === 15 || day === 22; }
 

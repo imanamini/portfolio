@@ -1,39 +1,54 @@
-<div class="hub-page">
+<div class="hub-page" [class.hub-page--light]="themeSvc.isLight()">
 
-  <!-- Header -->
-  <div class="hub-header">
-    <div class="hub-header__inner">
+  <button
+    class="hub-theme-toggle"
+    (click)="themeSvc.toggle()"
+    [title]="themeSvc.isLight() ? 'Dark mode' : 'Light mode'"
+  >{{ themeSvc.isLight() ? '🌙' : '☀️' }}</button>
+
+  <div class="hub-shell">
+
+    <!-- Header -->
+    <header class="hub-header">
       <div>
         <div class="hub-header__badge">📚 Learning Hub</div>
         <h1 class="hub-header__title">What are you learning?</h1>
         <p class="hub-header__sub">Pick a topic and continue where you left off</p>
       </div>
-      <button class="hub-logout" (click)="logout()">Sign out</button>
-    </div>
-  </div>
+      <button class="hub-pill" (click)="logout()">Sign out</button>
+    </header>
 
-  <!-- Topic cards -->
-  <div class="hub-grid">
-    @for (topic of topics; track topic.slug) {
-      <div
-        class="hub-card"
-        [class.hub-card--active]="topic.status === 'active'"
-        [class.hub-card--soon]="topic.status === 'coming-soon'"
-        (click)="openTopic(topic)"
-      >
-        <div class="hub-card__icon" [style.color]="topic.color">{{ topic.icon }}</div>
-        <h2 class="hub-card__title">{{ topic.title }}</h2>
-        <p class="hub-card__desc">{{ topic.description }}</p>
-        <div class="hub-card__footer">
-          <span class="hub-card__days" [style.color]="topic.color">{{ topic.totalDays }} days</span>
+    <!-- Topic cards -->
+    <div class="hub-grid">
+      @for (topic of topics; track topic.slug) {
+        <div
+          class="hub-card"
+          [class.hub-card--active]="topic.status === 'active'"
+          [class.hub-card--soon]="topic.status === 'coming-soon'"
+          [style.border-color]="topic.status === 'active' ? tint(topic.color, .35) : null"
+          (click)="openTopic(topic)"
+        >
           @if (topic.status === 'active') {
-            <span class="hub-card__cta" [style.background]="topic.color">Start →</span>
-          } @else {
-            <span class="hub-card__soon-badge">Coming soon</span>
+            <div class="hub-card__glow" [style.background]="'radial-gradient(circle, ' + tint(topic.color, .3) + ', transparent 70%)'"></div>
           }
+          <div
+            class="hub-card__icon"
+            [style.background]="tint(topic.color, .15)"
+            [style.border-color]="tint(topic.color, .3)"
+          >{{ topic.icon }}</div>
+          <h2 class="hub-card__title">{{ topic.title }}</h2>
+          <p class="hub-card__desc">{{ topic.description }}</p>
+          <div class="hub-card__footer">
+            <span class="hub-card__days" [style.color]="topic.color">{{ topic.totalDays }} days</span>
+            @if (topic.status === 'active') {
+              <span class="hub-card__cta" [style.background]="topic.color">Start →</span>
+            } @else {
+              <span class="hub-card__soon-badge">Coming soon</span>
+            }
+          </div>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
 
+  </div>
 </div>
