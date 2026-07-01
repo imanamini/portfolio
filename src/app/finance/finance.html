@@ -1,10 +1,10 @@
-<div class="fin-page" [class.fin-page--light]="theme() === 'light'" dir="rtl">
+<div class="fin-page" [class.fin-page--light]="themeSvc.isLight()" dir="rtl">
 
   <button
     class="fin-theme-toggle"
-    (click)="toggleTheme()"
-    [title]="theme() === 'light' ? 'حالت دارک' : 'حالت لایت'"
-  >{{ theme() === 'light' ? '🌙' : '☀️' }}</button>
+    (click)="themeSvc.toggle()"
+    [title]="themeSvc.isLight() ? 'حالت دارک' : 'حالت لایت'"
+  >{{ themeSvc.isLight() ? '🌙' : '☀️' }}</button>
 
   <div class="fin-shell">
 

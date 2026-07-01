@@ -2,15 +2,13 @@ import { Component, computed, signal, inject, afterNextRender, effect } from '@a
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { AuroraThemeService } from '../core/aurora-theme.service';
 import { FinanceService, FinanceSnapshot } from '../core/finance.service';
 import { parsePortfolioExport } from './finance-parser';
 import { computeFinanceTotals, FinanceInputs } from './finance-calc';
 import { todayJalali, jalaliToIso } from './jalali';
 
 type FinanceView = 'dashboard' | 'form';
-type Theme = 'dark' | 'light';
-
-const THEME_KEY = 'aurora-theme';
 
 interface CustomAsset {
   label: string;
@@ -55,6 +53,7 @@ export class FinanceComponent {
   private auth       = inject(AuthService);
   private financeSvc = inject(FinanceService);
   private router     = inject(Router);
+  themeSvc           = inject(AuroraThemeService);
 
   view     = signal<FinanceView>('dashboard');
   loading  = signal(false);
@@ -63,7 +62,6 @@ export class FinanceComponent {
   error    = signal('');
   fileName = signal('');
   history  = signal<FinanceSnapshot[]>([]);
-  theme    = signal<Theme>('dark');
 
   private readonly initialJalali = todayJalali();
   jalaliYear  = signal(this.initialJalali.jy);
@@ -222,11 +220,7 @@ export class FinanceComponent {
   }
 
   constructor() {
-    afterNextRender(() => {
-      const stored = localStorage.getItem(THEME_KEY);
-      if (stored === 'light' || stored === 'dark') this.theme.set(stored);
-      this.loadHistory();
-    });
+    afterNextRender(() => this.loadHistory());
 
     // if the selected day already has a saved snapshot, load it for editing
     // instead of silently overwriting it with a half-filled form on next save
@@ -250,12 +244,6 @@ export class FinanceComponent {
       this.dollarPricePerUnit.set(existing.dollar_price_per_unit);
       this.customAssets.set(recordToCustomAssets(existing.custom_assets));
     });
-  }
-
-  toggleTheme(): void {
-    const next: Theme = this.theme() === 'light' ? 'dark' : 'light';
-    this.theme.set(next);
-    localStorage.setItem(THEME_KEY, next);
   }
 
   private async loadHistory(): Promise<void> {

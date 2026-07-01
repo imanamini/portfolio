@@ -1,158 +1,177 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+// Aurora Learn Hub — topic picker. Tokens/mixins come from the shared
+// Aurora design system; see src/app/shared/_aurora.scss.
+@use '../shared/aurora' as au;
 
 :host {
   display: block;
-  min-height: 100vh;
-  background: #0F172A;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', 'Vazirmatn', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+@include au.keyframes;
+
 .hub-page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 48px 24px;
+  @include au.tokens;
+  @include au.page;
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
+.hub-page--light {
+  @include au.tokens-light;
+}
 
+.hub-shell {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 60px) clamp(16px, 4vw, 24px) 80px;
+}
+
+.hub-theme-toggle { @include au.theme-toggle(inline-end); }
+
+// ── Header ──────────────────────────────────────────────────────────────────
 .hub-header {
-  margin-bottom: 48px;
-
-  &__inner {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-  }
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(28px, 5vw, 42px);
+  animation: au-rise .5s var(--ease) both;
 
   &__badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: #60A5FA;
-    background: rgba(96, 165, 250, .1);
-    border: 1px solid rgba(96, 165, 250, .2);
-    border-radius: 20px;
-    padding: 4px 12px;
-    margin-bottom: 16px;
+    color: var(--accent);
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   &__title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #F1F5F9;
-    margin: 0 0 8px;
-    line-height: 1.2;
+    font-size: clamp(26px, 6vw, 36px);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--text-hi);
+    margin: 16px 0 8px;
   }
 
   &__sub {
     font-size: 15px;
-    color: #64748B;
+    color: var(--text-dim);
     margin: 0;
   }
 }
 
-.hub-logout {
-  flex-shrink: 0;
-  background: transparent;
-  border: 1px solid #2A4060;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #5E7A99;
-  cursor: pointer;
-  transition: border-color .2s, color .2s;
-
-  &:hover {
-    border-color: #EF4444;
-    color: #EF4444;
-  }
+.hub-pill {
+  @include au.pill;
+  color: var(--text-dim);
+  padding: 9px 16px;
 }
 
-// ── Grid ──────────────────────────────────────────────────────────────────────
-
+// ── Topic grid ──────────────────────────────────────────────────────────────
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: clamp(14px, 3vw, 20px);
 }
 
 .hub-card {
-  background: #1A2332;
-  border: 1px solid #2A4060;
-  border-radius: 16px;
-  padding: 28px 24px 24px;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: border-color .2s, transform .15s;
+  border-radius: 22px;
+  padding: 24px;
+  animation: au-rise .5s var(--ease) both;
 
   &--active {
     cursor: pointer;
+    transition: transform .2s var(--ease);
+    @include au.glass(var(--glass-strong), var(--glass-border), 26px, 150%);
 
-    &:hover {
-      transform: translateY(-2px);
-      border-color: #3B82F6;
-    }
+    &:hover { transform: translateY(-4px); }
   }
 
   &--soon {
-    opacity: .55;
-    cursor: default;
+    opacity: .72;
+    @include au.glass(var(--glass), var(--glass-border), 22px, 130%);
+  }
+
+  &__glow {
+    position: absolute;
+    inset: -40% -20% auto 40%;
+    height: 180px;
+    filter: blur(26px);
+    pointer-events: none;
   }
 
   &__icon {
-    font-size: 36px;
-    line-height: 1;
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 18px;
   }
 
   &__title {
+    position: relative;
     font-size: 20px;
-    font-weight: 700;
-    color: #F1F5F9;
-    margin: 0;
+    font-weight: 800;
+    color: var(--text-hi);
+    margin: 0 0 8px;
   }
 
   &__desc {
-    font-size: 14px;
+    position: relative;
+    font-size: 13.5px;
     line-height: 1.6;
-    color: #64748B;
-    margin: 0;
+    color: var(--text-dim);
+    margin: 0 0 20px;
     flex: 1;
   }
 
   &__footer {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
   }
 
   &__days {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   &__cta {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0F172A;
-    border-radius: 8px;
-    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #06210F;
+    border-radius: 999px;
+    padding: 7px 15px;
   }
 
   &__soon-badge {
-    font-size: 12px;
-    font-weight: 500;
-    color: #475569;
-    background: rgba(71, 85, 105, .15);
-    border: 1px solid rgba(71, 85, 105, .3);
-    border-radius: 8px;
-    padding: 4px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-faint);
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 6px 13px;
   }
 }
+
+// stagger the topic cards
+.hub-grid > :nth-child(2) { animation-delay: .06s; }
+.hub-grid > :nth-child(3) { animation-delay: .12s; }
+.hub-grid > :nth-child(4) { animation-delay: .18s; }

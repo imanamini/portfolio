@@ -1,8 +1,6 @@
-// ============================================================================
-//  Aurora Finance — glassmorphism dashboard over an aurora gradient backdrop.
-//  Tokens come from the Aurora Finance design (Claude Design). Dark is the
-//  default; .fin-page--light flips every CSS variable for the light theme.
-// ============================================================================
+// Aurora Finance — assets dashboard. Tokens/mixins come from the shared
+// Aurora design system; see src/app/shared/_aurora.scss.
+@use '../shared/aurora' as au;
 
 :host {
   display: block;
@@ -10,105 +8,15 @@
   -webkit-font-smoothing: antialiased;
 }
 
-@keyframes fin-rise-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
-}
-
-@keyframes fin-pop-in {
-  from { opacity: 0; transform: scale(.92); }
-  to   { opacity: 1; transform: none; }
-}
-
-@keyframes fin-draw-line {
-  from { stroke-dashoffset: 1; }
-  to   { stroke-dashoffset: 0; }
-}
+@include au.keyframes;
 
 .fin-page {
-  --ease: cubic-bezier(.22, .7, .2, 1);
-  --gold: #F6B23E;
-  --stock: #4F8DF7;
-  --dollar: #2DD4A7;
-  --crypto: #A78BFA;
-  --silver: #9AA7BE;
-  --custom: #FB7699;
-
-  --bg-base: #090D18;
-  --page-grad:
-    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .20), transparent 60%),
-    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .15), transparent 55%),
-    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .13), transparent 55%);
-  --glass: rgba(255, 255, 255, .045);
-  --glass-2: rgba(255, 255, 255, .075);
-  --glass-strong: rgba(255, 255, 255, .11);
-  --glass-border: rgba(255, 255, 255, .11);
-  --glass-border-hi: rgba(255, 255, 255, .20);
-  --card-shadow: 0 26px 60px -30px rgba(0, 0, 0, .85);
-  --text-hi: #F4F8FF;
-  --text: #C6D4EC;
-  --text-dim: #8194B6;
-  --text-faint: #56688A;
-  --accent: #60A5FA;
-  --hairline: rgba(255, 255, 255, .09);
-  --track: rgba(255, 255, 255, .07);
-
-  min-height: 100vh;
-  color: var(--text);
-  background: var(--page-grad), var(--bg-base);
-  background-attachment: fixed;
-  transition: background .5s var(--ease), color .3s var(--ease);
+  @include au.tokens;
+  @include au.page;
 }
 
 .fin-page--light {
-  --bg-base: #E9EEF8;
-  --page-grad:
-    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .26), transparent 60%),
-    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .22), transparent 55%),
-    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .20), transparent 55%);
-  --glass: rgba(255, 255, 255, .58);
-  --glass-2: rgba(255, 255, 255, .72);
-  --glass-strong: rgba(255, 255, 255, .88);
-  --glass-border: rgba(255, 255, 255, .75);
-  --glass-border-hi: rgba(255, 255, 255, .95);
-  --card-shadow: 0 24px 50px -28px rgba(30, 52, 96, .42);
-  --text-hi: #0E1B33;
-  --text: #33435E;
-  --text-dim: #62759A;
-  --text-faint: #93A2BE;
-  --accent: #2563EB;
-  --hairline: rgba(15, 30, 60, .10);
-  --track: rgba(15, 30, 60, .08);
-}
-
-// ── Glass building blocks ───────────────────────────────────────────────────
-@mixin glass($bg: var(--glass), $border: var(--glass-border), $blur: 24px, $saturate: 140%) {
-  background: $bg;
-  border: 1px solid $border;
-  backdrop-filter: blur($blur) saturate($saturate);
-  -webkit-backdrop-filter: blur($blur) saturate($saturate);
-  box-shadow: var(--card-shadow);
-}
-
-@mixin input {
-  width: 100%;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 11px 14px;
-  color: var(--text-hi);
-  font: inherit;
-  font-size: 14px;
-  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
-
-  &::placeholder { color: var(--text-faint); }
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, .18);
-    background: var(--glass-2);
-  }
+  @include au.tokens-light;
 }
 
 // ── Layout ──────────────────────────────────────────────────────────────────
@@ -124,23 +32,7 @@
   gap: clamp(14px, 3vw, 18px);
 }
 
-// ── Theme toggle ────────────────────────────────────────────────────────────
-.fin-theme-toggle {
-  position: fixed;
-  top: 16px;
-  inset-inline-start: 16px;
-  z-index: 50;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-  font-size: 18px;
-  color: var(--text-hi);
-  border-radius: 14px;
-  @include glass(var(--glass-2), var(--glass-border-hi), 14px, 100%);
-}
+.fin-theme-toggle { @include au.theme-toggle(inline-start); }
 
 // ── Top nav ─────────────────────────────────────────────────────────────────
 .fin-nav {
@@ -166,18 +58,7 @@
   min-width: 0;
   text-decoration: none;
 
-  &__logo {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--gold), #F97316);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 21px;
-    box-shadow: 0 10px 24px -10px rgba(246, 178, 62, .6);
-  }
+  &__logo { @include au.brand-logo(var(--gold), #F97316, rgba(246, 178, 62, .6)); }
 
   &__text {
     display: flex;
@@ -199,26 +80,7 @@
 }
 
 .fin-pill {
-  display: inline-flex;
-  align-items: center;
-  font-family: inherit;
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-  cursor: pointer;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  padding: 8px 15px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
-
-  &:hover {
-    background: var(--glass-2);
-    border-color: var(--glass-border-hi);
-    color: var(--text-hi);
-  }
+  @include au.pill;
 
   &--muted { color: var(--text-dim); }
 }
@@ -231,8 +93,8 @@
   overflow: hidden;
   border-radius: 26px;
   padding: clamp(22px, 5vw, 30px);
-  animation: fin-rise-in .5s var(--ease) both;
-  @include glass(var(--glass-strong), var(--glass-border-hi), 30px, 150%);
+  animation: au-rise .5s var(--ease) both;
+  @include au.glass(var(--glass-strong), var(--glass-border-hi), 30px, 150%);
 
   &__glow {
     position: absolute;
@@ -330,8 +192,8 @@
 .fin-card {
   border-radius: 24px;
   padding: clamp(20px, 4vw, 26px);
-  animation: fin-rise-in .5s var(--ease) both;
-  @include glass;
+  animation: au-rise .5s var(--ease) both;
+  @include au.glass;
 
   &__title {
     font-size: 15px;
@@ -375,7 +237,7 @@
   width: 186px;
   height: 186px;
   flex-shrink: 0;
-  animation: fin-pop-in .55s var(--ease) both;
+  animation: au-pop .55s var(--ease) both;
 
   &__ring {
     position: absolute;
@@ -466,36 +328,14 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-dasharray: 1;
-    animation: fin-draw-line 1.1s var(--ease) .25s both;
+    animation: au-draw 1.1s var(--ease) .25s both;
   }
 }
 
 // ── CTA / save button ───────────────────────────────────────────────────────
 .fin-cta {
+  @include au.cta;
   width: 100%;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  color: #06210F;
-  background: linear-gradient(135deg, var(--dollar), #14B88A);
-  border: none;
-  border-radius: 16px;
-  padding: 15px;
-  box-shadow: 0 14px 34px -14px rgba(45, 212, 167, .7);
-  transition: transform .2s var(--ease), filter .2s var(--ease);
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
-  }
-
-  &:active:not(:disabled) { transform: none; }
-
-  &:disabled {
-    opacity: .55;
-    cursor: not-allowed;
-  }
 }
 
 // ── Form ────────────────────────────────────────────────────────────────────
@@ -552,7 +392,7 @@
   }
 
   input {
-    @include input;
+    @include au.input;
     text-align: right;
   }
 }
@@ -615,7 +455,7 @@
   gap: 8px;
 
   input {
-    @include input;
+    @include au.input;
     text-align: right;
   }
 
@@ -638,24 +478,7 @@
   }
 }
 
-.fin-custom-add {
-  width: 100%;
-  background: transparent;
-  border: 1.5px dashed var(--glass-border-hi);
-  border-radius: 14px;
-  color: var(--text-dim);
-  font: inherit;
-  font-size: 13px;
-  padding: 12px;
-  cursor: pointer;
-  transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
-
-  &:hover {
-    border-color: var(--accent);
-    color: var(--text);
-    background: var(--glass);
-  }
-}
+.fin-custom-add { @include au.dashed; }
 
 @media (max-width: 560px) {
   .fin-grid,

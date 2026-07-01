@@ -1,0 +1,230 @@
+// ============================================================================
+//  Aurora Design System — glassmorphism over an aurora gradient backdrop.
+//  Tokens come from the Aurora design suite (Claude Design).
+//  Used by: finance · expenses · learn-hub · learn-react
+//
+//  Import with:  @use '../shared/aurora' as au;
+//  A page root gets:  @include au.tokens; @include au.page;
+//  and its light variant:  @include au.tokens-light;
+// ============================================================================
+
+// ── Page tokens (dark default) ──────────────────────────────────────────────
+@mixin tokens {
+  --ease: cubic-bezier(.22, .7, .2, 1);
+  --gold: #F6B23E;
+  --stock: #4F8DF7;
+  --dollar: #2DD4A7;
+  --crypto: #A78BFA;
+  --silver: #9AA7BE;
+  --custom: #FB7699;
+
+  --bg-base: #090D18;
+  --page-grad:
+    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .20), transparent 60%),
+    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .15), transparent 55%),
+    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .13), transparent 55%);
+  --glass: rgba(255, 255, 255, .045);
+  --glass-2: rgba(255, 255, 255, .075);
+  --glass-strong: rgba(255, 255, 255, .11);
+  --glass-border: rgba(255, 255, 255, .11);
+  --glass-border-hi: rgba(255, 255, 255, .20);
+  --card-shadow: 0 26px 60px -30px rgba(0, 0, 0, .85);
+  --text-hi: #F4F8FF;
+  --text: #C6D4EC;
+  --text-dim: #8194B6;
+  --text-faint: #56688A;
+  --accent: #60A5FA;
+  --hairline: rgba(255, 255, 255, .09);
+  --track: rgba(255, 255, 255, .07);
+  --inset: rgba(0, 0, 0, .28);
+  --code-bg: rgba(0, 0, 0, .34);
+  --code-text: #C6D4EC;
+}
+
+@mixin tokens-light {
+  --bg-base: #E9EEF8;
+  --page-grad:
+    radial-gradient(1100px 640px at 88% -12%, rgba(96, 165, 250, .26), transparent 60%),
+    radial-gradient(820px 520px at -4% 6%, rgba(167, 139, 250, .22), transparent 55%),
+    radial-gradient(760px 520px at 55% 118%, rgba(45, 212, 167, .20), transparent 55%);
+  --glass: rgba(255, 255, 255, .58);
+  --glass-2: rgba(255, 255, 255, .72);
+  --glass-strong: rgba(255, 255, 255, .88);
+  --glass-border: rgba(255, 255, 255, .75);
+  --glass-border-hi: rgba(255, 255, 255, .95);
+  --card-shadow: 0 24px 50px -28px rgba(30, 52, 96, .42);
+  --text-hi: #0E1B33;
+  --text: #33435E;
+  --text-dim: #62759A;
+  --text-faint: #93A2BE;
+  --accent: #2563EB;
+  --hairline: rgba(15, 30, 60, .10);
+  --track: rgba(15, 30, 60, .08);
+  --inset: rgba(15, 30, 60, .05);
+  --code-bg: #0E1626;
+  --code-text: #C6D4EC;
+}
+
+// Page root: aurora gradient background + base text color.
+@mixin page {
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--page-grad), var(--bg-base);
+  background-attachment: fixed;
+  transition: background .5s var(--ease), color .3s var(--ease);
+}
+
+// ── Animations ──────────────────────────────────────────────────────────────
+@mixin keyframes {
+  @keyframes au-rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @keyframes au-pop {
+    from { opacity: 0; transform: scale(.92); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @keyframes au-draw {
+    from { stroke-dashoffset: 1; }
+    to   { stroke-dashoffset: 0; }
+  }
+}
+
+// ── Glass building blocks ───────────────────────────────────────────────────
+@mixin glass($bg: var(--glass), $border: var(--glass-border), $blur: 24px, $saturate: 140%) {
+  background: $bg;
+  border: 1px solid $border;
+  backdrop-filter: blur($blur) saturate($saturate);
+  -webkit-backdrop-filter: blur($blur) saturate($saturate);
+  box-shadow: var(--card-shadow);
+}
+
+// Fixed floating theme switch. RTL pages put it inline-start, LTR inline-end —
+// pass the logical side the design uses.
+@mixin theme-toggle($side: inline-start) {
+  position: fixed;
+  top: 16px;
+  inset-#{$side}: 16px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-hi);
+  border-radius: 14px;
+  @include glass(var(--glass-2), var(--glass-border-hi), 14px, 100%);
+}
+
+// Rounded glass pill (nav links, secondary buttons).
+@mixin pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 8px 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+
+  &:hover {
+    background: var(--glass-2);
+    border-color: var(--glass-border-hi);
+    color: var(--text-hi);
+  }
+}
+
+// Glass text/number input.
+@mixin input {
+  width: 100%;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: var(--text-hi);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+
+  &::placeholder { color: var(--text-faint); }
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, .18);
+    background: var(--glass-2);
+  }
+}
+
+// Teal gradient call-to-action.
+@mixin cta {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: #06210F;
+  background: linear-gradient(135deg, var(--dollar), #14B88A);
+  border: none;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 14px 34px -14px rgba(45, 212, 167, .7);
+  transition: transform .2s var(--ease), filter .2s var(--ease);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  &:active:not(:disabled) { transform: none; }
+
+  &:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+  }
+}
+
+// Dashed "add" affordance.
+@mixin dashed {
+  width: 100%;
+  background: transparent;
+  border: 1.5px dashed var(--glass-border-hi);
+  border-radius: 12px;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 13px;
+  padding: 11px;
+  cursor: pointer;
+  transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+
+  &:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--glass);
+  }
+
+  &:disabled { opacity: .55; cursor: not-allowed; }
+}
+
+// 44px gradient app icon used in the top nav.
+@mixin brand-logo($from, $to, $glow) {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, $from, $to);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  box-shadow: 0 10px 24px -10px $glow;
+}

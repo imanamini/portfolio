@@ -21,7 +21,7 @@ export const JALALI_MONTH_NAMES = [
 ];
 
 export function jalaliMonthLabel(jy: number, jm: number): string {
-  return `${JALALI_MONTH_NAMES[jm - 1]} ${jy}`;
+  return `${JALALI_MONTH_NAMES[jm - 1]} ${jy.toLocaleString('fa-IR', { useGrouping: false })}`;
 }
 
 // months don't need day-level Jalali math, so plain integer arithmetic on a
