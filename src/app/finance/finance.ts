@@ -271,8 +271,8 @@ export class FinanceComponent {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-              x: { grid: { color: '#1E3248' } },
-              y: { grid: { color: '#1E3248' } },
+              x: { grid: { color: '#1E2A3D' }, ticks: { color: '#8FA8C8' } },
+              y: { grid: { color: '#1E2A3D' }, ticks: { color: '#8FA8C8' } },
             },
           },
         });

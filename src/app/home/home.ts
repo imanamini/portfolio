@@ -1,38 +1,59 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../core/auth.service';
+
+interface HubApp {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  route: string;
+  cta: string;
+}
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
-  template: `
-    <div class="home">
-      <h1>Iman Amini</h1>
-      <p>Front-End Developer</p>
-      <a routerLink="/resume">View Resume</a>
-    </div>
-  `,
-  styles: [`
-    .home {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      gap: 1rem;
-      font-family: 'Inter', sans-serif;
-    }
-    h1 { font-size: 2.5rem; font-weight: 700; }
-    p { color: #6b7280; }
-    a {
-      margin-top: 0.5rem;
-      padding: 0.6rem 1.4rem;
-      background: #16a34a;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-  `]
+  standalone: true,
+  templateUrl: './home.html',
+  styleUrl: './home.scss',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  private auth   = inject(AuthService);
+  private router = inject(Router);
+
+  apps: HubApp[] = [
+    {
+      title: 'دارایی‌ها',
+      description: 'پرتفوی، ترکیب دارایی‌ها و روند جمع کل ثروت',
+      icon: '💰',
+      color: '#FBBF24',
+      route: '/finance',
+      cta: 'مشاهده',
+    },
+    {
+      title: 'هزینه‌ها',
+      description: 'دخل و خرج ماهانه و برآیند کلی هر ماه',
+      icon: '🧾',
+      color: '#34D399',
+      route: '/expenses',
+      cta: 'مشاهده',
+    },
+    {
+      title: 'یادگیری',
+      description: 'مسیرهای یادگیری React، TypeScript و بیشتر',
+      icon: '📚',
+      color: '#60A5FA',
+      route: '/learn',
+      cta: 'ادامه',
+    },
+  ];
+
+  open(app: HubApp): void {
+    this.router.navigate([app.route]);
+  }
+
+  async logout(): Promise<void> {
+    await this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+}

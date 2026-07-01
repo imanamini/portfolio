@@ -1,0 +1,28 @@
+<div class="home-page" dir="rtl">
+
+  <!-- Header -->
+  <header class="home-header">
+    <div class="home-header__inner">
+      <div>
+        <div class="home-header__badge">🏠 هاب اصلی</div>
+        <h1 class="home-header__title">خوش اومدی</h1>
+        <p class="home-header__sub">کجا می‌خوای بری؟</p>
+      </div>
+      <button class="home-logout" (click)="logout()">خروج</button>
+    </div>
+  </header>
+
+  <!-- App cards -->
+  <div class="home-grid">
+    @for (app of apps; track app.route) {
+      <button class="home-card" (click)="open(app)" [style.--accent]="app.color">
+        <span class="home-card__glow"></span>
+        <span class="home-card__icon">{{ app.icon }}</span>
+        <h2 class="home-card__title">{{ app.title }}</h2>
+        <p class="home-card__desc">{{ app.description }}</p>
+        <span class="home-card__cta">{{ app.cta }} ←</span>
+      </button>
+    }
+  </div>
+
+</div>

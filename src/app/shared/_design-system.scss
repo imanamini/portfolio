@@ -1,0 +1,208 @@
+// ============================================================================
+//  Shared Design System — modern dark UI for the private (login-gated) app
+//  Used by: finance · expenses · learn-hub · learn-react
+//
+//  Import with:  @use '../shared/design-system' as ds;
+//  Then:         @include ds.page-bg;  color: ds.$text-body;  etc.
+// ============================================================================
+
+// ── Color tokens ────────────────────────────────────────────────────────────
+$bg-base:        #0B1120;   // page background
+$bg-surface:     #141C2B;   // cards
+$bg-surface-2:   #1B2536;   // raised / hovered surfaces
+$bg-inset:       #0E1626;   // inputs, wells
+
+$border-subtle:  #1E2A3D;
+$border-normal:  #2A3A52;
+$border-strong:  #3A4E6E;
+
+$text-primary:   #F1F5F9;   // headings
+$text-body:      #C8D8EC;   // main readable text
+$text-secondary: #8FA8C8;   // metadata, labels
+$text-muted:     #5E7A99;   // decoration, placeholders
+
+$accent:         #60A5FA;   // primary blue
+$accent-strong:  #3B82F6;
+$gold:           #FBBF24;
+$green:          #22C55E;
+$green-soft:     #4ADE80;
+$red:            #F87171;
+$purple:         #A78BFA;
+
+// ── Radii ───────────────────────────────────────────────────────────────────
+$r-sm:   8px;
+$r-md:   12px;
+$r-lg:   16px;
+$r-xl:   22px;
+$r-pill: 999px;
+
+// ── Shadows ─────────────────────────────────────────────────────────────────
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+$shadow-md: 0 10px 30px -16px rgba(0, 0, 0, .65);
+$shadow-lg: 0 28px 64px -24px rgba(0, 0, 0, .75);
+
+// ── Typography ──────────────────────────────────────────────────────────────
+$font-fa:   'Vazirmatn', Tahoma, system-ui, sans-serif;
+$font-en:   'Inter', system-ui, -apple-system, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+// ── Motion ──────────────────────────────────────────────────────────────────
+$ease: cubic-bezier(.4, 0, .2, 1);
+$dur:  .2s;
+
+// ── Mixins ──────────────────────────────────────────────────────────────────
+
+// Ambient, softly-lit page background with subtle color bloom.
+@mixin page-bg {
+  background:
+    radial-gradient(1100px 620px at 88% -12%, rgba(59, 130, 246, .12), transparent 60%),
+    radial-gradient(900px 520px at -5% 4%,     rgba(167, 139, 250, .07), transparent 55%),
+    $bg-base;
+  background-attachment: fixed;
+}
+
+// Elevated surface with a faint top-edge highlight for depth.
+@mixin card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, 0) 120px),
+    $bg-surface;
+  border: 1px solid $border-subtle;
+  border-radius: $r-lg;
+  box-shadow: $shadow-md;
+}
+
+@mixin card-interactive {
+  @include card;
+  cursor: pointer;
+  transition: transform $dur $ease, border-color $dur $ease, box-shadow $dur $ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: $border-strong;
+    box-shadow: $shadow-lg;
+  }
+}
+
+// Text field / number input.
+@mixin input {
+  width: 100%;
+  background: $bg-inset;
+  border: 1px solid $border-normal;
+  border-radius: $r-sm;
+  padding: 11px 14px;
+  color: $text-primary;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color $dur $ease, box-shadow $dur $ease, background $dur $ease;
+
+  &::placeholder { color: $text-muted; }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, .16);
+    background: #0F1A2C;
+  }
+}
+
+// Solid gradient call-to-action button.
+@mixin btn-primary($from: $green, $to: #15A34A) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, $from, $to);
+  color: #06210F;
+  border: none;
+  border-radius: $r-md;
+  padding: 13px 18px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -12px rgba($from, .8);
+  transition: transform $dur $ease, box-shadow $dur $ease, filter $dur $ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 16px 34px -14px rgba($from, .9);
+  }
+
+  &:active:not(:disabled) { transform: translateY(0); }
+
+  &:disabled { opacity: .55; cursor: not-allowed; }
+}
+
+// Subtle bordered "secondary" button / link.
+@mixin btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $bg-surface;
+  border: 1px solid $border-normal;
+  border-radius: $r-sm;
+  padding: 9px 16px;
+  color: $text-body;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color $dur $ease, background $dur $ease, color $dur $ease;
+
+  &:hover {
+    background: $bg-surface-2;
+    border-color: $border-strong;
+    color: $text-primary;
+  }
+}
+
+// Dashed "add / drop-zone" affordance.
+@mixin btn-dashed {
+  width: 100%;
+  background: transparent;
+  border: 1.5px dashed $border-normal;
+  border-radius: $r-md;
+  color: $text-secondary;
+  font: inherit;
+  font-size: 13px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color $dur $ease, color $dur $ease, background $dur $ease;
+
+  &:hover:not(:disabled) {
+    border-color: $accent;
+    color: $text-body;
+    background: rgba(96, 165, 250, .05);
+  }
+
+  &:disabled { opacity: .55; cursor: not-allowed; }
+}
+
+// Small status / category pill.
+@mixin badge($color: $gold) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $color;
+  background: rgba($color, .1);
+  border: 1px solid rgba($color, .22);
+  border-radius: $r-pill;
+  padding: 5px 13px;
+}
+
+// Thin, themed scrollbar.
+@mixin scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: $border-strong transparent;
+
+  &::-webkit-scrollbar { width: 8px; height: 8px; }
+  &::-webkit-scrollbar-thumb {
+    background: $border-strong;
+    border-radius: $r-pill;
+  }
+}

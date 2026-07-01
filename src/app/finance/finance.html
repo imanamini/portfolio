@@ -14,6 +14,7 @@
         </p>
       </div>
       <div class="fin-header__actions">
+        <a class="fin-link" routerLink="/home">خانه</a>
         <a class="fin-link" routerLink="/expenses">هزینه‌ها</a>
         <button class="fin-logout" (click)="logout()">خروج</button>
       </div>
@@ -24,11 +25,21 @@
 
     @if (view() === 'dashboard') {
 
+      <!-- Hero: grand total -->
+      <section class="fin-hero">
+        <div class="fin-hero__glow"></div>
+        <span class="fin-hero__label">جمع کل دارایی</span>
+        <div class="fin-hero__value">
+          {{ pieTotal() | number:'1.0-0' }}
+          <span class="fin-hero__unit">میلیون تومان</span>
+        </div>
+        <div class="fin-hero__meta">{{ pieSegments().length }} دارایی</div>
+      </section>
+
       <!-- Composition pie chart -->
       <section class="fin-card">
         <div class="fin-card__header">
           <h2 class="fin-card__title">ترکیب دارایی‌ها</h2>
-          <span class="fin-card__total">{{ pieTotal() | number:'1.0-0' }} میلیون تومان</span>
         </div>
         <div class="fin-pie-wrap">
           <div class="fin-canvas-box fin-canvas-box--pie">
@@ -47,7 +58,9 @@
         </section>
       }
 
-      <button class="fin-save" (click)="showForm()">➕ افزودن دیتای جدید</button>
+      <button class="fin-save" (click)="showForm()">
+        <span>افزودن دیتای جدید</span>
+      </button>
 
     } @else {
 
