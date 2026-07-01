@@ -1,0 +1,121 @@
+{
+  "configVersion": 1,
+  "timestamp": 1782943900625,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/chunk-7NLJRF3R.js",
+        "/chunk-A3CYUEU6.js",
+        "/chunk-AFC62DMU.js",
+        "/chunk-BP7GEK4J.js",
+        "/chunk-DGBCSAMC.js",
+        "/chunk-E4SDH6M7.js",
+        "/chunk-FY77XUZN.js",
+        "/chunk-GGHAFYWG.js",
+        "/chunk-ICNFOYVI.js",
+        "/chunk-IIATRRF4.js",
+        "/chunk-ILY3RKD2.js",
+        "/chunk-IMUQ46ZQ.js",
+        "/chunk-L6MSYREY.js",
+        "/chunk-LIA4IFC6.js",
+        "/chunk-LKM6FNKD.js",
+        "/chunk-MFYIITKP.js",
+        "/chunk-OZP4H7FQ.js",
+        "/chunk-QQMXNRVT.js",
+        "/chunk-W73FK5HV.js",
+        "/chunk-YZT6YT6N.js",
+        "/chunk-YZT7ZLRI.js",
+        "/favicon.ico",
+        "/index.html",
+        "/main-7MQJTVBG.js",
+        "/manifest.webmanifest",
+        "/styles-EOARUZBK.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/icons/apple-touch-icon.png",
+        "/icons/icon-16.png",
+        "/icons/icon-192.png",
+        "/icons/icon-32.png",
+        "/icons/icon-48.png",
+        "/icons/icon-512.png",
+        "/icons/icon.svg",
+        "/icons/maskable-192.png",
+        "/icons/maskable-512.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/chunk-7NLJRF3R.js": "c938ef6ccb9746453dfd218d1105631376ad1b09",
+    "/chunk-A3CYUEU6.js": "908660c2f79ffe932fca709a36718b936b441763",
+    "/chunk-AFC62DMU.js": "4b0832dd14107cbee7647eeddf7731e94b44fd6c",
+    "/chunk-BP7GEK4J.js": "b9e72cc8eabff823ef92b72cabb4603d36d56a55",
+    "/chunk-DGBCSAMC.js": "52e324075a65f728e2616e9e23e4a56bffff6c58",
+    "/chunk-E4SDH6M7.js": "13867e9cba702e1824ddba6e5dd12d450da359b4",
+    "/chunk-FY77XUZN.js": "94587f60781a19303432814f303120bd7377e7b0",
+    "/chunk-GGHAFYWG.js": "a3267ad0f661091dd45405a53dc2277edae2fcc2",
+    "/chunk-ICNFOYVI.js": "af66de2364554e59b3115da6cd4833c1891ed044",
+    "/chunk-IIATRRF4.js": "5b01cd6da57ed5f000fcd5a69862df8697a0bc14",
+    "/chunk-ILY3RKD2.js": "4f2bd6839344ec54add7497fd008195227e46588",
+    "/chunk-IMUQ46ZQ.js": "a3a7f4560649349e1794e137b0d74f11fd5073df",
+    "/chunk-L6MSYREY.js": "803f30c1e9ad660ad38a14d15951e1f44184c760",
+    "/chunk-LIA4IFC6.js": "aafa41950509f2acec63821e81fb9c236ebde220",
+    "/chunk-LKM6FNKD.js": "8de2a1714e4bc41dd1d9c2c9942fa9ba34824420",
+    "/chunk-MFYIITKP.js": "22d0fdd9dea5cde8c8bee4eacbe4fd7e3b94eacf",
+    "/chunk-OZP4H7FQ.js": "2a1a3ea7ed13f00388b483e76c7c089d893758e3",
+    "/chunk-QQMXNRVT.js": "943e2f85cfdd8ce85f6f3532d5cbf82af7585517",
+    "/chunk-W73FK5HV.js": "c0b050c85e31f3b358eda821e32e6f936d1454ee",
+    "/chunk-YZT6YT6N.js": "19658b95a542436499eaf95510c634e9752f9a5e",
+    "/chunk-YZT7ZLRI.js": "094c91275bedc3d3e2719b7c8d4623b0b44089cc",
+    "/favicon.ico": "e895bb903b26aa31e2313df4d0f9f6f1ed860264",
+    "/icons/apple-touch-icon.png": "4d9b46b7cc58796b4fdc87f5156d7a573263df10",
+    "/icons/icon-16.png": "e3eb700211e0a086940273af7c7b099eb8451e74",
+    "/icons/icon-192.png": "3164ef144c3f0223e5a8c930666aa99df2527edc",
+    "/icons/icon-32.png": "52ff9614e3684632af561c792d1f44de9da2bb7f",
+    "/icons/icon-48.png": "8a921411ecd752797617c0e7a756b535231770f6",
+    "/icons/icon-512.png": "2deed607811e2497c3f68a463af3dcf6a249daf0",
+    "/icons/icon.svg": "86bb21d70b695f10f3dac62ea9234273230373b3",
+    "/icons/maskable-192.png": "7943e7900a3d6f53f2950db08884a66a43fa52d6",
+    "/icons/maskable-512.png": "9f6efc9552d6355d91c8c7f28bbfaf3604f17ff4",
+    "/index.html": "5347fd6a231fff636a8ee4fa43bc223c946824e8",
+    "/main-7MQJTVBG.js": "45445aa1cbf50dd23cbb68ee1dc6c06f2836f684",
+    "/manifest.webmanifest": "470300a0cf79fa4cf20afbcc5688238fb017bd00",
+    "/styles-EOARUZBK.css": "6eae6b3bc4e3740d4d7ac2cdb90411cb22e97148"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
