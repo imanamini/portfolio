@@ -16,10 +16,8 @@ export class ProgressService {
   private auth = inject(AuthService);
 
   private get headers(): Record<string, string> {
-    const token = this.auth.getToken() ?? SUPABASE_KEY;
     return {
       apikey:          SUPABASE_KEY,
-      Authorization:   `Bearer ${token}`,
       'Content-Type':  'application/json',
       Prefer:          'return=representation',
     };
@@ -27,7 +25,7 @@ export class ProgressService {
 
   async get(slug: string): Promise<TopicProgress | null> {
     try {
-      const res = await fetch(
+      const res = await this.auth.authFetch(
         `${SUPABASE_URL}/rest/v1/learning_progress?slug=eq.${slug}&select=*`,
         { headers: this.headers }
       );
@@ -39,7 +37,7 @@ export class ProgressService {
 
   async patch(slug: string, payload: Partial<TopicProgress>): Promise<TopicProgress | null> {
     try {
-      const res = await fetch(
+      const res = await this.auth.authFetch(
         `${SUPABASE_URL}/rest/v1/learning_progress?slug=eq.${slug}`,
         {
           method:  'PATCH',

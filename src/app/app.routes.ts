@@ -50,6 +50,16 @@ export const routes: Routes = [
     loadComponent: () => import('./learn-react/learn-react').then((m) => m.LearnReactComponent),
   },
   {
+    path: 'finance',
+    canActivate: [authGuard],
+    loadComponent: () => import('./finance/finance').then((m) => m.FinanceComponent),
+  },
+  {
+    path: 'expenses',
+    canActivate: [authGuard],
+    loadComponent: () => import('./expenses/expenses').then((m) => m.ExpensesComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

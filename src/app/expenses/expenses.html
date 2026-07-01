@@ -1,0 +1,118 @@
+<div class="exp-page" dir="rtl">
+
+  <div class="exp-header">
+    <div class="exp-header__inner">
+      <div>
+        <div class="exp-header__badge">🧾 هزینه‌ها</div>
+        <h1 class="exp-header__title">دخل و خرج ماهانه</h1>
+        <p class="exp-header__sub">دریافتی و خرج هر ماه رو وارد کن</p>
+      </div>
+      <div class="exp-header__actions">
+        <a class="exp-link" routerLink="/finance">دارایی‌ها</a>
+        <button class="exp-logout" (click)="logout()">خروج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="exp-body">
+
+    <!-- Month switcher -->
+    <section class="exp-card exp-month">
+      <button class="exp-month__nav" (click)="prevMonth()">◀</button>
+      <span class="exp-month__label">{{ monthLabel() }}</span>
+      <button class="exp-month__nav" (click)="nextMonth()">▶</button>
+    </section>
+
+    @if (error()) {
+      <p class="exp-error">{{ error() }}</p>
+    }
+
+    @if (!loading() && entries().length === 0) {
+      <button class="exp-copy" [disabled]="copying()" (click)="copyFromPreviousMonth()">
+        {{ copying() ? 'در حال کپی...' : '↻ کپی ردیف‌های ماه قبل' }}
+      </button>
+    }
+
+    <!-- Income -->
+    <section class="exp-card">
+      <h2 class="exp-card__title">دریافتی</h2>
+      <div class="exp-rows">
+        @for (row of incomeEntries(); track row.id) {
+          <div class="exp-row">
+            <input type="checkbox" class="exp-row__check" [ngModel]="row.checked" (ngModelChange)="toggleChecked(row)" />
+            <input
+              class="exp-row__label"
+              [ngModel]="row.label"
+              (ngModelChange)="updateLabel(row, $event)"
+              (blur)="persistRow(row)"
+              placeholder="عنوان"
+            />
+            <input
+              type="number"
+              class="exp-row__amount"
+              [ngModel]="row.amount"
+              (ngModelChange)="updateAmount(row, $event)"
+              (blur)="persistRow(row)"
+              placeholder="مبلغ"
+            />
+            <button class="exp-row__remove" (click)="removeRow(row)">✕</button>
+          </div>
+        }
+      </div>
+      <button class="exp-add" (click)="addRow('income')">➕ افزودن دریافتی</button>
+    </section>
+
+    <!-- Expenses -->
+    <section class="exp-card">
+      <h2 class="exp-card__title">خرج</h2>
+      <div class="exp-rows">
+        @for (row of expenseEntries(); track row.id) {
+          <div class="exp-row">
+            <input type="checkbox" class="exp-row__check" [ngModel]="row.checked" (ngModelChange)="toggleChecked(row)" />
+            <input
+              class="exp-row__label"
+              [ngModel]="row.label"
+              (ngModelChange)="updateLabel(row, $event)"
+              (blur)="persistRow(row)"
+              placeholder="عنوان"
+            />
+            <input
+              type="number"
+              class="exp-row__amount"
+              [ngModel]="row.amount"
+              (ngModelChange)="updateAmount(row, $event)"
+              (blur)="persistRow(row)"
+              placeholder="مبلغ"
+            />
+            <button class="exp-row__remove" (click)="removeRow(row)">✕</button>
+          </div>
+        }
+      </div>
+      <button class="exp-add" (click)="addRow('expense')">➕ افزودن خرج</button>
+    </section>
+
+    <!-- Summary -->
+    <section class="exp-card">
+      <h2 class="exp-card__title">برآیند کلی</h2>
+      <div class="exp-totals">
+        <div class="exp-total">
+          <span class="exp-total__label">جمع دریافتی</span>
+          <span class="exp-total__value exp-total__value--pos">{{ incomeTotal() | number:'1.0-0' }}</span>
+        </div>
+        <div class="exp-total">
+          <span class="exp-total__label">جمع خرج</span>
+          <span class="exp-total__value exp-total__value--neg">{{ expenseTotal() | number:'1.0-0' }}</span>
+        </div>
+        <div class="exp-total exp-total--grand">
+          <span class="exp-total__label">مانده</span>
+          <span
+            class="exp-total__value"
+            [class.exp-total__value--pos]="balance() >= 0"
+            [class.exp-total__value--neg]="balance() < 0"
+          >{{ balance() | number:'1.0-0' }}</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

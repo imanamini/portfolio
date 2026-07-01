@@ -1,0 +1,209 @@
+<div class="fin-page" dir="rtl">
+
+  <div class="fin-header">
+    <div class="fin-header__inner">
+      <div>
+        <div class="fin-header__badge">💰 دارایی‌ها</div>
+        <h1 class="fin-header__title">وضعیت مالی</h1>
+        <p class="fin-header__sub">
+          @if (view() === 'dashboard') {
+            نمای کلی دارایی‌ها
+          } @else {
+            اکسل پرتفوی مفید رو آپلود کن و بقیه رو دستی وارد کن
+          }
+        </p>
+      </div>
+      <div class="fin-header__actions">
+        <a class="fin-link" routerLink="/expenses">هزینه‌ها</a>
+        <button class="fin-logout" (click)="logout()">خروج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fin-body">
+
+    @if (view() === 'dashboard') {
+
+      <!-- Composition pie chart -->
+      <section class="fin-card">
+        <div class="fin-card__header">
+          <h2 class="fin-card__title">ترکیب دارایی‌ها</h2>
+          <span class="fin-card__total">{{ pieTotal() | number:'1.0-0' }} میلیون تومان</span>
+        </div>
+        <div class="fin-pie-wrap">
+          <div class="fin-canvas-box fin-canvas-box--pie">
+            <canvas #pieCanvas></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trend over time -->
+      @if (history().length > 1) {
+        <section class="fin-card">
+          <h2 class="fin-card__title">روند جمع کل دارایی</h2>
+          <div class="fin-canvas-box fin-canvas-box--line">
+            <canvas #lineCanvas></canvas>
+          </div>
+        </section>
+      }
+
+      <button class="fin-save" (click)="showForm()">➕ افزودن دیتای جدید</button>
+
+    } @else {
+
+      <button class="fin-back" (click)="showDashboard()">→ بازگشت به داشبورد</button>
+
+      <!-- Upload -->
+      <section class="fin-card">
+        <h2 class="fin-card__title">۱. آپلود اکسل پرتفو</h2>
+        <label class="fin-upload">
+          <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" hidden />
+          <span>📄 {{ fileName() || 'انتخاب فایل Portfolio-export.xlsx' }}</span>
+        </label>
+        @if (error()) {
+          <p class="fin-error">{{ error() }}</p>
+        }
+      </section>
+
+      <!-- Auto-filled from excel -->
+      <section class="fin-card">
+        <h2 class="fin-card__title">۲. مقادیر استخراج‌شده (قابل ویرایش)</h2>
+        <div class="fin-grid">
+          <label class="fin-field">
+            <span>عیار</span>
+            <input type="number" [ngModel]="ayar()" (ngModelChange)="ayar.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>گنج</span>
+            <input type="number" [ngModel]="ganj()" (ngModelChange)="ganj.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>نهال</span>
+            <input type="number" [ngModel]="nahal()" (ngModelChange)="nahal.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>تمشک</span>
+            <input type="number" [ngModel]="tamashk()" (ngModelChange)="tamashk.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>سینرژی</span>
+            <input type="number" [ngModel]="synergy()" (ngModelChange)="synergy.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>نقران</span>
+            <input type="number" [ngModel]="noghran()" (ngModelChange)="noghran.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>نقرابی</span>
+            <input type="number" [ngModel]="noghrabi()" (ngModelChange)="noghrabi.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>کل پرتفو مفید</span>
+            <input type="number" [ngModel]="mofidPortfolioTotal()" (ngModelChange)="mofidPortfolioTotal.set($event)" />
+          </label>
+        </div>
+      </section>
+
+      <!-- Manual inputs -->
+      <section class="fin-card">
+        <h2 class="fin-card__title">۳. مقادیر دستی</h2>
+        <div class="fin-grid">
+          <label class="fin-field fin-field--date">
+            <span>تاریخ (شمسی)</span>
+            <div class="fin-date">
+              <input type="number" [ngModel]="jalaliYear()" (ngModelChange)="jalaliYear.set($event)" placeholder="سال" />
+              <input type="number" [ngModel]="jalaliMonth()" (ngModelChange)="jalaliMonth.set($event)" placeholder="ماه" min="1" max="12" />
+              <input type="number" [ngModel]="jalaliDay()" (ngModelChange)="jalaliDay.set($event)" placeholder="روز" min="1" max="31" />
+            </div>
+          </label>
+          <label class="fin-field">
+            <span>طلای فیزیکی (گرم)</span>
+            <input type="number" [ngModel]="physicalGoldGrams()" (ngModelChange)="physicalGoldGrams.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>قیمت هر گرم طلا (میلیون تومان)</span>
+            <input type="number" [ngModel]="goldPricePerGram()" (ngModelChange)="goldPricePerGram.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>کریپتو</span>
+            <input type="number" [ngModel]="crypto()" (ngModelChange)="crypto.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>میزان دلار</span>
+            <input type="number" [ngModel]="dollarAmount()" (ngModelChange)="dollarAmount.set($event)" />
+          </label>
+          <label class="fin-field">
+            <span>قیمت هر دلار (هزار تومان)</span>
+            <input type="number" [ngModel]="dollarPricePerUnit()" (ngModelChange)="dollarPricePerUnit.set($event)" />
+          </label>
+        </div>
+      </section>
+
+      <!-- Custom assets -->
+      <section class="fin-card">
+        <h2 class="fin-card__title">۴. دارایی‌های کاستوم</h2>
+        <div class="fin-custom-list">
+          @for (item of customAssets(); track $index) {
+            <div class="fin-custom-row">
+              <input
+                type="text"
+                class="fin-custom-row__label"
+                placeholder="مثلاً طلای کاریزما"
+                [ngModel]="item.label"
+                (ngModelChange)="updateCustomLabel($index, $event)"
+              />
+              <input
+                type="number"
+                class="fin-custom-row__value"
+                placeholder="مقدار"
+                [ngModel]="item.value"
+                (ngModelChange)="updateCustomValue($index, $event)"
+              />
+              <button type="button" class="fin-custom-row__remove" (click)="removeCustomAsset($index)">✕</button>
+            </div>
+          }
+        </div>
+        <button type="button" class="fin-custom-add" (click)="addCustomAsset()">+ افزودن دارایی کاستوم</button>
+      </section>
+
+      <!-- Computed totals -->
+      <section class="fin-card">
+        <h2 class="fin-card__title">۵. جمع‌بندی</h2>
+        <div class="fin-totals">
+          <div class="fin-total">
+            <span class="fin-total__label">طلا</span>
+            <span class="fin-total__value">{{ totals().gold_total | number:'1.1-1' }}</span>
+          </div>
+          <div class="fin-total">
+            <span class="fin-total__label">نقره</span>
+            <span class="fin-total__value">{{ totals().silver_total | number:'1.1-1' }}</span>
+          </div>
+          <div class="fin-total">
+            <span class="fin-total__label">سهام</span>
+            <span class="fin-total__value">{{ totals().stocks_total | number:'1.1-1' }}</span>
+          </div>
+          <div class="fin-total">
+            <span class="fin-total__label">دلار</span>
+            <span class="fin-total__value">{{ totals().dollar_total | number:'1.1-1' }}</span>
+          </div>
+          <div class="fin-total fin-total--grand">
+            <span class="fin-total__label">جمع کل</span>
+            <span class="fin-total__value">{{ totals().grand_total | number:'1.1-1' }}</span>
+          </div>
+        </div>
+
+        <button class="fin-save" [disabled]="saving()" (click)="save()">
+          {{ saving() ? 'در حال ذخیره...' : 'ذخیره امروز' }}
+        </button>
+        @if (saved()) {
+          <p class="fin-saved">✅ ذخیره شد</p>
+        }
+        @if (error()) {
+          <p class="fin-error">{{ error() }}</p>
+        }
+      </section>
+
+    }
+
+  </div>
+</div>

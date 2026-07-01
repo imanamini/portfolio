@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #0F172A;
+  font-family: 'Vazirmatn', Tahoma, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fin-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.fin-header {
+  margin-bottom: 40px;
+
+  &__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FBBF24;
+    background: rgba(251, 191, 36, .1);
+    border: 1px solid rgba(251, 191, 36, .2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #F1F5F9;
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+
+  &__sub {
+    font-size: 14px;
+    color: #8FA8C8;
+    margin: 0;
+  }
+
+  &__actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.fin-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: #C8D8EC;
+  background: #1A2332;
+  border: 1px solid #2A4060;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-decoration: none;
+
+  &:hover { background: #243044; }
+}
+
+.fin-logout {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #C8D8EC;
+  background: #1A2332;
+  border: 1px solid #2A4060;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+
+  &:hover { background: #243044; }
+}
+
+// ── Cards ─────────────────────────────────────────────────────────────────────
+
+.fin-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fin-card {
+  background: #1A2332;
+  border: 1px solid #1E3248;
+  border-radius: 14px;
+  padding: 24px;
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #F1F5F9;
+    margin: 0 0 16px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .fin-card__title { margin: 0; }
+  }
+
+  &__total {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FBBF24;
+    white-space: nowrap;
+  }
+}
+
+.fin-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed #2A4060;
+  border-radius: 10px;
+  padding: 20px;
+  color: #8FA8C8;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+
+  &:hover {
+    border-color: #60A5FA;
+    color: #C8D8EC;
+  }
+}
+
+.fin-error {
+  color: #F87171;
+  font-size: 13px;
+  margin: 12px 0 0;
+}
+
+.fin-saved {
+  color: #4ADE80;
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
+// ── Fields ────────────────────────────────────────────────────────────────────
+
+.fin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.fin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &--date {
+    grid-column: 1 / -1;
+  }
+
+  span {
+    font-size: 12px;
+    color: #8FA8C8;
+  }
+
+  input {
+    background: #0F172A;
+    border: 1px solid #2A4060;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #F1F5F9;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: right;
+
+    &:focus {
+      outline: none;
+      border-color: #60A5FA;
+    }
+  }
+}
+
+.fin-date {
+  display: flex;
+  gap: 8px;
+
+  input {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+// ── Totals ────────────────────────────────────────────────────────────────────
+
+.fin-totals {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.fin-total {
+  background: #0F172A;
+  border: 1px solid #1E3248;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__label {
+    font-size: 12px;
+    color: #8FA8C8;
+  }
+
+  &__value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #F1F5F9;
+  }
+
+  &--grand {
+    grid-column: 1 / -1;
+    border-color: #FBBF24;
+
+    .fin-total__value { color: #FBBF24; }
+  }
+}
+
+.fin-save {
+  width: 100%;
+  background: #22C55E;
+  color: #0F172A;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+
+  &:disabled { opacity: .6; cursor: not-allowed; }
+  &:hover:not(:disabled) { opacity: .9; }
+}
+
+// ── Charts (Chart.js canvases) ─────────────────────────────────────────────────
+
+.fin-pie-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fin-canvas-box {
+  position: relative;
+  width: 100%;
+
+  &--pie {
+    height: 280px;
+  }
+
+  &--line {
+    height: 200px;
+  }
+}
+
+.fin-back {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid #2A4060;
+  border-radius: 8px;
+  color: #C8D8EC;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 8px 14px;
+  cursor: pointer;
+
+  &:hover { background: #1A2332; }
+}
+
+// ── Custom assets ─────────────────────────────────────────────────────────────
+
+.fin-custom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.fin-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    background: #0F172A;
+    border: 1px solid #2A4060;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #F1F5F9;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: right;
+
+    &:focus {
+      outline: none;
+      border-color: #60A5FA;
+    }
+  }
+
+  &__label {
+    flex: 2;
+    min-width: 0;
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__remove {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    background: rgba(248, 113, 113, .1);
+    border: 1px solid rgba(248, 113, 113, .3);
+    border-radius: 8px;
+    color: #F87171;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover { background: rgba(248, 113, 113, .18); }
+  }
+}
+
+.fin-custom-add {
+  background: none;
+  border: 1.5px dashed #2A4060;
+  border-radius: 8px;
+  color: #8FA8C8;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+
+  &:hover {
+    border-color: #60A5FA;
+    color: #C8D8EC;
+  }
+}
+
+@media (max-width: 560px) {
+  .fin-grid,
+  .fin-totals {
+    grid-template-columns: 1fr;
+  }
+}
