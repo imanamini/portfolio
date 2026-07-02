@@ -20,6 +20,35 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
+
+      @if (auth.isLoggedIn()) {
+        <div class="nav__menu">
+          <button
+            class="nav__menu-btn"
+            type="button"
+            (click)="toggleMenu()"
+            [class.nav__menu-btn--open]="menuOpen()"
+            aria-label="Menu"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
+            </svg>
+          </button>
+          @if (menuOpen()) {
+            <div class="nav__menu-panel">
+              @for (link of menuLinks; track link.route) {
+                <button class="nav__menu-item" type="button" (click)="goTo(link.route)">
+                  <span class="nav__menu-icon">{{ link.icon }}</span>{{ link.label }}
+                </button>
+              }
+              <span class="nav__menu-divider"></span>
+              <button class="nav__menu-item nav__menu-item--danger" type="button" (click)="logout()">
+                <span class="nav__menu-icon">→</span>Logout
+              </button>
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
 </nav>
