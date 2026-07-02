@@ -1,14 +1,26 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal, afterNextRender } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { AuroraThemeService } from '../core/aurora-theme.service';
+import { FinanceService } from '../core/finance.service';
+import { ExpenseService } from '../core/expense.service';
+import { ProgressService } from '../core/progress.service';
+import { todayJalali } from '../finance/jalali';
+
+// keep in sync with LESSONS in learn-react-data (not imported — that file
+// is ~2k lines of lesson content and would bloat the home chunk)
+const REACT_TOTAL_DAYS = 27;
 
 interface HubApp {
   title: string;
   description: string;
   icon: string;
-  color: string;
   route: string;
   cta: string;
+  gradFrom: string;
+  gradTo: string;
+  glow: string;
+  ctaColor: string;
 }
 
 @Component({
@@ -18,35 +30,98 @@ interface HubApp {
   styleUrl: './home.scss',
 })
 export class HomeComponent {
-  private auth   = inject(AuthService);
-  private router = inject(Router);
+  private auth        = inject(AuthService);
+  private router      = inject(Router);
+  private financeSvc  = inject(FinanceService);
+  private expenseSvc  = inject(ExpenseService);
+  private progressSvc = inject(ProgressService);
+  themeSvc            = inject(AuroraThemeService);
 
-  apps: HubApp[] = [
-    {
-      title: 'دارایی‌ها',
-      description: 'پرتفوی، ترکیب دارایی‌ها و روند جمع کل ثروت',
-      icon: '💰',
-      color: '#FBBF24',
-      route: '/finance',
-      cta: 'مشاهده',
-    },
-    {
-      title: 'هزینه‌ها',
-      description: 'دخل و خرج ماهانه و برآیند کلی هر ماه',
-      icon: '🧾',
-      color: '#34D399',
-      route: '/expenses',
-      cta: 'مشاهده',
-    },
-    {
-      title: 'یادگیری',
-      description: 'مسیرهای یادگیری React، TypeScript و بیشتر',
-      icon: '📚',
-      color: '#60A5FA',
-      route: '/learn',
-      cta: 'ادامه',
-    },
-  ];
+  reactTotalDays = REACT_TOTAL_DAYS;
+
+  totalAssets  = signal<number | null>(null);
+  monthBalance = signal<number | null>(null);
+  reactDone    = signal<number | null>(null);
+
+  apps = computed<HubApp[]>(() => {
+    const done = this.reactDone();
+    return [
+      {
+        title: 'Assets',
+        description: "Your whole portfolio at a glance — how it's split, and where your net worth is heading.",
+        icon: '💎',
+        route: '/finance',
+        cta: 'Open →',
+        gradFrom: '#F6B23E',
+        gradTo: '#F97316',
+        glow: 'rgba(246, 178, 62, .34)',
+        ctaColor: '#F6B23E',
+      },
+      {
+        title: 'Expenses',
+        description: "What came in, what went out, and exactly what's left — month by month.",
+        icon: '🧾',
+        route: '/expenses',
+        cta: 'Open →',
+        gradFrom: '#2DD4A7',
+        gradTo: '#14B88A',
+        glow: 'rgba(45, 212, 167, .32)',
+        ctaColor: '#2DD4A7',
+      },
+      {
+        title: 'Learning',
+        description: done
+          ? `One concept a day — React now, more to come. You're ${done} days in.`
+          : 'One concept a day — React now, more to come.',
+        icon: '📚',
+        route: '/learn',
+        cta: 'Continue →',
+        gradFrom: '#4F8DF7',
+        gradTo: '#A78BFA',
+        glow: 'rgba(96, 165, 250, .34)',
+        ctaColor: '#60A5FA',
+      },
+    ];
+  });
+
+  private nf = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
+  fmt(value: number): string {
+    return this.nf.format(value);
+  }
+
+  constructor() {
+    afterNextRender(() => this.loadGlance());
+  }
+
+  // best-effort stats for the quick-glance strip; tiles show "—" until loaded
+  private async loadGlance(): Promise<void> {
+    const { jy, jm } = todayJalali();
+
+    const [snapshots, monthRows, progress] = await Promise.all([
+      this.financeSvc.list(),
+      this.expenseSvc.listMonth(jy, jm),
+      this.progressSvc.get('react'),
+    ]);
+
+    const latest = snapshots.at(-1);
+    if (latest) this.totalAssets.set(latest.grand_total);
+
+    if (monthRows.length) {
+      const sum = (kind: 'income' | 'expense') =>
+        monthRows.filter((r) => r.kind === kind).reduce((acc, r) => acc + (Number(r.amount) || 0), 0);
+      this.monthBalance.set(sum('income') - sum('expense'));
+    }
+
+    if (progress) {
+      this.reactDone.set(progress.completed.length);
+    } else {
+      try {
+        const local = localStorage.getItem('react-learning-completed');
+        if (local) this.reactDone.set(JSON.parse(local).length);
+      } catch { /* leave null */ }
+    }
+  }
 
   open(app: HubApp): void {
     this.router.navigate([app.route]);
