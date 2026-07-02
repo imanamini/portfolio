@@ -41,7 +41,9 @@ export class HomeComponent {
 
   totalAssets  = signal<number | null>(null);
   monthBalance = signal<number | null>(null);
-  reactDone    = signal<number | null>(null);
+  // seed from localStorage synchronously so the tile shows real progress
+  // immediately, instead of waiting on (and being blanked by) Supabase
+  reactDone    = signal<number | null>(this.readLocalReactDone());
 
   apps = computed<HubApp[]>(() => {
     const done = this.reactDone();
@@ -113,13 +115,22 @@ export class HomeComponent {
       this.monthBalance.set(sum('income') - sum('expense'));
     }
 
-    if (progress) {
-      this.reactDone.set(progress.completed.length);
-    } else {
-      try {
-        const local = localStorage.getItem('react-learning-completed');
-        if (local) this.reactDone.set(JSON.parse(local).length);
-      } catch { /* leave null */ }
+    // Reconcile Supabase with localStorage: whichever source has more completed
+    // days wins. A stale or empty row on either side must never blank a count
+    // the other side still has — that's what made this tile show 0.
+    const remote = progress?.completed?.length ?? 0;
+    const local  = this.readLocalReactDone() ?? 0;
+    if (remote || local) {
+      this.reactDone.set(Math.max(remote, local));
+    }
+  }
+
+  private readLocalReactDone(): number | null {
+    try {
+      const local = localStorage.getItem('react-learning-completed');
+      return local ? (JSON.parse(local) as number[]).length : null;
+    } catch {
+      return null;
     }
   }
 
