@@ -1,28 +1,88 @@
-<div class="home-page" dir="rtl">
+<div class="home-page" [class.home-page--light]="themeSvc.isLight()">
 
-  <!-- Header -->
-  <header class="home-header">
-    <div class="home-header__inner">
-      <div>
-        <div class="home-header__badge">🏠 هاب اصلی</div>
-        <h1 class="home-header__title">خوش اومدی</h1>
-        <p class="home-header__sub">کجا می‌خوای بری؟</p>
+  <button
+    class="home-theme-toggle"
+    (click)="themeSvc.toggle()"
+    [title]="themeSvc.isLight() ? 'Dark mode' : 'Light mode'"
+  >{{ themeSvc.isLight() ? '🌙' : '☀️' }}</button>
+
+  <div class="home-shell">
+
+    <!-- Header -->
+    <header class="home-header">
+      <div class="home-header__text">
+        <div class="home-header__badge">
+          <span class="home-header__dot"></span>
+          Private workspace · Iman
+        </div>
+        <h1 class="home-header__title">Good to see you again.</h1>
+        <p class="home-header__sub">
+          Everything that's just for you — money, spending, and what you're learning —
+          kept in one quiet corner. Pick up wherever you left off.
+        </p>
       </div>
-      <button class="home-logout" (click)="logout()">خروج</button>
+      <button class="home-pill" (click)="logout()">Sign out</button>
+    </header>
+
+    <!-- App cards -->
+    <div class="home-grid">
+      @for (app of apps(); track app.route) {
+        <button class="home-card" (click)="open(app)">
+          <span class="home-card__glow" [style.background]="'radial-gradient(circle, ' + app.glow + ', transparent 70%)'"></span>
+          <span
+            class="home-card__icon"
+            [style.background]="'linear-gradient(135deg, ' + app.gradFrom + ', ' + app.gradTo + ')'"
+            [style.box-shadow]="'0 12px 28px -10px ' + app.glow"
+          >{{ app.icon }}</span>
+          <h2 class="home-card__title">{{ app.title }}</h2>
+          <p class="home-card__desc">{{ app.description }}</p>
+          <span class="home-card__footer">
+            <span class="home-card__route">{{ app.route }}</span>
+            <span class="home-card__cta" [style.color]="app.ctaColor">{{ app.cta }}</span>
+          </span>
+        </button>
+      }
     </div>
-  </header>
 
-  <!-- App cards -->
-  <div class="home-grid">
-    @for (app of apps; track app.route) {
-      <button class="home-card" (click)="open(app)" [style.--accent]="app.color">
-        <span class="home-card__glow"></span>
-        <span class="home-card__icon">{{ app.icon }}</span>
-        <h2 class="home-card__title">{{ app.title }}</h2>
-        <p class="home-card__desc">{{ app.description }}</p>
-        <span class="home-card__cta">{{ app.cta }} ←</span>
-      </button>
-    }
+    <!-- Quick glance strip -->
+    <div class="home-glance">
+      <div class="home-stat">
+        <div class="home-stat__label">Total assets</div>
+        <div class="home-stat__row">
+          @if (totalAssets() !== null) {
+            <span class="home-stat__value">{{ fmt(totalAssets()!) }}</span>
+            <span class="home-stat__unit">M IRT</span>
+          } @else {
+            <span class="home-stat__value home-stat__value--empty">—</span>
+          }
+        </div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat__label">Left this month</div>
+        <div class="home-stat__row">
+          @if (monthBalance() !== null) {
+            <span
+              class="home-stat__value"
+              [class.home-stat__value--pos]="monthBalance()! >= 0"
+              [class.home-stat__value--neg]="monthBalance()! < 0"
+            >{{ monthBalance()! >= 0 ? '+' : '−' }}{{ fmt(monthBalance()! < 0 ? -monthBalance()! : monthBalance()!) }}</span>
+          } @else {
+            <span class="home-stat__value home-stat__value--empty">—</span>
+          }
+        </div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat__label">React progress</div>
+        <div class="home-stat__row">
+          @if (reactDone() !== null) {
+            <span class="home-stat__value">{{ reactDone() }}</span>
+            <span class="home-stat__unit">/ {{ reactTotalDays }} days</span>
+          } @else {
+            <span class="home-stat__value home-stat__value--empty">—</span>
+          }
+        </div>
+      </div>
+    </div>
+
   </div>
-
 </div>

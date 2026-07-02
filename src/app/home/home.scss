@@ -1,138 +1,217 @@
-@use '../shared/design-system' as ds;
+// Aurora Home — private workspace hub. Tokens/mixins come from the shared
+// Aurora design system; see src/app/shared/_aurora.scss.
+@use '../shared/aurora' as au;
 
 :host {
   display: block;
-  min-height: 100vh;
-  @include ds.page-bg;
-  font-family: ds.$font-fa;
-  color: ds.$text-body;
+  font-family: 'Inter', 'Vazirmatn', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+@include au.keyframes;
+
 .home-page {
-  max-width: 860px;
+  @include au.tokens;
+  @include au.page;
+}
+
+.home-page--light {
+  @include au.tokens-light;
+}
+
+.home-shell {
+  width: min(1000px, 100%);
   margin: 0 auto;
-  padding: 56px 24px 96px;
+  padding: clamp(36px, 7vw, 72px) clamp(16px, 4vw, 28px) 90px;
+}
+
+.home-theme-toggle { @include au.theme-toggle(inline-end); }
+
+.home-pill {
+  @include au.pill;
+  color: var(--text-dim);
+  font-weight: 600;
+  padding: 10px 18px;
+  white-space: nowrap;
 }
 
 // ── Header ──────────────────────────────────────────────────────────────────
 .home-header {
-  margin-bottom: 44px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(28px, 6vw, 48px);
+  animation: au-rise .5s var(--ease) both;
 
-  &__inner {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-  }
+  &__text { min-width: 0; }
 
   &__badge {
-    @include ds.badge(ds.$accent);
-    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--accent);
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--dollar);
+    box-shadow: 0 0 8px var(--dollar);
   }
 
   &__title {
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -.01em;
-    color: ds.$text-primary;
-    margin: 0 0 8px;
-    line-height: 1.2;
+    font-size: clamp(30px, 8vw, 48px);
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.05;
+    color: var(--text-hi);
+    margin: 18px 0 10px;
   }
 
   &__sub {
-    font-size: 15px;
-    color: ds.$text-secondary;
+    font-size: clamp(14px, 3.5vw, 16px);
+    color: var(--text-dim);
     margin: 0;
+    max-width: 460px;
+    line-height: 1.6;
   }
 }
 
-.home-logout {
-  @include ds.btn-ghost;
-  flex-shrink: 0;
-  &:hover { border-color: rgba(ds.$red, .5); color: ds.$red; }
-}
-
-// ── Grid ────────────────────────────────────────────────────────────────────
+// ── App cards ───────────────────────────────────────────────────────────────
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(16px, 3vw, 22px);
+  margin-bottom: clamp(20px, 4vw, 28px);
 }
 
 .home-card {
-  @include ds.card-interactive;
+  position: relative;
   overflow: hidden;
-  text-align: right;
-  padding: 26px 24px 22px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: stretch;
+  text-align: left;
+  min-height: 230px;
+  cursor: pointer;
   font-family: inherit;
+  border-radius: 24px;
+  padding: clamp(22px, 4vw, 28px);
+  transition: transform .22s var(--ease);
+  animation: au-rise .5s var(--ease) both;
+  @include au.glass(var(--glass-strong), var(--glass-border-hi), 28px, 150%);
 
-  &:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
-
-  &:focus-visible {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
-  }
+  &:hover { transform: translateY(-5px); }
 
   &__glow {
     position: absolute;
-    inset: -60% 30% auto -30%;
-    height: 180px;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%);
-    filter: blur(24px);
-    opacity: .55;
+    inset: -40% -20% auto 35%;
+    height: 200px;
+    filter: blur(28px);
     pointer-events: none;
-    transition: opacity ds.$dur ds.$ease;
   }
-
-  &:hover &__glow { opacity: .9; }
 
   &__icon {
     position: relative;
-    display: inline-flex;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: ds.$r-md;
-    font-size: 28px;
-    line-height: 1;
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    font-size: 27px;
+    margin-bottom: 20px;
   }
 
   &__title {
     position: relative;
-    font-size: 20px;
-    font-weight: 700;
-    color: ds.$text-primary;
-    margin: 0;
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--text-hi);
+    margin: 0 0 8px;
   }
 
   &__desc {
     position: relative;
     font-size: 13.5px;
-    line-height: 1.65;
-    color: ds.$text-secondary;
-    margin: 0;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin: 0 0 22px;
     flex: 1;
   }
 
-  &__cta {
+  &__footer {
     position: relative;
-    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__route {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  &__cta {
     font-size: 13px;
     font-weight: 700;
-    color: var(--accent);
-    margin-top: 4px;
   }
 }
 
-@media (max-width: 560px) {
-  .home-page { padding: 40px 16px 80px; }
-  .home-grid { grid-template-columns: 1fr; }
+.home-grid > :nth-child(2) { animation-delay: .07s; }
+.home-grid > :nth-child(3) { animation-delay: .14s; }
+
+// ── Quick glance strip ──────────────────────────────────────────────────────
+.home-glance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(12px, 2.5vw, 16px);
+  animation: au-rise .5s var(--ease) .2s both;
+}
+
+.home-stat {
+  border-radius: 18px;
+  padding: 18px 20px;
+  @include au.glass(var(--glass), var(--glass-border), 20px, 100%);
+
+  &__label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  &__value {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--text-hi);
+    letter-spacing: -.02em;
+
+    &--pos   { color: var(--dollar); }
+    &--neg   { color: var(--custom); }
+    &--empty { color: var(--text-faint); }
+  }
+
+  &__unit {
+    font-size: 11px;
+    color: var(--text-faint);
+  }
 }
