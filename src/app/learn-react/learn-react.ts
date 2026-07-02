@@ -70,11 +70,25 @@ export class LearnReactComponent {
     this.syncing.set(false);
     if (!data) return;
 
-    const completedSet = new Set<number>(data.completed);
-    this.completed.set(completedSet);
-    this.currentDay.set(data.current_day);
-    this.saveCompleted(completedSet);
-    localStorage.setItem(DAY_KEY, String(data.current_day));
+    // Merge, never overwrite. A stale or empty server row must never wipe
+    // local progress — union local + remote so no completed day is ever lost.
+    // If a mark-done failed to persist earlier (swallowed PATCH error), local
+    // ends up ahead of the server; push the union back up to self-heal it.
+    const remote = new Set<number>(data.completed ?? []);
+    const merged = new Set<number>([...this.completed(), ...remote]);
+    const nextDay = Math.max(this.currentDay(), data.current_day ?? 1);
+
+    this.completed.set(merged);
+    this.currentDay.set(nextDay);
+    this.saveCompleted(merged);
+    localStorage.setItem(DAY_KEY, String(nextDay));
+
+    if (merged.size > remote.size) {
+      await this.progressSvc.patch(TOPIC, {
+        completed:   [...merged],
+        current_day: nextDay,
+      });
+    }
   }
 
   // ── Storage ───────────────────────────────────────────────────────────────
