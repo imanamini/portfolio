@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>گزارش AI برای تست UI کتابخانه‌ها</title>
+  <style>
+    @page { size: A4 landscape; margin: 0; }
+
+    * { box-sizing: border-box; }
+
+    :root {
+      --brand: #003eff;
+      --brand-soft: #4c7bff;
+      --bg: #090b10;
+      --panel: #121722;
+      --panel-2: #171d2a;
+      --ink: #edf1f7;
+      --muted: #a4adbd;
+      --dim: #687285;
+      --line: rgba(255,255,255,0.12);
+      --ok: #35d07f;
+      --warn: #ffb020;
+      --err: #ff4d5e;
+      --cyan: #6ce0ff;
+      --violet: #a78bfa;
+      --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+      --sans: Tahoma, "Vazirmatn", "Segoe UI", Arial, sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      background: #000;
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body { direction: rtl; }
+
+    .page {
+      width: 297mm;
+      height: 210mm;
+      padding: 16mm 18mm 14mm;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(0,62,255,0.24), transparent 30%),
+        linear-gradient(135deg, rgba(108,224,255,0.06), transparent 28%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    .chrome {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .topline,
+    .footer {
+      position: absolute;
+      left: 18mm;
+      right: 18mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      direction: ltr;
+    }
+
+    .topline { top: 7mm; }
+    .footer { bottom: 7mm; }
+
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: #303848; display: inline-block; }
+    .dot.brand { background: var(--brand-soft); box-shadow: 0 0 12px rgba(76,123,255,0.6); }
+    .dot.ok { background: var(--ok); }
+    .dot.warn { background: var(--warn); }
+
+    .eyebrow {
+      color: var(--brand-soft);
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      direction: ltr;
+      text-align: right;
+      margin-bottom: 5mm;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: 40pt;
+      line-height: 1.18;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      max-width: 225mm;
+    }
+
+    h2 {
+      font-size: 26pt;
+      line-height: 1.25;
+      font-weight: 800;
+      margin-bottom: 7mm;
+    }
+
+    h3 {
+      font-size: 15pt;
+      line-height: 1.35;
+      font-weight: 800;
+      margin-bottom: 2.5mm;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 15pt;
+      line-height: 1.85;
+      max-width: 230mm;
+      margin-top: 8mm;
+    }
+
+    .accent { color: var(--brand-soft); }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .err { color: var(--err); }
+    .muted { color: var(--muted); }
+    .ltr { direction: ltr; unicode-bidi: embed; font-family: var(--mono); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018));
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      padding: 6mm;
+      min-height: 34mm;
+    }
+
+    .card.brand { border-color: rgba(76,123,255,0.45); background: rgba(0,62,255,0.12); }
+    .card.ok { border-color: rgba(53,208,127,0.35); background: rgba(53,208,127,0.08); }
+    .card.warn { border-color: rgba(255,176,32,0.35); background: rgba(255,176,32,0.08); }
+    .card.err { border-color: rgba(255,77,94,0.35); background: rgba(255,77,94,0.08); }
+
+    .label {
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 8pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      direction: ltr;
+      margin-bottom: 2.5mm;
+    }
+
+    .body {
+      color: var(--muted);
+      font-size: 11.5pt;
+      line-height: 1.7;
+    }
+
+    .body strong { color: var(--ink); font-weight: 800; }
+
+    .metric {
+      font-family: var(--mono);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .metric .num {
+      color: var(--ink);
+      font-size: 26pt;
+      line-height: 1;
+      font-weight: 800;
+      margin-bottom: 2mm;
+    }
+
+    .metric .caption {
+      color: var(--dim);
+      font-size: 8pt;
+      line-height: 1.45;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4mm;
+      align-items: stretch;
+    }
+
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      padding: 5mm;
+      min-height: 44mm;
+      position: relative;
+    }
+
+    .step::before {
+      content: attr(data-n);
+      display: inline-flex;
+      width: 9mm;
+      height: 9mm;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 8pt;
+      margin-bottom: 3mm;
+    }
+
+    .code {
+      direction: ltr;
+      text-align: left;
+      font-family: var(--mono);
+      color: #dfe6f3;
+      background: #0b0f17;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3mm;
+      padding: 4mm;
+      font-size: 8.3pt;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .shot {
+      background: #0d111a;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 3mm;
+      padding: 3.5mm;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+      min-height: 44mm;
+    }
+
+    .shotbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 7.5pt;
+      direction: ltr;
+      margin-bottom: 3mm;
+      padding-bottom: 2mm;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .pillrow { display: flex; gap: 2.5mm; flex-wrap: wrap; margin-top: 5mm; }
+
+    .pill {
+      border: 1px solid rgba(76,123,255,0.35);
+      background: rgba(0,62,255,0.12);
+      color: var(--ink);
+      border-radius: 99px;
+      padding: 2mm 3.5mm;
+      font-family: var(--mono);
+      font-size: 8pt;
+      direction: ltr;
+    }
+
+    .agent {
+      display: grid;
+      grid-template-columns: 78mm 1fr;
+      gap: 5mm;
+      align-items: start;
+      margin-bottom: 4mm;
+      padding: 5mm;
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .agent-name {
+      direction: ltr;
+      font-family: var(--mono);
+      font-size: 8.2pt;
+      line-height: 1.45;
+      color: var(--brand-soft);
+      white-space: nowrap;
+    }
+
+    .agent-text {
+      color: var(--muted);
+      font-size: 10.5pt;
+      line-height: 1.7;
+    }
+
+    ul.clean {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 2.2mm;
+    }
+
+    ul.clean li {
+      color: var(--muted);
+      font-size: 11pt;
+      line-height: 1.65;
+      position: relative;
+      padding-right: 5mm;
+    }
+
+    ul.clean li::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 3.2mm;
+      width: 2.2mm;
+      height: 2.2mm;
+      border-radius: 999px;
+      background: var(--brand-soft);
+    }
+
+    .summary-band {
+      position: absolute;
+      left: 18mm;
+      right: 18mm;
+      bottom: 23mm;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4mm;
+    }
+  </style>
+</head>
+<body>
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>AI × UI Testing · Digipay Libs</span><span class="dots"><i class="dot brand"></i><i class="dot"></i><i class="dot ok"></i></span></div>
+    <div class="eyebrow">Executive Summary</div>
+    <h1>چطور AI تست UI کتابخانه‌ها را از کار دستی به <span class="accent">قرارداد خودکار</span> تبدیل کرد.</h1>
+    <p class="lead">
+      خروجی کار، یک سیستم تست‌نویسی و کنترل کیفیت AI-assisted برای کتابخانه‌های مشترک Angular است:
+      AI طبق قوانین پروژه spec تولید می‌کند، توسعه‌دهنده review می‌کند، Playwright و unit test قرارداد را enforce می‌کنند،
+      و CI قبل از رسیدن تغییر به QA/Production باگ‌های ریز UI را متوقف می‌کند.
+    </p>
+    <div class="summary-band">
+      <div class="card metric"><div class="num">76</div><div class="caption">shared libraries under test</div></div>
+      <div class="card metric"><div class="num">1d → &lt;1h</div><div class="caption">time to create a full spec set</div></div>
+      <div class="card metric"><div class="num">1,000+</div><div class="caption">assertions per release / PR cycle</div></div>
+      <div class="card metric"><div class="num">0</div><div class="caption">lib-level QA tickets in last cycle</div></div>
+    </div>
+    <div class="footer"><span>01 / 08</span><span>Prepared from deck/digipay-libs</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>Need + Main Idea</span><span class="dots"><i class="dot warn"></i><i class="dot"></i><i class="dot brand"></i></span></div>
+    <div class="eyebrow">Idea / Need</div>
+    <h2>ایده اصلی و نیازی که مرتفع شد</h2>
+    <div class="grid-2">
+      <div class="card warn">
+        <div class="label">Before</div>
+        <h3>QA نقش firewall انسانی را داشت.</h3>
+        <p class="body">هر تغییر کوچک در یک package مثل <span class="ltr">ngx-button</span> یا <span class="ltr">ngx-spinner</span> می‌توانست روی چند محصول اثر بگذارد. نتیجه: regression دستی، زمان زیاد، هزینه انسانی و ترس توسعه‌دهنده از refactor.</p>
+      </div>
+      <div class="card brand">
+        <div class="label">Core Idea</div>
+        <h3>قرارداد کتابخانه‌ها باید توسط ماشین enforce شود.</h3>
+        <p class="body">برای هر کتابخانه یک demo page واقعی داریم. AI بر اساس ruleهای پروژه unit spec و E2E spec می‌نویسد. Playwright همان صفحه واقعی را باز می‌کند و computed style، state، interaction و screenshot را چک می‌کند.</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top: 7mm;">
+      <div class="card">
+        <div class="label">Business Need</div>
+        <p class="body"><strong>کاهش بار QA</strong> در سطح library regression و انتقال QA به user journeyهای مهم‌تر.</p>
+      </div>
+      <div class="card">
+        <div class="label">Engineering Need</div>
+        <p class="body"><strong>اعتماد به refactor</strong> برای shared packageها بدون اینکه هر تغییر تبدیل به release risk شود.</p>
+      </div>
+      <div class="card">
+        <div class="label">AI Need</div>
+        <p class="body"><strong>یکنواختی specها</strong> با ruleهای ثابت، نه promptهای پراکنده و خروجی‌های سلیقه‌ای.</p>
+      </div>
+    </div>
+    <div class="footer"><span>02 / 08</span><span>QA bottleneck → self-verifying contract</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>Main Features</span><span class="dots"><i class="dot brand"></i><i class="dot ok"></i><i class="dot"></i></span></div>
+    <div class="eyebrow">Features</div>
+    <h2>فیچرهای اصلی کاری که انجام شد</h2>
+    <div class="grid-3">
+      <div class="card brand">
+        <div class="label">Demo Harness</div>
+        <h3>یک URL واقعی برای هر library</h3>
+        <p class="body"><span class="ltr">/package/&lt;name&gt;</span> بدون mock و بدون publish loop؛ تست مستقیم روی source و همان چیزی که مصرف‌کننده می‌بیند.</p>
+      </div>
+      <div class="card">
+        <div class="label">Unit Layer</div>
+        <h3>قرارداد API کامپوننت</h3>
+        <p class="body">input/output، signal input، state classها، و رفتار <span class="ltr">OnPush</span> با coverage سخت‌گیرانه.</p>
+      </div>
+      <div class="card">
+        <div class="label">E2E Layer</div>
+        <h3>قرارداد visual و interaction</h3>
+        <p class="body">computed CSS، screenshot regression، animation live-check، responsive، disabled/loading/destructive states.</p>
+      </div>
+      <div class="card">
+        <div class="label">AI Rules</div>
+        <h3>قانون در repo، خروجی توسط AI</h3>
+        <p class="body"><span class="ltr">CLAUDE.md</span> و slash-commandها استاندارد تست را نگه می‌دارند؛ AI فقط همان سبک را تولید می‌کند.</p>
+      </div>
+      <div class="card ok">
+        <div class="label">Learning Loop</div>
+        <h3>هر failure تبدیل به rule شد</h3>
+        <p class="body">قانون جدید در <span class="ltr">TESTING.md</span> و command ثبت می‌شود و برای specهای بعدی از روز صفر اعمال می‌شود.</p>
+      </div>
+      <div class="card">
+        <div class="label">CI Gate</div>
+        <h3>merge قبل از QA متوقف می‌شود</h3>
+        <p class="body">اگر style، size، color، animation یا state drift کند، PR در CI fail می‌شود.</p>
+      </div>
+    </div>
+    <div class="footer"><span>03 / 08</span><span>Unit + Playwright + AI rules + CI</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>Workflow</span><span class="dots"><i class="dot"></i><i class="dot brand"></i><i class="dot ok"></i></span></div>
+    <div class="eyebrow">Flow</div>
+    <h2>فلوی کاری از تغییر component تا CI سبز</h2>
+    <div class="flow">
+      <div class="step" data-n="01">
+        <h3>توسعه component</h3>
+        <p class="body">Developer کامپوننت و demo page را اضافه یا اصلاح می‌کند.</p>
+      </div>
+      <div class="step" data-n="02">
+        <h3>اجرای AI command</h3>
+        <p class="body">با command اختصاصی، AI سورس، demo و ruleها را می‌خواند.</p>
+      </div>
+      <div class="step" data-n="03">
+        <h3>تولید specها</h3>
+        <p class="body">Unit spec و Playwright E2E spec با همان الگوی پروژه ساخته می‌شود.</p>
+      </div>
+      <div class="step" data-n="04">
+        <h3>بازبینی انسانی</h3>
+        <p class="body">Developer خروجی را review می‌کند و edge caseها را tune می‌کند.</p>
+      </div>
+      <div class="step" data-n="05">
+        <h3>CI gate</h3>
+        <p class="body">تست‌ها روی هر push/PR اجرا می‌شوند و regression را قبل از merge می‌بندند.</p>
+      </div>
+    </div>
+    <div class="card brand" style="margin-top: 8mm;">
+      <div class="label">Important Detail</div>
+      <p class="body">این flow جای developer را نمی‌گیرد؛ AI کار حجیم و تکراری تولید assertionها را انجام می‌دهد، ولی ruleها، review، تصمیم نهایی و اصلاح edge caseها توسط تیم توسعه کنترل می‌شود.</p>
+    </div>
+    <div class="footer"><span>04 / 08</span><span>dev → ai → review → ci</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>Screenshots / Samples</span><span class="dots"><i class="dot warn"></i><i class="dot brand"></i><i class="dot ok"></i></span></div>
+    <div class="eyebrow">Screenshots + Bug Samples</div>
+    <h2>نمونه بخش‌هایی که باید به چشم بیاید</h2>
+    <div class="grid-2">
+      <div class="shot">
+        <div class="shotbar"><span>ngx-spinner.spec.ts · Size Contract</span><span class="ok">CI BLOCK</span></div>
+        <div class="code">const sizeSpec = {
+  sm: { size: '16px', stroke: '3px' },
+  md: { size: '20px', stroke: '4px' },
+  lg: { size: '24px', stroke: '4px' },
+};
+
+expect(actual.spinnerSize).toBe(expected.size);
+expect(actual.strokeWidth).toBe(expected.stroke);</div>
+        <p class="body" style="margin-top: 3mm;">کشف باگ: تغییر ناخواسته <span class="ltr">--spinner-size</span> از 16px به 15px در review دیده نمی‌شود، اما Size Contract در CI fail می‌کند.</p>
+      </div>
+      <div class="shot">
+        <div class="shotbar"><span>Visual Regression</span><span class="ok">SCREENSHOT DIFF</span></div>
+        <div class="grid-3">
+          <div class="card" style="min-height: 25mm; padding: 4mm;"><div class="label">before</div><div style="height: 11mm; border-radius: 2mm; background: #003eff;"></div></div>
+          <div class="card" style="min-height: 25mm; padding: 4mm;"><div class="label">after</div><div style="height: 11mm; border-radius: 2mm; background: #174cff;"></div></div>
+          <div class="card ok" style="min-height: 25mm; padding: 4mm;"><div class="label">result</div><p class="body" style="font-size: 9pt;">24 screenshots fail</p></div>
+        </div>
+        <p class="body" style="margin-top: 3mm;">کشف باگ: تغییر رنگ brand primary در CSS global با چشم سخت تشخیص داده می‌شود، اما screenshot regression همه variantها را fail می‌کند.</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top: 5mm;">
+      <div class="shot">
+        <div class="shotbar"><span>Animation Contract</span><span class="ok">LIVE CHECK</span></div>
+        <div class="code">const t1 = await spinner.evaluate(el => getComputedStyle(el).transform);
+await page.waitForTimeout(200);
+const t2 = await spinner.evaluate(el => getComputedStyle(el).transform);
+
+expect(t1).toBeTruthy();
+expect(t2).toBeTruthy();
+// t1 != t2 → element is actually moving</div>
+      </div>
+      <div class="shot">
+        <div class="shotbar"><span>Input Variant Contract</span><span class="ok">STATE CHECK</span></div>
+        <p class="body">کشف باگ: بعد از refactor، button در state disabled هنوز <span class="ltr">cursor: pointer</span> نشان می‌داد. تست state، DOM + style + screenshot را هم‌زمان چک کرد و merge را بست.</p>
+        <div class="pillrow"><span class="pill">disabled</span><span class="pill">loading</span><span class="pill">destructive</span><span class="pill">fullWidth</span></div>
+      </div>
+    </div>
+    <div class="footer"><span>05 / 08</span><span>bugs invisible in review → loud in CI</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>Outcomes</span><span class="dots"><i class="dot ok"></i><i class="dot brand"></i><i class="dot"></i></span></div>
+    <div class="eyebrow">Impact</div>
+    <h2>نتیجه عملی برای تیم</h2>
+    <div class="grid-4">
+      <div class="card metric"><div class="num accent">&lt;1h</div><div class="caption">برای تولید تست کامل یک component با AI و review انسانی</div></div>
+      <div class="card metric"><div class="num">38</div><div class="caption">E2E spec سبز برای پوشش libraryها و variantها</div></div>
+      <div class="card metric"><div class="num">7</div><div class="caption">قرارداد ثابت در هر spec: render, size, color, animation, visual, responsive, state</div></div>
+      <div class="card metric"><div class="num ok">Near 0</div><div class="caption">بار regression دستی در سطح library</div></div>
+    </div>
+    <div class="grid-2" style="margin-top: 8mm;">
+      <div class="card">
+        <div class="label">For QA</div>
+        <ul class="clean">
+          <li>QA از تست تکراری library plumbing آزاد شد.</li>
+          <li>تمرکز QA به user journeyها، edge caseهای محصول و قضاوت انسانی منتقل شد.</li>
+          <li>Regressionهای کوچک UI قبل از رسیدن به QA در CI پیدا می‌شوند.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="label">For Developers</div>
+        <ul class="clean">
+          <li>refactor shared packageها کم‌ریسک‌تر شد.</li>
+          <li>هر تغییر قرارداد قابل اندازه‌گیری دارد، نه وابسته به حافظه افراد.</li>
+          <li>AI خروجی اولیه حجیم را می‌سازد، developer فقط quality و edge case را کنترل می‌کند.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>06 / 08</span><span>QA freed, developers safer, CI stricter</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>MCP + Design System Memory</span><span class="dots"><i class="dot brand"></i><i class="dot"></i><i class="dot ok"></i></span></div>
+    <div class="eyebrow">MCP / Figma</div>
+    <h2>چیزی که باید دیده شود: AI با ابزارهای واقعی کار می‌کند</h2>
+    <div class="grid-2">
+      <div class="card brand">
+        <div class="label">Model Context Protocol</div>
+        <h3>Claude فقط متن نمی‌خواند؛ به ابزار وصل می‌شود.</h3>
+        <p class="body">با MCP می‌شود Figma، Sentry، GitHub، Google Drive یا API داخلی را داخل session در اختیار AI گذاشت. یعنی context واقعی، بدون copy/paste و بدون حدس.</p>
+      </div>
+      <div class="card ok">
+        <div class="label">Figma MCP Result</div>
+        <h3>Design tokenها تبدیل به rule دائمی شدند.</h3>
+        <p class="body">AI به جای استخراج blind pixel value، ruleهای design system را می‌شناسد: typography، spacing، color token و utility classها.</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top: 7mm;">
+      <div class="shot">
+        <div class="shotbar"><span>without rule</span><span class="warn">bad output</span></div>
+        <div class="code">.title {
+  font-size: 20px;
+  color: #1f2937;
+  margin-bottom: 16px;
+}</div>
+      </div>
+      <div class="shot">
+        <div class="shotbar"><span>with MCP rule</span><span class="ok">actual output</span></div>
+        <div class="code">&lt;h3 class="st-4 text-onback-high mb-medium"&gt;
+  ...
+&lt;/h3&gt;</div>
+      </div>
+    </div>
+    <div class="footer"><span>07 / 08</span><span>Figma context → repo rules → repeatable implementation</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chrome"></div>
+    <div class="topline"><span>AI Agents for Development Quality</span><span class="dots"><i class="dot brand"></i><i class="dot warn"></i><i class="dot ok"></i></span></div>
+    <div class="eyebrow">Agents</div>
+    <h2>ایجنت‌هایی که کار development را دقیق‌تر می‌کنند</h2>
+
+    <div class="agent">
+      <div class="agent-name">smart-dashboard-dev</div>
+      <div class="agent-text">
+        ایجنت پیاده‌سازی. برای یک task مشخص کار می‌کند، قبل از کدنویسی Figma/context را می‌خواند، اولویت را به componentها و packageهای موجود می‌دهد، از hardcode کردن style جلوگیری می‌کند، stateهای مختلف را پیاده می‌کند و قبل از تحویل build/lint/browser check انجام می‌دهد.
+      </div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-name">smart-dashboard-figma-qa</div>
+      <div class="agent-text">
+        ایجنت QA سخت‌گیر. بعد از implementation، diff را بررسی می‌کند، ruleهای Angular/base-style/RTL را enforce می‌کند، Figma را با structured context و screenshot می‌سنجد، app واقعی را با browser باز می‌کند، و اگر چیزی ناقص باشد PASS نمی‌دهد.
+      </div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-name">smart-dashboard-design-review</div>
+      <div class="agent-text">
+        ایجنت final visual gate. فقط visual fidelity را بررسی می‌کند: layout، spacing، color، typography، icon، RTL، copy فارسی، stateها و flowها. معیارش «تقریبا شبیه» نیست؛ هر اختلاف باید با مقدار دقیق مثل px/class/hex گزارش شود.
+      </div>
+    </div>
+
+    <div class="card brand" style="margin-top: 6mm;">
+      <div class="label">Operating Model</div>
+      <p class="body">
+        نقش‌ها از هم جدا شده‌اند: یک agent می‌سازد، یکی QA می‌کند، یکی pixel-perfect review می‌کند.
+        این جداسازی باعث می‌شود AI هم سرعت بدهد و هم کیفیت را با gateهای مستقل بالا ببرد.
+      </p>
+    </div>
+
+    <div class="footer"><span>08 / 08</span><span>dev agent → QA agent → design review agent</span></div>
+  </section>
+</body>
+</html>
