@@ -6,6 +6,7 @@ export interface FinanceInputs {
   synergy:                number;
   noghran:                number;
   noghrabi:               number;
+  noghrin:                number;
   mofid_portfolio_total:  number;
   physical_gold_grams:    number;
   gold_price_per_gram:    number;
@@ -28,7 +29,7 @@ export function computeFinanceTotals(i: FinanceInputs): FinanceTotals {
   const physicalGoldValue = i.physical_gold_grams * i.gold_price_per_gram;
 
   const goldTotal = i.ayar + i.ganj + physicalGoldValue;
-  const silverTotal = i.noghran + i.noghrabi;
+  const silverTotal = i.noghran + i.noghrabi + i.noghrin;
   // dollar_price_per_unit is entered in thousand-toman (e.g. 175 for 175,000 toman);
   // every other field is in million-toman, so convert before combining
   const dollarTotal = i.dollar_amount * (i.dollar_price_per_unit / 1000);

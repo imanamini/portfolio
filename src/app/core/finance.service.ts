@@ -11,6 +11,7 @@ export interface FinanceSnapshot {
   synergy:                number;
   noghran:                number;
   noghrabi:               number;
+  noghrin:                number;
   mofid_portfolio_total:  number;
   physical_gold_grams:    number;
   gold_price_per_gram:    number;
