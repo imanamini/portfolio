@@ -80,6 +80,7 @@ export class FinanceComponent {
   synergy = signal(0);
   noghran = signal(0);
   noghrabi = signal(0);
+  noghrin = signal(0);
   mofidPortfolioTotal = signal(0);
 
   // manual inputs — always tracked
@@ -104,6 +105,7 @@ export class FinanceComponent {
       synergy:               this.synergy(),
       noghran:               this.noghran(),
       noghrabi:              this.noghrabi(),
+      noghrin:               this.noghrin(),
       mofid_portfolio_total: this.mofidPortfolioTotal(),
       physical_gold_grams:   this.physicalGoldGrams(),
       gold_price_per_gram:   this.goldPricePerGram(),
@@ -236,6 +238,7 @@ export class FinanceComponent {
       this.synergy.set(existing.synergy);
       this.noghran.set(existing.noghran);
       this.noghrabi.set(existing.noghrabi);
+      this.noghrin.set(existing.noghrin);
       this.mofidPortfolioTotal.set(existing.mofid_portfolio_total);
       this.physicalGoldGrams.set(existing.physical_gold_grams);
       this.goldPricePerGram.set(existing.gold_price_per_gram);
@@ -303,6 +306,7 @@ export class FinanceComponent {
       this.synergy.set(parsed.bySymbol.synergy);
       this.noghran.set(parsed.bySymbol.noghran);
       this.noghrabi.set(parsed.bySymbol.noghrabi);
+      this.noghrin.set(parsed.bySymbol.noghrin);
       this.mofidPortfolioTotal.set(parsed.mofidPortfolioTotal);
     } catch {
       this.error.set('نتونستم فایل اکسل رو بخونم. مطمئن شو خروجی پرتفوی بورسه.');
@@ -324,6 +328,7 @@ export class FinanceComponent {
       synergy:                this.synergy(),
       noghran:                this.noghran(),
       noghrabi:               this.noghrabi(),
+      noghrin:                this.noghrin(),
       mofid_portfolio_total:  this.mofidPortfolioTotal(),
       physical_gold_grams:    this.physicalGoldGrams(),
       gold_price_per_gram:    this.goldPricePerGram(),

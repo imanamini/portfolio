@@ -15,6 +15,7 @@ export interface ParsedPortfolio {
     synergy:  number;
     noghran:  number;
     noghrabi: number;
+    noghrin:  number;
   };
   mofidPortfolioTotal: number;
 }
@@ -27,6 +28,7 @@ const FIELD_BY_SYMBOL: Record<string, keyof ParsedPortfolio['bySymbol']> = {
   'سینرژی':  'synergy',
   'نقران':   'noghran',
   'نقرابی':  'noghrabi',
+  'نقرین':   'noghrin',
 };
 
 function round1(n: number): number {
@@ -40,7 +42,7 @@ export async function parsePortfolioExport(file: File): Promise<ParsedPortfolio>
   const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: 0 });
 
   const bySymbol: ParsedPortfolio['bySymbol'] = {
-    ayar: 0, ganj: 0, nahal: 0, tamashk: 0, synergy: 0, noghran: 0, noghrabi: 0,
+    ayar: 0, ganj: 0, nahal: 0, tamashk: 0, synergy: 0, noghran: 0, noghrabi: 0, noghrin: 0,
   };
   let totalRial = 0;
 
