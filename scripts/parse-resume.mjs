@@ -128,7 +128,7 @@ function parseExperience(text) {
       tags,
       featured: subs['featured'] || [],
       bullets: subs['bullets'] || [],
-      ...(be && be.length ? { backendBullets: be } : {}),
+      ...(be && be.length ? { backendBullets: be, backendLabel: meta.backend_label || 'Backend Contributions', backendStack: meta.backend_stack || '' } : {}),
     };
   });
 }

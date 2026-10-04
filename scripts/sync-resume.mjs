@@ -38,7 +38,7 @@ const experienceTs = R.experience.map(exp => {
       location: ${q(exp.location)},
       role: ${q(exp.role)},
       period: ${q(exp.period)},
-      bullets: ${arr(exp.bullets)},${be ? `\n      backendBullets: ${be},` : ''}
+      bullets: ${arr(exp.bullets)},${be ? `\n      backendBullets: ${be},\n      backendLabel: ${q(exp.backendLabel)},` : ''}
     }`;
 }).join(',\n');
 
@@ -72,6 +72,7 @@ export interface Experience {
   period: string;
   bullets: string[];
   backendBullets?: string[];
+  backendLabel?: string;
 }
 
 export interface Project {
