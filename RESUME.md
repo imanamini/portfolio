@@ -2,7 +2,7 @@
 name: Iman Amini
 role: Software Engineer
 subtitle: Front-End Focused · Full-Stack with Java / Spring Boot
-tagline: I build products people trust with their money — from fintech flows used by 10M+ people to a marketplace I took from zero to revenue.
+tagline: I build products people trust with their money — from fintech flows used by 10M+ people to full-stack platforms built from the database up.
 availability: Open to international roles · Remote / Hybrid / On-site · Fluent English
 email: iman.fa88@gmail.com
 phone: +98-9034646366
@@ -16,18 +16,18 @@ github_label: github.com/imanamini
 
 ## Pitch
 
-Software engineer with a front-end core and real backend depth, who can carry a product end to end. For five years I have built and led the Credit & BNPL frontend at Digipay, Iran's largest digital-payments platform, where the screens I own are used by more than 10 million people, and I also ship to its Java / Spring Boot microservices. In 2026 I founded XPCard and built the whole platform from scratch on my own, from the Spring Boot backend and databases to the Angular apps and production infrastructure. I used an AI-agent workflow I designed, and kept the architecture, code review and releases in my own hands. It processed 250 transactions in its first three months with zero marketing spend. I am looking for an international team to do my best work with.
+Software engineer with a front-end core and real backend depth, who can carry a product end to end. For five years I have built and led the Credit & BNPL frontend at Digipay, Iran's largest digital-payments platform, where the screens I own are used by more than 10 million people, and I also ship to its Java / Spring Boot microservices. In 2026 I founded XPCard and built the whole platform from scratch on my own, from the Spring Boot backend and databases to the Angular apps and production infrastructure. I used an AI-agent workflow I designed, and kept the architecture, code review and releases in my own hands. I am looking for an international team to do my best work with.
 
 ## Summary
 
-Software engineer focused on front-end with production backend experience — 5+ years of Angular and TypeScript at scale in fintech, plus Java 21 / Spring Boot services, relational and document databases, and the infrastructure that runs them. Led Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard, an e-commerce platform for digital goods built from scratch in three months: a Spring Boot modular monolith on MySQL, MongoDB and Redis, contract-first OpenAPI APIs, Angular storefront and admin apps, and a Dockerized production stack. It reached 250 transactions with no marketing budget. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates.
+Software engineer focused on front-end with production backend experience — 5+ years of Angular and TypeScript at scale in fintech, plus Java 21 / Spring Boot services, relational and document databases, and the infrastructure that runs them. Led Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard, an e-commerce platform for digital goods built from scratch in three months: a Spring Boot modular monolith on MySQL, MongoDB and Redis, contract-first OpenAPI APIs, Angular storefront and admin apps, and a Dockerized production stack. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates.
 
 ## Stats
 
 - 10M+ · users on flows I own
-- 250 · transactions in XPCard's first 3 months, $0 marketing
 - 5+ · years in fintech engineering
 - 14 · shared npm packages shipped
+- 75 · package monorepo I help steer
 
 ## Skills
 
@@ -72,8 +72,8 @@ backend_stack: Java 21  ·  Spring Boot 3  ·  MySQL  ·  MongoDB  ·  Redis
 
 #### featured
 - Founded and built from scratch, as the only engineer, a live marketplace for gift cards, game accounts and game top-ups: a Spring Boot backend, customer storefront, admin dashboard, chat-bot sales channel and an SEO content site, all in production within about three months.
-- Reached 250 transactions in the first three months with zero marketing spend. Traffic came from organic search, driven by a content site and technical SEO work that I built and ran.
 - Designed the system architecture and an AI-assisted delivery workflow around it. I own the product decisions, the architecture, the API contracts and the final review of every change; AI agents handle repetitive implementation, test and verification work inside guardrails I defined.
+- The platform has processed 250 transactions since launch, with traffic coming from organic search through a content site and technical SEO I built.
 
 #### bullets
 - Architected a four-repository system: a platform repo for product docs, API contracts and infrastructure, a Spring Boot backend, an Angular / Nx front-end monorepo with storefront and admin apps, and a CMS theme for the marketing site.
