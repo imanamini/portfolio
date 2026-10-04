@@ -54,7 +54,7 @@ export class PortfolioV2Component {
 
   firstName = 'Iman';
   lastName = 'Amini';
-  role = 'Software Engineer · Front-End Focused';
+  role = 'Frontend Engineer';
   availability = 'Remote \u00B7 Hybrid \u00B7 On-site';
 
   stats = [
