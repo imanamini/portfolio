@@ -201,6 +201,7 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
     profile: {
       name: fm.name,
       role: fm.role,
+      subtitle: fm.subtitle,
       tagline: fm.tagline,
       availability: fm.availability,
       email: fm.email,

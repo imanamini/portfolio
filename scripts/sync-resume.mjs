@@ -97,6 +97,7 @@ export interface Course {
 export const RESUME = {
   name: ${q(R.profile.name)},
   title: ${q(R.profile.role)},
+  subtitle: ${q(R.profile.subtitle)},
   email: ${q(R.profile.email)},
   phone: ${q(R.profile.phone)},
   linkedinUrl: ${q(R.profile.links.find(l => l.label === 'LinkedIn')?.href ?? '')},

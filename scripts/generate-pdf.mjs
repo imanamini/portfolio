@@ -156,6 +156,12 @@ a { color: inherit; text-decoration: none; }
   font-weight: 500;
   color: var(--green-deep);
 }
+.header__subtitle {
+  margin-top: 2px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7.6pt;
+  color: var(--muted);
+}
 .header__tagline {
   margin-top: 6px;
   font-size: 9.5pt;
@@ -486,6 +492,7 @@ a { color: inherit; text-decoration: none; }
     </a>
     <div class="header__name">${e(PROFILE.name)}</div>
     <div class="header__role">${e(PROFILE.role)}</div>
+    ${PROFILE.subtitle ? `<div class="header__subtitle">${e(PROFILE.subtitle)}</div>` : ''}
     <div class="header__tagline">${e(PROFILE.tagline)}</div>
     <div class="header__avail">${e(PROFILE.availability)}</div>
   </div>

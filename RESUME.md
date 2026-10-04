@@ -1,7 +1,8 @@
 ---
 name: Iman Amini
-role: Senior Front-End Engineer
-tagline: I build financial products that 10M+ people trust with their money.
+role: Software Engineer
+subtitle: Focused on Front-End · Angular · TypeScript · React
+tagline: I build products people trust with their money — from fintech flows used by 10M+ people to a marketplace I took from zero to revenue.
 availability: Open to international roles · Remote / Hybrid / On-site · Fluent English
 email: iman.fa88@gmail.com
 phone: +98-9034646366
@@ -15,24 +16,43 @@ github_label: github.com/imanamini
 
 ## Pitch
 
-Senior frontend engineer who turns complex financial journeys into flows that feel effortless. For the past five years I have built and led the Credit & BNPL frontend at Digipay — Iran's largest digital-payments platform — where the screens I own are used by more than 10 million people. I architect shared design systems, set technical direction, and lift the engineers around me. Equally fluent in Angular, React / Next.js and Vue, with additional backend contributions in Java (Spring Boot) microservices and PHP — I learn new stacks fast and I am looking for an international team to do my best work with.
+Software engineer with a front-end core who can carry a product end to end. For five years I have built and led the Credit & BNPL frontend at Digipay — Iran's largest digital-payments platform — where the screens I own are used by more than 10 million people. In 2026 I founded XPCard and built it from scratch on my own, from architecture to production, using an AI-agent workflow I designed while keeping architecture, code review and releases in my hands. It processed 250 transactions in its first three months with zero marketing spend. I am looking for an international team to do my best work with.
 
 ## Summary
 
-Frontend-heavy engineer with cross-stack experience — 5+ years specializing in Angular and TypeScript at scale in fintech, with backend contributions in Java (Spring Boot) microservices and PHP. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in cross-functional teams.
+Software engineer focused on front-end — 5+ years specializing in Angular and TypeScript at scale in fintech, with hands-on backend work in Java (Spring Boot) and PHP. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform, and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard (xpcard.ir), a production e-commerce platform built from scratch in three months (Angular 20 / Nx, Spring Boot 3 / Java 21, MySQL, MongoDB, Redis, Docker, WordPress) that reached 250 transactions with no marketing budget. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates. Fluent across Angular, React/Next.js and Vue/Nuxt.
 
 ## Stats
 
 - 10M+ · users on flows I own
+- 250 · transactions in XPCard's first 3 months, $0 marketing
 - 5+ · years in fintech frontend
 - 14 · shared npm packages shipped
-- 75 · package monorepo I help steer
 
 ## Skills
 
-Angular, TypeScript, RxJS, NX Monorepo, React, Next.js, Vue, Nuxt, Playwright, Karma/Jasmine, SCSS/CSS, Java / Spring Boot, PHP, Git, REST APIs, Figma, Agile/Scrum
+Angular, TypeScript, RxJS, Signals, NX Monorepo, React, Next.js, Vue, Nuxt, Playwright, Jest, Karma/Jasmine, SCSS/CSS, Java / Spring Boot, MySQL, MongoDB, Redis, OpenAPI, Docker, CI/CD, WordPress / PHP, Technical SEO, AI-assisted development (Claude Code), Git, Figma, Agile/Scrum
 
 ## Experience
+
+### XPCard (xpcard.ir) | Tehran · Remote | Founder & Software Engineer | Jul 2026 – Present
+tags: Angular 20, Nx, Spring Boot 3, Java 21, MySQL, MongoDB, Redis, Docker, WordPress, Claude Code
+
+#### featured
+- Founded and built from scratch, as the only engineer, a live marketplace for gift cards, game accounts and game top-ups: customer storefront, admin dashboard, backend, Telegram bot and an SEO content site, all shipped to production in about three months.
+- Reached 250 transactions in the first three months with zero marketing spend. Traffic came from organic search, driven by a WordPress magazine and technical SEO work that I built and ran.
+- Designed the system architecture and an AI-assisted delivery workflow around it. I own the product decisions, the architecture, the API contracts and the final review of every change, and AI agents do the repetitive implementation, test and verification work inside guardrails I defined.
+
+#### bullets
+- Architected a four-repo system: a platform repo for product docs, OpenAPI contracts and infra, an Angular 20 / Nx front-end monorepo (storefront + admin apps), a Spring Boot 3 / Java 21 modular monolith, and a WordPress child theme for the marketing site and magazine.
+- Made the API contract-first: 27 OpenAPI 3.1 specs are the single boundary between front-end and back-end, with typed mocks so the UI and the API could be built and tested independently, plus RFC-7807 errors and integer-rial money end to end.
+- Built the storefront and admin dashboard in Angular 20 on Nx: standalone components, signals, OnPush everywhere, domain libs split into feature / ui / data-access layers with enforced boundaries, Persian RTL design system, Jest unit tests and Playwright E2E.
+- Designed the backend as a modular monolith (catalog, order, payment, wallet, auth, discount, KYC, provider, admin, telegram) with MySQL + Flyway (146 migrations), MongoDB for the flexible product catalog and Redis for OTP, rate limits and caching, covered by Testcontainers integration tests.
+- Integrated three payment gateways and two wholesale supplier APIs (catalog sync, automated order fulfillment, webhooks, provider ledger), SMS OTP login, and a Telegram bot that reuses the same domain services as the web checkout.
+- Built a multi-agent development pipeline with Claude Code: a PM agent turns the PRD into feature briefs, an architect agent turns a brief into a contract and per-repo tasks, and each repo runs dev → adversarial QA → code-review agents against written acceptance criteria. Every merge to production goes through my review.
+- Encoded engineering standards as guardrails the agents cannot skip: per-repo coding rules, Definition of Done gates (lint, tests, build), design-to-code checks against delivered HTML designs with Playwright screenshots, git hooks that block direct pushes to production, and build-time guards for caching and JSON-LD safety.
+- Delivered about 115 features and 880+ tasks across the four repos in three months, at a pace a solo engineer could not reach without the pipeline, while keeping test coverage and contract parity enforced on every change.
+- Run production myself: Docker Compose on a single VPS, self-hosted GitHub Actions runners with deploy locking, TLS edge, ArvanCloud CDN, WP Super Cache, and a demo environment seeded from anonymized production data for rehearsing risky migrations.
 
 ### Digipay | Tehran | Senior Front-End Engineer | Dec 2021 – Present
 tags: Angular, TypeScript, NX Monorepo, RxJS, Signals
@@ -129,13 +149,13 @@ Drag-and-drop, JotForm-style form builder — schema-driven UI with deep nested-
 Angular · 5y, React / Next.js · 4y, TypeScript · 5y, NX Monorepo · 3y
 
 ### proficient
-RxJS, Vue, Nuxt, Playwright, Karma/Jasmine, SCSS / Tailwind, PWA / Service Workers
+RxJS, Vue, Nuxt, Playwright, Jest, Karma/Jasmine, SCSS / Tailwind, PWA / Service Workers
 
 ### backend
-Java / Spring Boot, PHP
+Java / Spring Boot, MySQL, MongoDB, Redis, PHP
 
 ### familiar
-WebSockets, Pusher, Laravel Echo, Docker, Git, REST APIs, Figma, Agile/Scrum
+Docker, GitHub Actions, OpenAPI, WordPress, Technical SEO, Claude Code / AI agents, WebSockets, Git, Figma, Agile/Scrum
 
 ## Education
 

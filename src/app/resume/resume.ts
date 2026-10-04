@@ -11,6 +11,7 @@ import { RESUME, Experience, Project, Education, Course } from '../data/resume-d
 export class ResumeComponent {
   name        = RESUME.name;
   title       = RESUME.title;
+  subtitle    = RESUME.subtitle;
   email       = RESUME.email;
   phone       = RESUME.phone;
   linkedinUrl = RESUME.linkedinUrl;
