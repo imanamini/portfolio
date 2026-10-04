@@ -156,6 +156,12 @@ a { color: inherit; text-decoration: none; }
   font-weight: 500;
   color: var(--green-deep);
 }
+.header__subtitle {
+  margin-top: 2px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7.6pt;
+  color: var(--muted);
+}
 .header__tagline {
   margin-top: 6px;
   font-size: 9.5pt;
@@ -463,8 +469,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 8px;
 }
-.backend-label::after {
-  content: 'Java / Spring Boot  ·  PHP';
+.backend-stack {
   font-weight: 400;
   font-size: 6.5pt;
   color: #3b82f6;
@@ -486,6 +491,7 @@ a { color: inherit; text-decoration: none; }
     </a>
     <div class="header__name">${e(PROFILE.name)}</div>
     <div class="header__role">${e(PROFILE.role)}</div>
+    ${PROFILE.subtitle ? `<div class="header__subtitle">${e(PROFILE.subtitle)}</div>` : ''}
     <div class="header__tagline">${e(PROFILE.tagline)}</div>
     <div class="header__avail">${e(PROFILE.availability)}</div>
   </div>
@@ -529,7 +535,7 @@ a { color: inherit; text-decoration: none; }
     ${job.bullets  && job.bullets.length  ? bullets(job.bullets,  'num') : ''}
     ${job.backendBullets && job.backendBullets.length ? `
     <div class="backend-block">
-      <div class="backend-label">Backend Contributions</div>
+      <div class="backend-label">${e(job.backendLabel)}${job.backendStack ? `<span class="backend-stack">${e(job.backendStack)}</span>` : ''}</div>
       ${bullets(job.backendBullets, 'dot')}
     </div>` : ''}
   </div>`).join('')}
@@ -572,11 +578,11 @@ a { color: inherit; text-decoration: none; }
   <div class="stack-grid">
     <div class="stack-label">Core</div>
     <div class="stack-val">${STACK.core.map(([n, y]) => `${e(n)} <span class="stack-dim">${e(y)}</span>`).join(' · ')}</div>
-    <div class="stack-label">Proficient</div>
-    <div class="stack-val">${STACK.proficient.map(e).join(' · ')}</div>
     ${STACK.backend && STACK.backend.length ? `
     <div class="stack-label" style="color:#1d4ed8">Backend</div>
     <div class="stack-val" style="color:#1d4ed8;font-weight:500">${STACK.backend.map(e).join(' · ')}</div>` : ''}
+    <div class="stack-label">Proficient</div>
+    <div class="stack-val">${STACK.proficient.map(e).join(' · ')}</div>
     <div class="stack-label">Familiar</div>
     <div class="stack-val stack-fam">${STACK.familiar.map(e).join(' · ')}</div>
   </div>

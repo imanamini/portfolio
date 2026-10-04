@@ -5,6 +5,9 @@
     <div class="resume__header-left">
       <h1 class="resume__name">{{ name }}</h1>
       <p class="resume__title">{{ title }}</p>
+      @if (subtitle) {
+        <p class="resume__subtitle">{{ subtitle }}</p>
+      }
       <div class="resume__contact">
         <a [href]="'mailto:' + email" class="resume__contact-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -49,7 +52,7 @@
           </ul>
           @if (exp.backendBullets && exp.backendBullets.length) {
             <div class="entry__backend">
-              <span class="entry__backend-label">Backend Contributions</span>
+              <span class="entry__backend-label">{{ exp.backendLabel || 'Backend Contributions' }}</span>
               <ul class="entry__bullets">
                 <li *ngFor="let bullet of exp.backendBullets">{{ bullet }}</li>
               </ul>

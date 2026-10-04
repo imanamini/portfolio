@@ -7,6 +7,7 @@ export interface Experience {
   period: string;
   bullets: string[];
   backendBullets?: string[];
+  backendLabel?: string;
 }
 
 export interface Project {
@@ -31,29 +32,42 @@ export interface Course {
 
 export const RESUME = {
   name: "Iman Amini",
-  title: "Senior Front-End Engineer",
+  title: "Software Engineer",
+  subtitle: "Front-End Focused · Full-Stack with Java / Spring Boot",
   email: "iman.fa88@gmail.com",
   phone: "+98-9034646366",
   linkedinUrl: "https://www.linkedin.com/in/imanamini78",
 
-  summary: "Frontend-heavy engineer with cross-stack experience — 5+ years specializing in Angular and TypeScript at scale in fintech, with backend contributions in Java (Spring Boot) microservices and PHP. Led development of Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform. Architected 14 shared npm packages and established multi-layer testing strategies across 75-package monorepos. Fluent across Angular, React/Next.js, and Vue/Nuxt — known for picking up new stacks quickly and thriving in cross-functional teams.",
+  summary: "Software engineer focused on front-end with production backend experience — 5+ years of Angular and TypeScript at scale in fintech, plus Java 21 / Spring Boot services, relational and document databases, and the infrastructure that runs them. Led Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard, an e-commerce platform for digital goods built from scratch in three months: a Spring Boot modular monolith on MySQL, MongoDB and Redis, contract-first OpenAPI APIs, Angular storefront and admin apps, and a Dockerized production stack. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates.",
 
   skills: [
     "Angular",
     "TypeScript",
     "RxJS",
+    "Signals",
     "NX Monorepo",
     "React",
     "Next.js",
     "Vue",
     "Nuxt",
+    "Java 21",
+    "Spring Boot",
+    "JPA / Hibernate",
+    "MySQL",
+    "MongoDB",
+    "Redis",
+    "REST / OpenAPI",
+    "Testcontainers",
+    "Docker",
+    "CI/CD",
     "Playwright",
+    "Jest",
     "Karma/Jasmine",
     "SCSS/CSS",
-    "Java / Spring Boot",
-    "PHP",
+    "WordPress / PHP",
+    "Technical SEO",
+    "AI-assisted development (Claude Code)",
     "Git",
-    "REST APIs",
     "Figma",
     "Agile/Scrum",
   ],
@@ -73,16 +87,40 @@ export const RESUME = {
     "Built a zero-maintenance test catalog CLI (generate-package-status.mjs) that auto-discovers unit and E2E specs across all 75 packages, counts individual test cases via regex, and generates a typed TypeScript data file powering a live status dashboard.",
     "Adopted Angular 17+ standalone components, OnPush change detection, and signal-based computed properties across the entire Credit/BNPL library, eliminating NgModule overhead.",
     "Implemented a custom Angular preloading strategy using route metadata (preload: true, critical: true) to load critical routes immediately post-bootstrap, alongside retryImport wrappers for network-resilient lazy module loading.",
-    "Integrated multi-platform analytics (Google Tag Manager, InTrack, Sentry) behind a single EventManagementService abstraction, with Sentry configured for performance profiling and console-error capture.",
+    "Integrated multi-platform analytics (Google Tag Manager, a marketing-automation SDK, Sentry) behind a single EventManagementService abstraction, with Sentry configured for performance profiling and console-error capture.",
     "Built biometric identity verification feature with selfie video capture and liveness photo for digital document signing.",
     "Developed Mydigipay website by Laravel & Angular.",
   ],
       backendBullets: [
-      "Instrumented the Credit Onboarding Java (Spring Boot) service end-to-end with Micrometer metrics — campaign wallet creation, SMC scoring, ICS OTP (send / resend / verify), BNPL inquiry & allocation, sequential and volunteer activation flows.",
+      "Instrumented the Credit Onboarding Java (Spring Boot) service end-to-end with Micrometer metrics — campaign wallet creation, credit scoring, OTP (send / resend / verify), BNPL inquiry & allocation, sequential and volunteer activation flows.",
       "Fixed production Java bugs across microservices: NullPointerException in the blocking-detail service, journal double-linking on duplicate trackingCodes, and BNPL SMS double-activation — each covered with unit tests.",
-      "Implemented a configurable time-window scoring-provider switch in the SMC Java service, enabling dynamic selection between ICS and BANK_SCORE engines on a scheduled basis.",
-      "Built Credit Club (Mellat & Tejarat) and Installment Cheque landing pages in PHP on the Digipay marketing website, integrating credit-installment REST APIs.",
+      "Implemented a configurable time-window scoring-provider switch in the credit-scoring Java service, enabling dynamic selection between two external scoring engines on a scheduled basis.",
+      "Built bank-partnership Credit Club and Installment Cheque landing pages in PHP on the Digipay marketing website, integrating credit-installment REST APIs.",
     ],
+      backendLabel: "Backend Contributions",
+    },
+    {
+      company: "XPCard",
+      location: "Remote",
+      role: "Founder & Software Engineer",
+      period: "Jul 2026 – Present",
+      bullets: [
+    "Architected a four-repository system: a platform repo for product docs, API contracts and infrastructure, a Spring Boot backend, an Angular / Nx front-end monorepo with storefront and admin apps, and a CMS theme for the marketing site.",
+    "Built the storefront and admin dashboard in Angular 20 on Nx: standalone components, signals, OnPush everywhere, domain libraries split into feature / ui / data-access layers with enforced boundaries, an RTL design system, Jest unit tests and Playwright E2E.",
+    "Built a multi-agent development pipeline with Claude Code: a PM agent turns the PRD into feature briefs, an architect agent turns a brief into an API contract and per-repo tasks, and each repo runs dev → adversarial QA → code-review agents against written acceptance criteria. Every merge to production goes through my review.",
+    "Encoded engineering standards as guardrails the agents cannot skip: per-repo coding rules, Definition-of-Done gates (lint, tests, build), design-to-code checks with Playwright screenshots, git hooks that block direct pushes to production, and build-time configuration guards.",
+    "Delivered about 115 features and 880+ tasks in three months, a pace a solo engineer could not reach without the pipeline, with test coverage and contract parity enforced on every change.",
+  ],
+      backendBullets: [
+      "Designed the backend as a Java 21 / Spring Boot 3 modular monolith with 10+ domain modules (catalog, order, payment, wallet, auth, discount, KYC, supplier, admin, chat-bot) that talk only through public service interfaces, with layered api → service → repository packages and DTOs at every boundary.",
+      "Ran the API contract-first: 27 OpenAPI 3.1 specs are the single boundary between front-end and back-end, with versioned paths, RFC-7807 problem-detail errors and integer minor-unit money end to end.",
+      "Modeled persistence per workload: MySQL with JPA and 140+ versioned Flyway migrations for transactional data (orders, payments, wallet ledger), MongoDB for the flexible product catalog, and Redis for OTP codes, rate limiting and caching.",
+      "Built the order and payment core: an order state machine, integrations with multiple payment gateways, a customer wallet, bulk discount-code batches, and phone-OTP authentication with JWT sessions.",
+      "Automated fulfillment through wholesale supplier APIs: scheduled catalog sync, automatic purchase and delivery of digital codes, signed webhook handling and a supplier ledger, with real purchases gated behind a feature flag for safe rehearsal.",
+      "Covered the backend with nearly 1,000 test files — fast Mockito unit tests plus Testcontainers integration tests on real MySQL, MongoDB and Redis, sharing one Spring context to keep the full suite fast.",
+      "Run production myself: Docker Compose on a single VPS, self-hosted GitHub Actions runners with deploy locking, a TLS edge proxy, CDN and page caching, and a rehearsal environment seeded from anonymized production data for risky migrations.",
+    ],
+      backendLabel: "Backend Engineering",
     },
     {
       company: "Adowing",
@@ -117,7 +155,7 @@ export const RESUME = {
       role: "Android Developer",
       period: "Oct 2014 – Oct 2015",
       bullets: [
-    "Developed 10 apps and published them in Cafebazaar, Myket and Candoo.",
+    "Developed 10 apps and published them on the main Iranian Android app stores.",
     "Implemented with B4A (Basic for Android) that is based on VisualBasic language.",
     "All applications were content-driven.",
   ],

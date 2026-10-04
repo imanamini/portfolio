@@ -44,6 +44,12 @@ $white: #ffffff;
   letter-spacing: 0.01em;
 }
 
+.resume__subtitle {
+  font-size: 0.85rem;
+  color: $text-muted;
+  margin-top: 0.15rem;
+}
+
 .resume__contact {
   display: flex;
   flex-wrap: wrap;

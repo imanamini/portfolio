@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 /**
  * Regenerates scripts/fonts/fonts.css — a self-contained @font-face stylesheet
- * with the `latin` subset of Inter (300–700) and JetBrains Mono (400, 500)
- * embedded as base64 woff2. Run this when you want to refresh the fonts:
+ * with Inter (300–700) and JetBrains Mono (400, 500) embedded as base64 TTF.
+ *
+ * Static TTFs, not the variable woff2 a modern browser gets: Chrome embeds a
+ * variable font in a PDF as Type 3 outlines with no hinting, which renders
+ * jagged and unevenly spaced in many PDF viewers. Requesting the stylesheet
+ * without a browser User-Agent makes Google Fonts return one static TTF per
+ * weight, which Chrome embeds as a regular TrueType font.
+ *
+ * Run this when you want to refresh the fonts:
  *
  *   node scripts/fonts/embed-fonts.mjs
  *
@@ -14,21 +21,18 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), 'fonts.css');
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36';
 const SRC = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap';
 
-const css = await (await fetch(SRC, { headers: { 'User-Agent': UA } })).text();
-const blocks = css.split(/\/\*\s*([\w-]+)\s*\*\//).slice(1);
+const css = await (await fetch(SRC)).text();   // no User-Agent → static TTFs
+const blocks = css.split('@font-face').slice(1);
 
 let out = '';
-for (let i = 0; i < blocks.length; i += 2) {
-  if (blocks[i] !== 'latin') continue;            // latin subset only
-  const chunk = blocks[i + 1];
+for (const chunk of blocks) {
   const fam = /font-family:\s*'([^']+)'/.exec(chunk)[1];
   const wght = /font-weight:\s*(\d+)/.exec(chunk)[1];
-  const url = /url\((https:[^)]+\.woff2)\)/.exec(chunk)[1];
+  const url = /url\((https:[^)]+\.ttf)\)/.exec(chunk)[1];
   const b64 = Buffer.from(await (await fetch(url)).arrayBuffer()).toString('base64');
-  out += `@font-face{font-family:'${fam}';font-style:normal;font-weight:${wght};font-display:swap;src:url(data:font/woff2;base64,${b64}) format('woff2');}\n`;
+  out += `@font-face{font-family:'${fam}';font-style:normal;font-weight:${wght};font-display:swap;src:url(data:font/ttf;base64,${b64}) format('truetype');}\n`;
   console.error(`embedded ${fam} ${wght}`);
 }
 writeFileSync(OUT, out);

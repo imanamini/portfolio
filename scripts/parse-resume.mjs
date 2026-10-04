@@ -128,7 +128,7 @@ function parseExperience(text) {
       tags,
       featured: subs['featured'] || [],
       bullets: subs['bullets'] || [],
-      ...(be && be.length ? { backendBullets: be } : {}),
+      ...(be && be.length ? { backendBullets: be, backendLabel: meta.backend_label || 'Backend Contributions', backendStack: meta.backend_stack || '' } : {}),
     };
   });
 }
@@ -201,6 +201,7 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
     profile: {
       name: fm.name,
       role: fm.role,
+      subtitle: fm.subtitle,
       tagline: fm.tagline,
       availability: fm.availability,
       email: fm.email,
