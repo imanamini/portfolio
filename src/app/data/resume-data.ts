@@ -38,7 +38,7 @@ export const RESUME = {
   phone: "+98-9034646366",
   linkedinUrl: "https://www.linkedin.com/in/imanamini78",
 
-  summary: "Software engineer focused on front-end with production backend experience — 5+ years of Angular and TypeScript at scale in fintech, plus Java 21 / Spring Boot services, relational and document databases, and the infrastructure that runs them. Led Credit & BNPL flows serving 10M+ users at Iran's largest digital payment platform and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard, an e-commerce platform for digital goods built from scratch in three months: a Spring Boot modular monolith on MySQL, MongoDB and Redis, contract-first OpenAPI APIs, Angular storefront and admin apps, and a Dockerized production stack. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates.",
+  summary: "Software engineer focused on front-end with production backend experience — 5+ years of Angular and TypeScript at scale in fintech, plus Java 21 / Spring Boot services, relational and document databases, and the infrastructure that runs them. Front-end owner of Digipay's payment product (since Jul 2026) after owning its Credit & BNPL front-end, serving 10M+ users, at Iran's largest digital payment platform and architected 14 shared npm packages across a 75-package monorepo. Founder and sole engineer of XPCard, an e-commerce platform for digital goods built from scratch in three months: a Spring Boot modular monolith on MySQL, MongoDB and Redis, contract-first OpenAPI APIs, Angular storefront and admin apps, and a Dockerized production stack. Designed a contract-first, AI-assisted engineering workflow (Claude Code agents for planning, implementation, QA and review) with human-owned architecture and approval gates.",
 
   skills: [
     "Angular",
@@ -75,10 +75,15 @@ export const RESUME = {
   experiences: [
     {
       company: "Digipay",
-      location: "Tehran",
-      role: "Senior Front-End Engineer",
+      location: "Tehran, Iran",
+      role: "Senior Front-End Engineer · Front-End Owner",
       period: "Dec 2021 – Present",
       bullets: [
+    "Merged the Credit (~340 TS files) and Web-Pay (~500 TS files) Angular apps into a single purchase app serving web.mydigipay.com. A depth-preserving layout let ~840 files move without source edits, both apps became route subtrees so every published URL kept working, and each tree kept its global styles through isolated shell components.",
+    "Rolled the merged app out in parallel with the old ones behind nginx, cut over in production after QA sign-off, then deleted the two standalone apps; the payment flows kept running without user-facing regressions.",
+    "Built a Playwright E2E suite for the checkout that runs against the real UAT backend: merchant-ticket API fixtures, page objects on stable data-testids, OTP codes read from the UAT OTP catcher, mobile runs and a screenshot-per-action report, covering 47 wallet, credit/BNPL, bank-gateway and error-recovery scenarios.",
+    "The E2E suite found and fixed 11 app bugs, 7 of which left users stuck mid-payment (each verified by reverting the fix and watching the test fail), and surfaced 4 backend findings including a double-payment risk.",
+    "Upgraded both front-end monorepos from Angular 17 / Nx 18 to Angular 22 / Nx 23 (TypeScript 6, ESLint 9) — the client monorepo (17 repos, 110+ Nx projects) and the payment monorepo (~1,150 files): built-in control flow, signal inputs/outputs, Hammer.js replaced by a custom pointer-event swipe directive, with E2E runs after every step.",
     "Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.",
     "Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.",
     "Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.",
@@ -124,7 +129,7 @@ export const RESUME = {
     },
     {
       company: "Adowing",
-      location: "Tehran",
+      location: "Tehran, Iran",
       role: "Front-End Developer",
       period: "Oct 2019 – Dec 2021",
       bullets: [
@@ -138,7 +143,7 @@ export const RESUME = {
     },
     {
       company: "Carnotic",
-      location: "Tehran",
+      location: "Tehran, Iran",
       role: "Front-End Developer",
       period: "Oct 2019 – Dec 2021",
       bullets: [
@@ -164,22 +169,30 @@ export const RESUME = {
 
   projects: [
     {
+      name: "Origins",
+      tech: "React Native · React · TypeScript",
+      period: "Sep 2026 – Present",
+      bullets: [
+    "Built the marketing landing pages; now building the React Native mobile app for the wallet, working remotely with the UK team.",
+  ],
+    },
+    {
       name: "Pita",
       tech: "React · NX Monorepo · WebSockets · Docker · TypeScript",
       period: "2024 – 2025",
       bullets: [
-    "A two-app React/NX monorepo for self-service restaurant ordering — a customer-facing kiosk and a kitchen display — sharing @pita/api and @pita/ui, deployed as separate Docker images behind nginx routing.",
+    "Built remotely in English with a Canadian client's team: a two-app React/NX monorepo for self-service restaurant ordering — a customer-facing kiosk and a kitchen display — sharing @pita/api and @pita/ui, deployed as separate Docker images behind nginx routing.",
     "Integrated the Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback, plus mobile-device and browser-print safety nets.",
     "Real-time order sync between kiosk and kitchen over Laravel Echo + Pusher WebSockets, with a 10-second polling backup and a live in-process vs ready KDS board.",
     "Zero-downtime version checker for always-on hardware — polls a cache-busted /version.json and forces a hard reload on new builds.",
   ],
     },
     {
-      name: "Pharma",
+      name: "RexRx",
       tech: "Angular 17 · PWA · Signals · Service Worker",
       period: "2024",
       bullets: [
-    "A full Angular 17 PWA for prescription pharmaceutical e-commerce, built around a server-driven adaptive questionnaire engine with offline support.",
+    "Front-end for a Canadian online pharmacy for GLP-1 weight-loss treatments (Ozempic, Wegovy, Mounjaro): a full Angular 17 PWA, built around a server-driven adaptive questionnaire engine with offline support.",
     "Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched from the API based on the previous answer for personalised eligibility screening.",
     "Signal-based session management, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app support chat, and a Service Worker for offline use.",
   ],
@@ -223,12 +236,6 @@ export const RESUME = {
     { name: "Angular — The Complete Guide (2024 Edition)", provider: "Udemy" },
     { name: "UTACM-Cafebazaar Android Course", provider: "Cafebazaar & University of Tehran", year: "Winter 2019" },
     { name: "Agile Software Development: Clean Coding Practices", provider: "LinkedIn" },
-    { name: "Agile Software Development: Refactoring", provider: "LinkedIn" },
-    { name: "JavaScript: Classes", provider: "LinkedIn" },
-    { name: "Test Automation Foundations", provider: "LinkedIn" },
-    { name: "Agile Testing", provider: "LinkedIn" },
-    { name: "Bootstrap 4 with Sass", provider: "LinkedIn" },
-    { name: "Interactive Animations with CSS and JavaScript", provider: "LinkedIn" },
-    { name: "JavaScript for Web Designers", provider: "LinkedIn" }
+    { name: "Test Automation Foundations", provider: "LinkedIn" }
   ] as Course[],
 };

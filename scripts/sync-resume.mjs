@@ -24,7 +24,7 @@ const R = parseResume();
 
 // ─── Generate resume-data.ts ─────────────────────────────────────────────────
 
-function q(s)    { return JSON.stringify(String(s ?? '')); }
+function q(s)    { return JSON.stringify(String(s ?? '').replace(/\*\*/g, '')); } // drop PDF-only **bold** markup
 function arr(a)  { return `[\n${a.map(s => `    ${q(s)},`).join('\n')}\n  ]`; }
 function optArr(a) {
   if (!a || !a.length) return null;

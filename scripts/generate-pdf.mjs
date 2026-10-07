@@ -8,6 +8,8 @@
  * Data source: RESUME.md (parsed by scripts/parse-resume.mjs)
  * To update resume content, edit RESUME.md and run: npm run pdf
  *
+ * Tailored variants: RESUME_MD=<variant.md> RESUME_PDF=<out.pdf> node scripts/generate-pdf.mjs
+ *
  * Requirements: Google Chrome / Chromium.
  */
 
@@ -21,12 +23,14 @@ import { parseResume } from './parse-resume.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const TMP = '/tmp/_iman_resume.html';
-const OUTPUT = resolve(ROOT, 'public', 'Iman Amini Resume.pdf');
+const OUTPUT = process.env.RESUME_PDF
+  ? resolve(process.env.RESUME_PDF)
+  : resolve(ROOT, 'public', 'Iman Amini Resume.pdf');
 const FONTS_CSS = resolve(__dirname, 'fonts', 'fonts.css');
 
 // ─── Resume data (from RESUME.md via parse-resume.mjs) ───────────────────────
 
-const R = parseResume();
+const R = parseResume(process.env.RESUME_MD ? resolve(process.env.RESUME_MD) : undefined);
 
 const PROFILE  = { ...R.profile, pitch: R.pitch };
 const STATS    = R.stats;
@@ -38,6 +42,7 @@ const EDUCATION = R.education.map(ed => ({
   school: ed.location ? ed.institution + ', ' + ed.location : ed.institution,
   period: ed.period,
 }));
+const LANGUAGES = R.languages;
 const COURSES = R.courses.map(c => ({ name: c.name, source: c.provider, year: c.year || '' }));
 
 // ─── HTML builder helpers ────────────────────────────────────────────────────
@@ -49,14 +54,12 @@ const e = (s) => String(s)
 
 const tags = (arr) => arr.map(t => `<span class="tag">${e(t)}</span>`).join('');
 
-const bullets = (items, type = 'dot') =>
-  `<ul class="bullets">${items.map((b, i) => `
-    <li class="bullet">
-      ${type === 'dot'
-        ? `<span class="b-dot">▸</span>`
-        : `<span class="b-num">${String(i + 1).padStart(2, '0')}</span>`}
-      <span>${e(b)}</span>
-    </li>`).join('')}</ul>`;
+/** Escaped text with **bold** markup turned into <b>. */
+const rich = (s) => e(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+
+const bullets = (items, variant = '') =>
+  `<ul class="bullets${variant ? ` bullets--${variant}` : ''}">${items.map(b => `
+    <li class="bullet"><span class="b-dot"></span><span>${rich(b)}</span></li>`).join('')}</ul>`;
 
 // Font CSS — embedded if available (offline-safe), else fall back to Google Fonts.
 function fontCss() {
@@ -66,10 +69,64 @@ function fontCss() {
 
 // ─── HTML template ───────────────────────────────────────────────────────────
 
-function buildHtml() {
-  const featuredProjects = PROJECTS.filter(p => p.featured);
-  const otherProjects    = PROJECTS.filter(p => !p.featured);
+// Accent rotation: neighbouring blocks get different colours so the page never reads as one flat tone.
+const ACCENTS = ['#0d9488', '#4f46e5', '#d97706', '#e11d48', '#0284c7'];
+const acc = (i) => ACCENTS[i % ACCENTS.length];
 
+const section = (title, i, inner) => `
+<section class="section" style="--acc:${acc(i)}">
+  <h2 class="sec-title"><span class="sec-bar"></span>${e(title)}</h2>
+  ${inner}
+</section>`;
+
+const intlPill = (where) => where ? `<span class="intl">International · ${e(where)}</span>` : '';
+
+const challengeBox = (c) => c ? `
+<div class="challenge">
+  <div class="challenge__label">Most important challenge</div>
+  <div class="challenge__title">${rich(c.title)}</div>
+  ${c.body ? `<div class="challenge__body">${rich(c.body)}</div>` : ''}
+</div>` : '';
+
+/** One experience or project entry: the role is the headline, the company sits under it. */
+const entry = (x, i) => `
+<div class="entry" style="--acc:${acc(i)}">
+  <div class="entry__head">
+    <h3 class="entry__role">${e(x.role)}</h3>
+    <div class="entry__period">${e(x.period)}</div>
+  </div>
+  <div class="entry__org">
+    <span class="entry__company">${e(x.company)}</span>
+    ${x.location ? `<span class="entry__loc">${e(x.location)}</span>` : ''}
+    ${intlPill(x.international)}
+  </div>
+  ${x.about ? `<div class="entry__about">${rich(x.about)}</div>` : ''}
+  ${x.tags && x.tags.length ? `<div class="tags">${tags(x.tags)}</div>` : ''}
+  ${x.featured && x.featured.length ? bullets(x.featured, 'lead') : ''}
+  ${x.bullets && x.bullets.length ? bullets(x.bullets) : ''}
+  ${x.backendBullets && x.backendBullets.length ? `
+  <div class="backend-block">
+    <div class="backend-label">${e(x.backendLabel)}${x.backendStack ? `<span class="backend-stack">${e(x.backendStack)}</span>` : ''}</div>
+    ${bullets(x.backendBullets)}
+  </div>` : ''}
+  ${challengeBox(x.challenge)}
+</div>`;
+
+function buildHtml() {
+  // Projects render through the same entry layout as jobs.
+  const projectEntries = PROJECTS.map(p => ({
+    role: p.role,
+    period: p.period,
+    company: p.sub ? `${p.name} — ${p.sub}` : p.name,
+    location: '',
+    international: p.international,
+    about: p.about || p.body,
+    tags: p.stack,
+    bullets: p.bullets,
+    challenge: p.challenge,
+  }));
+
+  let n = 0;
   return /* html */`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,422 +135,290 @@ function buildHtml() {
 <style>
 ${fontCss()}
 
-@page { size: A4; margin: 13mm 15mm 13mm; }
-
+@page { size: A4; margin: 11mm 13mm 12mm; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green: #16a34a;
-  --green-deep: #0f7a38;
-  --green-tint: #f3faf5;
-  --ink: #0a0a0a;
-  --body: #2b2b2b;
-  --muted: #6b7280;
-  --faint: #9aa0a6;
-  --line: #e7e7e7;
+  --ink: #0f172a;
+  --body: #334155;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --line: #e2e8f0;
+  --navy: #0f172a;
+  --navy-2: #1e293b;
 }
 
 body {
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
-  font-size: 8.8pt;
+  font-size: 9pt;
   color: var(--body);
   background: #fff;
   line-height: 1.45;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-
 a { color: inherit; text-decoration: none; }
+b { color: var(--ink); font-weight: 600; }
 
-/* ── header ── */
+/* ── header band ── */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--green);
-  margin-bottom: 13px;
+  gap: 22px;
+  padding: 16px 18px 15px;
+  border-radius: 10px;
+  background: linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 70%, #134e4a 100%);
+  color: #e2e8f0;
+  margin-bottom: 12px;
 }
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 9px;
-}
-.brand__mark {
-  width: 17px; height: 17px;
-  border-radius: 5px;
-  background: var(--green);
-  color: #fff;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5pt;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  letter-spacing: -0.02em;
-}
-.brand__word {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 8pt;
-  color: var(--muted);
-  letter-spacing: 0.01em;
-}
-.brand__word b { color: var(--ink); font-weight: 500; }
-.brand__dot { color: var(--green); }
-
 .header__name {
-  font-size: 27pt;
+  font-size: 25pt;
   font-weight: 700;
-  letter-spacing: -0.038em;
-  color: var(--ink);
-  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: #fff;
+  line-height: 1;
 }
 .header__role {
   margin-top: 5px;
-  font-size: 10pt;
-  font-weight: 500;
-  color: var(--green-deep);
+  font-size: 12.5pt;
+  font-weight: 600;
+  color: #5eead4;
+  letter-spacing: -0.01em;
 }
-.header__subtitle {
-  margin-top: 2px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.6pt;
-  color: var(--muted);
-}
-.header__tagline {
+.header__headline {
   margin-top: 6px;
-  font-size: 9.5pt;
-  color: var(--body);
-  max-width: 46ch;
-  line-height: 1.4;
+  font-size: 8.8pt;
+  line-height: 1.45;
+  color: #cbd5e1;
+  max-width: 62ch;
 }
+.header__headline b { color: #fff; }
 .header__avail {
   margin-top: 8px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
-  color: var(--muted);
-  letter-spacing: 0.01em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
-
-/* contact rail */
+.chip {
+  font-size: 7.3pt;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(94, 234, 212, 0.12);
+  border: 0.75px solid rgba(94, 234, 212, 0.45);
+  color: #99f6e4;
+}
 .contact {
   flex-shrink: 0;
   display: grid;
-  gap: 6px;
-  min-width: 168px;
-}
-.contact__row {
-  display: grid;
-  grid-template-columns: 50px 1fr;
-  align-items: baseline;
-  gap: 8px;
-}
-.contact__label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 6.5pt;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--faint);
-}
-.contact__value {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.8pt;
-  color: var(--body);
+  align-content: start;
+  gap: 5px;
+  min-width: 165px;
   text-align: right;
 }
-.contact__row--primary .contact__value {
-  font-size: 9pt;
-  font-weight: 500;
-  color: var(--green-deep);
+.contact__label {
+  display: block;
+  font-size: 6.4pt;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
 }
-.contact__row--primary .contact__label { color: var(--green); }
+.contact__value { font-size: 8.2pt; color: #f1f5f9; }
+.contact__row--primary .contact__value { color: #5eead4; font-weight: 600; font-size: 9pt; }
 
-/* ── stats strip ── */
+/* ── highlights ── */
 .stats {
-  display: flex;
-  border: 0.75px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 12px;
-  background: linear-gradient(180deg, #fff 0%, var(--green-tint) 100%);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-bottom: 11px;
 }
 .stat {
-  flex: 1;
-  padding: 8px 13px;
-  border-right: 0.75px solid var(--line);
+  padding: 7px 10px 8px;
+  border-radius: 8px;
+  border: 0.75px solid var(--line);
+  border-top: 2.5px solid var(--acc);
+  background: color-mix(in srgb, var(--acc) 5%, #fff);
 }
-.stat:last-child { border-right: none; }
 .stat__value {
-  font-size: 14pt;
+  font-size: 15pt;
   font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--green-deep);
-  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--acc);
+  line-height: 1.05;
 }
-.stat__label {
-  margin-top: 3px;
-  font-size: 6.8pt;
-  color: var(--muted);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  letter-spacing: 0.01em;
-}
+.stat__label { margin-top: 2px; font-size: 7.3pt; color: var(--muted); line-height: 1.3; }
 
-/* ── pitch ── */
-.pitch {
-  font-size: 9pt;
-  line-height: 1.5;
-  color: var(--body);
-  margin-bottom: 12px;
-}
-.pitch b { font-weight: 600; color: var(--ink); }
-
-/* ── section ── */
-.section { margin-bottom: 9px; }
-
-.kicker {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5pt;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--green);
+/* ── sections ── */
+.section { margin: 0 0 18px; }
+.sec-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
+  font-size: 10.5pt;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--acc) 80%, #000);
+  background: color-mix(in srgb, var(--acc) 10%, #fff);
+  border-bottom: 1.5px solid var(--acc);
+  border-radius: 6px 6px 0 0;
+  padding: 5px 10px 4px;
   margin-bottom: 10px;
+  page-break-after: avoid;
+  break-after: avoid;
 }
-.kicker__num { font-weight: 500; }
-.kicker__label { color: var(--ink); font-weight: 500; }
-.kicker::after {
-  content: '';
-  flex: 1;
-  height: 0.75px;
-  background: var(--line);
-}
+.sec-bar { width: 5px; height: 13px; border-radius: 2px; background: var(--acc); }
 
-/* ── experience entry ── */
-.exp {
-  margin-bottom: 10px;
+.summary { font-size: 9.2pt; line-height: 1.55; color: var(--body); }
+
+/* ── entries (jobs & projects) ── */
+.entry {
+  padding: 0 0 0 10px;
+  border-left: 2px solid color-mix(in srgb, var(--acc) 35%, #fff);
 }
-.exp__head {
+.entry + .entry {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 0.75px dashed #cbd5e1;
+}
+.entry__head, .entry__org, .entry__about { break-after: avoid; }
+.entry__head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 12px;
+  page-break-after: avoid;
 }
-.exp__company {
-  font-size: 12.5pt;
-  font-weight: 600;
+.entry__role {
+  font-size: 12pt;
+  font-weight: 700;
   letter-spacing: -0.015em;
   color: var(--ink);
 }
-.exp__period {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5pt;
-  color: var(--muted);
-}
-.exp__role-row {
+.entry__period { font-size: 8pt; color: var(--muted); white-space: nowrap; font-weight: 500; }
+.entry__org {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 6px;
-}
-.exp__role  { font-size: 8.8pt; color: var(--green-deep); font-weight: 500; }
-.exp__loc   { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: var(--faint); }
-
-.tags {
-  display: flex;
-  gap: 4px;
+  align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  gap: 4px 8px;
+  margin-top: 1px;
 }
-.tag {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
+.entry__company { font-size: 9.6pt; font-weight: 500; color: var(--acc); }
+.entry__loc { font-size: 8pt; color: var(--faint); }
+.entry__loc::before { content: '· '; }
+.intl {
+  font-size: 7.2pt;
+  font-weight: 700;
   padding: 1.5px 7px;
-  border-radius: 5px;
-  background: #f4f4f5;
+  border-radius: 99px;
+  background: #eef2ff;
+  color: #4338ca;
+  border: 0.75px solid #c7d2fe;
+}
+.entry__about {
+  margin-top: 2px;
+  font-size: 8.3pt;
+  font-style: italic;
   color: var(--muted);
-  border: 0.5px solid var(--line);
 }
-
-/* featured highlight block */
-.featured {
-  background: var(--green-tint);
-  border-left: 2.5px solid var(--green);
-  border-radius: 0 6px 6px 0;
-  padding: 8px 11px 8px 12px;
-  margin-bottom: 8px;
+.tags { display: flex; flex-wrap: wrap; gap: 3px; margin: 5px 0 5px; }
+.tag {
+  font-size: 7pt;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--acc) 8%, #fff);
+  color: color-mix(in srgb, var(--acc) 75%, #000);
 }
-.featured .bullet { color: #1f2937; font-size: 8.7pt; }
-.featured .b-dot { color: var(--green); }
 
 /* ── bullets ── */
-.bullets { list-style: none; display: grid; gap: 3px; }
+.bullets { list-style: none; display: grid; gap: 2.5px; margin-top: 4px; }
 .bullet {
+  break-inside: avoid;
   display: grid;
-  grid-template-columns: 14px 1fr;
-  gap: 6px;
-  font-size: 8.5pt;
-  line-height: 1.48;
-  color: var(--body);
-  align-items: start;
+  grid-template-columns: 9px 1fr;
+  gap: 5px;
+  font-size: 8.7pt;
+  line-height: 1.45;
 }
 .b-dot {
-  color: var(--green);
-  font-weight: 700;
-  font-size: 9pt;
-  line-height: 1.3;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--acc);
+  margin-top: 0.62em;
 }
-.b-num {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
-  color: #c4c4c4;
-  line-height: 1.7;
-}
+.bullets--lead .bullet { color: var(--ink); }
 
-/* ── project card ── */
-.project {
-  margin-bottom: 10px;
+/* ── challenge ── */
+.challenge {
+  margin-top: 6px;
+  padding: 7px 10px 8px;
+  border-radius: 7px;
+  background: #fffbeb;
+  border: 0.75px solid #fde68a;
   page-break-inside: avoid;
+  break-inside: avoid;
 }
-.project__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.project__name {
-  font-size: 12pt;
-  font-weight: 600;
-  color: var(--ink);
-}
-.project__sub  { font-size: 8pt; color: var(--muted); margin-bottom: 4px; }
-.project__stack {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5pt;
-  color: var(--green-deep);
-  margin-bottom: 5px;
-}
-.project__body { font-size: 8.5pt; line-height: 1.48; color: var(--body); margin-bottom: 6px; }
-
-/* ── compact "also" list ── */
-.also { border-top: 0.75px solid var(--line); padding-top: 7px; margin-top: 5px; }
-.also__label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
-  color: var(--faint);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-.also__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 30px; }
-.also__name  { font-size: 8.7pt; font-weight: 600; color: var(--ink); }
-.also__stack { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7pt; color: var(--green-deep); margin-left: 6px; }
-.also__body  { font-size: 7.6pt; color: var(--muted); margin-top: 2px; line-height: 1.42; }
-
-/* ── toolkit ── */
-.stack-grid {
-  display: grid;
-  grid-template-columns: 62px 1fr;
-  gap: 5px 14px;
-  align-items: baseline;
-}
-.stack-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5pt;
-  color: var(--faint);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.stack-val  { font-size: 8.6pt; color: var(--body); }
-.stack-dim  { color: #b8b8b8; }
-.stack-fam  { color: var(--muted); }
-
-/* ── background ── */
-.bg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-.edu__degree  { font-size: 9.5pt; font-weight: 600; color: var(--ink); }
-.edu__school  { font-size: 8.5pt; color: var(--muted); margin-top: 2px; }
-.edu__period  { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 7.5pt; color: var(--faint); margin-top: 3px; }
-.courses-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7pt;
-  color: var(--faint);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-.course { margin-bottom: 5px; }
-.course__name { font-size: 8.6pt; font-weight: 500; color: var(--ink); }
-.course__meta { font-size: 7.6pt; color: var(--muted); }
-
-/* ── closing line ── */
-.closing {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 0.75px solid var(--line);
-  page-break-inside: avoid;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 14px;
-}
-.closing__text { font-size: 8.6pt; color: var(--body); }
-.closing__text b { color: var(--ink); font-weight: 600; }
-.closing__cta {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 8.5pt;
-  font-weight: 500;
-  color: var(--green-deep);
-  white-space: nowrap;
-}
-
-/* ── backend contributions sub-section ── */
-.backend-block {
-  margin-top: 10px;
-  background: #eff6ff;
-  border-left: 2.5px solid #3b82f6;
-  border-radius: 0 6px 6px 0;
-  padding: 8px 11px 8px 12px;
-}
-.backend-block .bullet { color: #1e3a5f; font-size: 8.5pt; }
-.backend-block .b-dot { color: #3b82f6; }
-.backend-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+.challenge__label {
   font-size: 6.8pt;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b45309;
+  margin-bottom: 2px;
+}
+.challenge__title { font-size: 8.9pt; font-weight: 600; color: var(--ink); }
+.challenge__body { font-size: 8.4pt; color: #44403c; margin-top: 2px; line-height: 1.45; }
+
+/* ── backend sub-block ── */
+.backend-block {
+  margin-top: 6px;
+  padding: 7px 10px 8px;
+  border-radius: 7px;
+  background: #eff6ff;
+  border: 0.75px solid #bfdbfe;
+  --acc: #2563eb;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.backend-label {
+  font-size: 6.8pt;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #1d4ed8;
-  margin-bottom: 6px;
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: baseline;
 }
-.backend-stack {
-  font-weight: 400;
-  font-size: 6.5pt;
-  color: #3b82f6;
-  letter-spacing: 0.04em;
-}
+.backend-stack { font-weight: 500; letter-spacing: 0.03em; color: #3b82f6; }
+.backend-block .bullet { color: #1e3a5f; }
 
-/* ── flow control ── */
-.page-2 { } /* sections flow naturally; cards avoid internal breaks */
+/* ── skills ── */
+.skills { display: grid; grid-template-columns: 70px 1fr; gap: 4px 12px; align-items: baseline; }
+.skills__label { font-size: 7.6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.skills__val { font-size: 8.7pt; }
+.skills__dim { color: var(--faint); font-size: 7.8pt; }
+
+/* ── education / languages / courses ── */
+.grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 0 28px; page-break-inside: avoid; }
+.edu__degree { font-size: 9.6pt; font-weight: 600; color: var(--ink); }
+.edu__school { font-size: 8.4pt; color: var(--muted); }
+.edu__period { font-size: 7.8pt; color: var(--faint); margin-bottom: 4px; }
+.lang { display: flex; justify-content: space-between; font-size: 8.8pt; margin-bottom: 3px; }
+.lang__level { color: var(--muted); }
+.courses { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 28px; }
+.course__name { font-size: 8.5pt; font-weight: 500; color: var(--ink); }
+.course__meta { font-size: 7.8pt; color: var(--muted); }
 </style>
 </head>
 <body>
 
-<!-- ─── HEADER ─── -->
-<div class="header">
+<header class="header">
   <div>
-    <a class="brand" href="https://imanamini.ir">
-      <span class="brand__mark">IA</span>
-      <span class="brand__word">iman<span class="brand__dot">.</span>amini</span>
-    </a>
-    <div class="header__name">${e(PROFILE.name)}</div>
+    <h1 class="header__name">${e(PROFILE.name)}</h1>
     <div class="header__role">${e(PROFILE.role)}</div>
-    ${PROFILE.subtitle ? `<div class="header__subtitle">${e(PROFILE.subtitle)}</div>` : ''}
-    <div class="header__tagline">${e(PROFILE.tagline)}</div>
-    <div class="header__avail">${e(PROFILE.availability)}</div>
+    <div class="header__headline">${rich(PROFILE.headline || PROFILE.tagline)}</div>
+    ${PROFILE.availability ? `<div class="header__avail">${PROFILE.availability.split('·').map(s => `<span class="chip">${e(s.trim())}</span>`).join('')}</div>` : ''}
   </div>
   <div class="contact">
     ${PROFILE.links.map(l => `
@@ -501,123 +426,58 @@ a { color: inherit; text-decoration: none; }
       <span class="contact__label">${e(l.label)}</span>
       <span class="contact__value">${e(l.value)}</span>
     </a>`).join('')}
+    ${PROFILE.phone ? `<div class="contact__row"><span class="contact__label">Phone</span><span class="contact__value">${e(PROFILE.phone)}</span></div>` : ''}
   </div>
-</div>
+</header>
 
-<!-- ─── STATS ─── -->
+${STATS.length ? `
 <div class="stats">
-  ${STATS.map(s => `
-  <div class="stat">
+  ${STATS.map((s, i) => `
+  <div class="stat" style="--acc:${acc(i)}">
     <div class="stat__value">${e(s.value)}</div>
     <div class="stat__label">${e(s.label)}</div>
   </div>`).join('')}
+</div>` : ''}
+
+${section('Summary', n++, `<p class="summary">${rich(PROFILE.pitch)}</p>`)}
+
+${section('Experience', n++, EXPERIENCE.map((job, i) => entry(job, i)).join(''))}
+
+${projectEntries.length ? section(PROFILE.projectsTitle, n++, projectEntries.map((p, i) => entry(p, i + 3)).join('')) : ''}
+
+${section('Skills', n++, `
+<div class="skills">
+  <div class="skills__label" style="color:${acc(0)}">Core</div>
+  <div class="skills__val"><b>${STACK.core.map(([nm, y]) => `${e(nm)}${y ? ` <span class="skills__dim">${e(y)}</span>` : ''}`).join(' · ')}</b></div>
+  ${STACK.backend && STACK.backend.length ? `
+  <div class="skills__label" style="color:${acc(1)}">Backend</div>
+  <div class="skills__val">${STACK.backend.map(e).join(' · ')}</div>` : ''}
+  ${STACK.ai && STACK.ai.length ? `
+  <div class="skills__label" style="color:${acc(4)}">AI</div>
+  <div class="skills__val"><b>${STACK.ai.map(e).join(' · ')}</b></div>` : ''}
+  <div class="skills__label" style="color:${acc(2)}">Proficient</div>
+  <div class="skills__val">${STACK.proficient.map(e).join(' · ')}</div>
+  <div class="skills__label" style="color:${acc(3)}">Tools</div>
+  <div class="skills__val">${STACK.familiar.map(e).join(' · ')}</div>
+</div>`)}
+
+<div class="grid-2">
+  ${section('Education', n++, EDUCATION.map(ed => `
+  <div>
+    <div class="edu__degree">${e(ed.degree)}</div>
+    <div class="edu__school">${e(ed.school)}</div>
+    <div class="edu__period">${e(ed.period)}</div>
+  </div>`).join(''))}
+  ${LANGUAGES.length ? section('Languages', n++, LANGUAGES.map(l => `
+  <div class="lang"><b>${e(l.name)}</b><span class="lang__level">${e(l.level)}</span></div>`).join('')) : ''}
 </div>
 
-<!-- ─── PITCH ─── -->
-<p class="pitch">${e(PROFILE.pitch)}</p>
+${COURSES.length ? section('Courses', n++, `
+<div class="courses">
+  ${COURSES.map(c => `
+  <div><span class="course__name">${e(c.name)}</span> <span class="course__meta">— ${e(c.source)}${c.year ? `, ${e(c.year)}` : ''}</span></div>`).join('')}
+</div>`) : ''}
 
-<!-- ─── EXPERIENCE ─── -->
-<div class="section">
-  <div class="kicker"><span class="kicker__num">01</span><span class="kicker__label">Experience</span></div>
-
-  ${EXPERIENCE.map(job => `
-  <div class="exp">
-    <div class="exp__head">
-      <div class="exp__company">${e(job.company)}</div>
-      <div class="exp__period">${e(job.period)}</div>
-    </div>
-    <div class="exp__role-row">
-      <div class="exp__role">${e(job.role)}</div>
-      <div class="exp__loc">${e(job.location)}</div>
-    </div>
-    <div class="tags">${tags(job.tags)}</div>
-    ${job.featured && job.featured.length ? `<div class="featured">${bullets(job.featured, 'dot')}</div>` : ''}
-    ${job.bullets  && job.bullets.length  ? bullets(job.bullets,  'num') : ''}
-    ${job.backendBullets && job.backendBullets.length ? `
-    <div class="backend-block">
-      <div class="backend-label">${e(job.backendLabel)}${job.backendStack ? `<span class="backend-stack">${e(job.backendStack)}</span>` : ''}</div>
-      ${bullets(job.backendBullets, 'dot')}
-    </div>` : ''}
-  </div>`).join('')}
-</div>
-
-<!-- ─── PAGE 2 ─── -->
-<div class="page-2">
-
-<!-- ─── PROJECTS ─── -->
-<div class="section">
-  <div class="kicker"><span class="kicker__num">02</span><span class="kicker__label">Projects</span></div>
-
-  ${featuredProjects.map(p => `
-  <div class="project">
-    <div class="project__head">
-      <div class="project__name">${e(p.name)}</div>
-      <div class="exp__period">${e(p.period)} · ${e(p.role)}</div>
-    </div>
-    <div class="project__sub">${e(p.sub)}</div>
-    <div class="project__stack">${p.stack.map(e).join(' · ')}</div>
-    <p class="project__body">${e(p.body)}</p>
-    ${p.bullets ? bullets(p.bullets, 'num') : ''}
-  </div>`).join('')}
-
-  <div class="also">
-    <div class="also__label">Also shipped</div>
-    <div class="also__grid">
-      ${otherProjects.map(p => `
-      <div>
-        <div><span class="also__name">${e(p.name)}</span><span class="also__stack">${p.stack.join(' · ')}</span></div>
-        <div class="also__body">${e(p.body)}</div>
-      </div>`).join('')}
-    </div>
-  </div>
-</div>
-
-<!-- ─── TOOLKIT ─── -->
-<div class="section">
-  <div class="kicker"><span class="kicker__num">03</span><span class="kicker__label">Toolkit</span></div>
-  <div class="stack-grid">
-    <div class="stack-label">Core</div>
-    <div class="stack-val">${STACK.core.map(([n, y]) => `${e(n)} <span class="stack-dim">${e(y)}</span>`).join(' · ')}</div>
-    ${STACK.backend && STACK.backend.length ? `
-    <div class="stack-label" style="color:#1d4ed8">Backend</div>
-    <div class="stack-val" style="color:#1d4ed8;font-weight:500">${STACK.backend.map(e).join(' · ')}</div>` : ''}
-    <div class="stack-label">Proficient</div>
-    <div class="stack-val">${STACK.proficient.map(e).join(' · ')}</div>
-    <div class="stack-label">Familiar</div>
-    <div class="stack-val stack-fam">${STACK.familiar.map(e).join(' · ')}</div>
-  </div>
-</div>
-
-<!-- ─── BACKGROUND ─── -->
-<div class="section">
-  <div class="kicker"><span class="kicker__num">04</span><span class="kicker__label">Background</span></div>
-  <div class="bg-grid">
-    <div>
-      ${EDUCATION.map(ed => `
-      <div>
-        <div class="edu__degree">${e(ed.degree)}</div>
-        <div class="edu__school">${e(ed.school)}</div>
-        <div class="edu__period">${e(ed.period)}</div>
-      </div>`).join('')}
-    </div>
-    <div>
-      <div class="courses-label">Recent courses</div>
-      ${COURSES.map(c => `
-      <div class="course">
-        <span class="course__name">${e(c.name)}</span>
-        <span class="course__meta"> — ${e(c.source)}, ${e(c.year)}</span>
-      </div>`).join('')}
-    </div>
-  </div>
-</div>
-
-<!-- ─── CLOSING ─── -->
-<div class="closing">
-  <div class="closing__text">Thanks for reading to the end — <b>let's build something great together.</b></div>
-  <a class="closing__cta" href="https://imanamini.ir">imanamini.ir ↗</a>
-</div>
-
-</div><!-- end .page-2 -->
 </body>
 </html>`;
 }

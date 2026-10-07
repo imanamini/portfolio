@@ -93,6 +93,22 @@ const csv = s => s.split(',').map(f => f.trim()).filter(Boolean);
 
 // ─── Section parsers ─────────────────────────────────────────────────────────
 
+/** `#### challenge` → first bullet is the title, the rest is the story */
+function parseChallenge(items) {
+  if (!items || !items.length) return null;
+  return { title: items[0], body: items.slice(1).join(' ') };
+}
+
+function parseLanguages(text) {
+  return text
+    .split('\n')
+    .filter(l => l.trim().startsWith('- '))
+    .map(l => {
+      const [name, level] = pipe(l.slice(2).trim());
+      return { name, level: level || '' };
+    });
+}
+
 function parsePitch(text) {
   return text.replace(/\n+/g, ' ').trim();
 }
@@ -126,6 +142,9 @@ function parseExperience(text) {
     return {
       company, location, role, period,
       tags,
+      about: meta.about || '',
+      international: meta.international || '',
+      challenge: parseChallenge(subs['challenge']),
       featured: subs['featured'] || [],
       bullets: subs['bullets'] || [],
       ...(be && be.length ? { backendBullets: be, backendLabel: meta.backend_label || 'Backend Contributions', backendStack: meta.backend_stack || '' } : {}),
@@ -139,7 +158,7 @@ function parseProjects(text) {
     const lines = body.split('\n');
     const meta = parseMeta(lines);
     // Strip metadata lines (key: value) and #### headers before extracting plain text
-    const KNOWN_META = /^(stack|featured|tags|role):/i;
+    const KNOWN_META = /^(stack|featured|tags|role|about|international):/i;
     const bodyWithoutMeta = lines
       .filter(l => !KNOWN_META.test(l.trim()))
       .join('\n');
@@ -150,6 +169,9 @@ function parseProjects(text) {
       name, sub, role, period,
       stack,
       featured: meta.featured === 'true',
+      about: meta.about || '',
+      international: meta.international || '',
+      challenge: parseChallenge(subs['challenge']),
       body: plain,
       bullets: subs['bullets'] || [],
     };
@@ -203,6 +225,8 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
       role: fm.role,
       subtitle: fm.subtitle,
       tagline: fm.tagline,
+      headline: fm.headline || '',
+      projectsTitle: fm.projects_title || 'Projects',
       availability: fm.availability,
       email: fm.email,
       phone: fm.phone,
@@ -222,5 +246,6 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
     toolkit:     parseToolkit(sec['toolkit'] || ''),
     education:   parseEducation(sec['education'] || ''),
     courses:     parseCourses(sec['courses'] || ''),
+    languages:   parseLanguages(sec['languages'] || ''),
   };
 }

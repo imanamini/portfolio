@@ -43,3 +43,7 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 .playwright-mcp
+
+# Resume variants: generated PDFs and private per-application notes
+/resumes/out/
+/resumes/applications/
