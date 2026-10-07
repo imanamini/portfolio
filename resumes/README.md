@@ -1,7 +1,14 @@
 # Resume variants
 
-`RESUME.md` (repo root) is the full resume: it feeds the website and `public/Iman Amini Resume.pdf`.
-This folder holds shorter, role-focused variants that reuse the same PDF generator.
+`RESUME.md` (repo root) is the **content bank**: every fact, bullet, project and course, in full detail.
+**Never delete data from it** — variants pick from it and shorten, the bank keeps everything. It feeds the website's
+resume data (`src/app/data/resume-data.ts`) and its complete PDF `resumes/out/Iman Amini Resume (Full).pdf`.
+
+This folder holds shorter, role-focused variants that reuse the same PDF generator. The site's downloadable CV
+(`public/Iman Amini Resume.pdf`) is built from `frontend-developer.md`. `npm run sync` (or `npm run pdf`) rebuilds all of it.
+
+The home page (`src/app/portfolio-v2/portfolio-v2.ts`) keeps its own hand-written copy of the data — update it too
+when the bank changes.
 
 | File | Use for |
 |---|---|

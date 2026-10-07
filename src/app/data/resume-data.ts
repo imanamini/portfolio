@@ -84,6 +84,9 @@ export const RESUME = {
     "Built a Playwright E2E suite for the checkout that runs against the real UAT backend: merchant-ticket API fixtures, page objects on stable data-testids, OTP codes read from the UAT OTP catcher, mobile runs and a screenshot-per-action report, covering 47 wallet, credit/BNPL, bank-gateway and error-recovery scenarios.",
     "The E2E suite found and fixed 11 app bugs, 7 of which left users stuck mid-payment (each verified by reverting the fix and watching the test fail), and surfaced 4 backend findings including a double-payment risk.",
     "Upgraded both front-end monorepos from Angular 17 / Nx 18 to Angular 22 / Nx 23 (TypeScript 6, ESLint 9) — the client monorepo (17 repos, 110+ Nx projects) and the payment monorepo (~1,150 files): built-in control flow, signal inputs/outputs, Hammer.js replaced by a custom pointer-event swipe directive, with E2E runs after every step.",
+    "Built the whole test setup and the playground demo app for Digipay's 80-package UI library (digipay-libs-workspace): 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines; together with the checkout suite, 7,400+ automated tests in suites I built.",
+    "Made Claude Code part of Digipay's front-end workflow with agents and commands I wrote: Figma-MCP dev → QA → design-review agents with a shared lessons file for the merchant dashboard, AI code-review commands for staging and production merge requests, and commands that write and fix component tests and build demo pages.",
+    "The AI-assisted test workflow cut the time to write a full component test spec from 1 day to under 1 hour, and library-level regressions reaching QA dropped to near zero.",
     "Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.",
     "Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.",
     "Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.",
@@ -236,6 +239,12 @@ export const RESUME = {
     { name: "Angular — The Complete Guide (2024 Edition)", provider: "Udemy" },
     { name: "UTACM-Cafebazaar Android Course", provider: "Cafebazaar & University of Tehran", year: "Winter 2019" },
     { name: "Agile Software Development: Clean Coding Practices", provider: "LinkedIn" },
-    { name: "Test Automation Foundations", provider: "LinkedIn" }
+    { name: "Agile Software Development: Refactoring", provider: "LinkedIn" },
+    { name: "JavaScript: Classes", provider: "LinkedIn" },
+    { name: "Test Automation Foundations", provider: "LinkedIn" },
+    { name: "Agile Testing", provider: "LinkedIn" },
+    { name: "Bootstrap 4 with Sass", provider: "LinkedIn" },
+    { name: "Interactive Animations with CSS and JavaScript", provider: "LinkedIn" },
+    { name: "JavaScript for Web Designers", provider: "LinkedIn" }
   ] as Course[],
 };

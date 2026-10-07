@@ -17,9 +17,11 @@ interface Project {
   period: string;
   role: string;
   featured?: boolean;
+  international?: string;
   body: string;
   bullets?: string[];
 }
+interface Challenge { title: string; body: string; }
 
 @Component({
   selector: 'app-portfolio-v2',
@@ -58,26 +60,34 @@ export class PortfolioV2Component {
   focus = 'Front-End Focused \u00B7 Full-Stack with Java / Spring Boot';
 
   stats = [
-    { value: '5+', label: 'Years shipping fintech frontend' },
-    { value: 'Lead', label: 'Credit & BNPL frontend team' },
-    { value: '10M+', label: 'Users on flows I own' },
+    { value: '10M+', label: 'Users on payment flows I own' },
+    { value: '7,400+', label: 'Automated tests in suites I built' },
+    { value: '20', label: 'Claude agents, skills & commands I wrote' },
     { value: '14', label: 'Shared npm packages published' },
   ];
 
   experiences = [
     {
       company: 'Digipay',
-      role: 'Senior Front-End Engineer',
+      role: 'Senior Front-End Engineer \u00B7 Front-End Owner',
       period: 'Dec 2021 — Present',
-      location: 'Tehran',
-      summary: 'Lead frontend on Credit & BNPL product lines at Iran\u2019s largest digital-payment platform, with backend contributions to its Java services.',
-      tags: ['Angular', 'TypeScript', 'NX Monorepo', 'RxJS'],
+      location: 'Tehran, Iran',
+      about: 'Payments and credit arm of Digikala Group, Iran\u2019s largest e-commerce company.',
+      international: '',
+      summary: 'Front-end owner of Digipay\u2019s payment (checkout) product since Jul 2026, after owning the entire Credit & BNPL front-end for 4+ years \u2014 with backend contributions to its Java services.',
+      tags: ['Angular', 'TypeScript', 'NX Monorepo', 'RxJS', 'Signals', 'Playwright', 'Claude Code'],
       featured: [
-        'Led frontend for Credit & BNPL journeys serving 10M+ users — complex multi-step financial flows in Angular + TypeScript.',
-        'Architected and published 14 shared npm packages, reducing cross-team code duplication and accelerating delivery across all product lines.',
-        'Leading the Credit & BNPL line, mentoring engineers and setting the technical direction.',
+        'Front-end owner of Digipay\u2019s payment (checkout) product since Jul 2026; before that I owned the entire Credit & BNPL front-end (Dec 2021 \u2013 Jul 2026). Flows used by 10M+ people.',
+        'Merged two production payment apps into one, put the checkout under a Playwright E2E safety net, and upgraded both front-end monorepos to Angular 22 / Nx 23.',
+        'Made Claude Code part of the front-end workflow with agents and commands I wrote \u2014 a full test spec went from 1 day to under 1 hour.',
+        'Architected and published 14 shared npm packages, and mentor the engineers on my product lines.',
       ],
       bullets: [
+        'Merged the Credit (~340 TS files) and Web-Pay (~500 TS files) Angular apps into a single purchase app serving web.mydigipay.com: ~840 files moved without source edits, every published URL kept working as a route subtree, rolled out in parallel behind nginx, then cut over in production.',
+        'Built a Playwright E2E suite for the checkout that pays through the real backend \u2014 47 wallet, credit/BNPL, bank-gateway and error-recovery scenarios with merchant-ticket fixtures, page objects, OTP automation and screenshot reports. It caught bugs that left users stuck mid-payment and a double-payment risk.',
+        'Built the whole test setup and the playground demo app for the 80-package UI library: 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines.',
+        'Upgraded both front-end monorepos from Angular 17 / Nx 18 to Angular 22 / Nx 23 \u2014 the client monorepo (17 repos, 110+ Nx projects) and the payment monorepo (~1,150 files): built-in control flow, signal inputs/outputs, and a custom pointer-event swipe directive replacing Hammer.js.',
+        'Wrote Figma-MCP dev \u2192 QA \u2192 design-review agents with a shared lessons file, AI code-review commands for staging and production merge requests, and commands that write and fix component tests; library regressions reaching QA dropped to near zero.',
         'Migrated three standalone Angular apps into a unified NX monorepo with shared libs, consolidating dependencies and enabling cross-app code reuse.',
         'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine unit tests, Playwright E2E, and a dual snapshot system (style + visual) as backward-compatibility guards.',
         'Engineered a 7-step credit pre-registration state machine with conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL↔step sync.',
@@ -95,12 +105,18 @@ export class PortfolioV2Component {
         'Implemented a configurable time-window switch in the credit-scoring Java service, selecting between two external scoring engines on a schedule.',
         'Built bank-partnership Credit Club and Installment Cheque landing pages in PHP, integrating credit-installment REST APIs.',
       ],
+      challenge: {
+        title: 'Merging two live payment apps into one without breaking a single URL',
+        body: 'Credit and Web-Pay (~840 TypeScript files) had to become one app while real payments kept flowing. I designed a layout that moved every file without editing its source, kept every published URL working as a route subtree, ran both versions side by side behind nginx, then cut over in production with no user-facing regressions.',
+      } as Challenge,
     },
     {
       company: 'XPCard',
       role: 'Founder & Software Engineer',
       period: 'Jul 2026 — Present',
       location: 'Remote',
+      about: 'Gift-card and gaming-credit marketplace I built from scratch with AI agents \u2014 1B+ toman GMV in its first two months.',
+      international: '',
       summary: 'Built a live marketplace for gift cards, game accounts and game top-ups from scratch as the only engineer — backend, storefront, admin dashboard, chat-bot channel and SEO content site.',
       tags: ['Java 21', 'Spring Boot 3', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'Angular 20', 'Nx', 'OpenAPI', 'Claude Code'],
       featured: [
@@ -125,12 +141,18 @@ export class PortfolioV2Component {
         'Covered the backend with nearly 1,000 test files — fast Mockito unit tests plus Testcontainers integration tests on real MySQL, MongoDB and Redis, sharing one Spring context to keep the full suite fast.',
         'Run production myself: Docker Compose on a single VPS, self-hosted GitHub Actions runners with deploy locking, a TLS edge proxy, CDN and page caching, and a rehearsal environment seeded from anonymized production data for risky migrations.',
       ],
+      challenge: {
+        title: 'Shipping a full product alone at team speed',
+        body: 'I designed a Claude Code multi-agent pipeline (PM \u2192 architect \u2192 dev \u2192 QA \u2192 review) with guardrails the agents cannot skip: lint, tests, build and screenshot checks on every change. It delivered ~115 features in three months, and I still review every merge myself.',
+      } as Challenge,
     },
     {
       company: 'Adowing',
       role: 'Front-End Developer',
       period: 'Oct 2019 — Dec 2021',
-      location: 'Tehran',
+      location: 'Tehran, Iran',
+      about: '',
+      international: '',
       summary: '',
       tags: ['Vue', 'Nuxt', 'Agile'],
       featured: [] as string[],
@@ -144,7 +166,9 @@ export class PortfolioV2Component {
       company: 'Carnotic',
       role: 'Front-End Developer',
       period: 'Oct 2019 — Dec 2021',
-      location: 'Tehran',
+      location: 'Tehran, Iran',
+      about: 'Online freight-forwarding platform.',
+      international: '',
       summary: '',
       tags: ['Nuxt', 'SEO'],
       featured: [] as string[],
@@ -164,9 +188,28 @@ export class PortfolioV2Component {
   ];
   stackSecondary = ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Jest', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'];
   stackBackend = ['Java 21', 'Spring Boot', 'JPA / Hibernate', 'MySQL', 'MongoDB', 'Redis', 'REST / OpenAPI', 'Testcontainers', 'Docker', 'PHP'];
-  stackFamiliar = ['GitHub Actions', 'WordPress', 'Technical SEO', 'Claude Code / AI agents', 'WebSockets', 'Git', 'Figma', 'Agile/Scrum'];
+  stackAi = ['Claude Code', 'Multi-agent workflows', 'MCP (Figma)', 'AI code review', 'AI test generation', 'Project rules & slash commands'];
+  stackFamiliar = ['React Native', 'GitHub Actions', 'WordPress', 'Technical SEO', 'WebSockets', 'Git', 'Figma', 'Agile/Scrum'];
+
+  languages = [
+    { name: 'English', level: 'Fluent' },
+    { name: 'Persian', level: 'Native' },
+  ];
 
   projects: Project[] = [
+    {
+      name: 'Origins',
+      sub: 'Ethical payments & rewards wallet',
+      stack: ['React Native', 'React', 'TypeScript'],
+      period: 'Sep 2026 — Present',
+      role: 'Front-End Developer',
+      featured: true,
+      international: 'United Kingdom \u00B7 Remote',
+      body: 'UK fintech building a rewards wallet and BNPL access for credit-invisible consumers.',
+      bullets: [
+        'Built the marketing landing pages; now building the React Native mobile app for the wallet, working remotely with the UK team.',
+      ],
+    },
     {
       name: 'Pita',
       sub: 'Restaurant Kiosk + Kitchen Display System',
@@ -174,7 +217,8 @@ export class PortfolioV2Component {
       period: '2024 — 2025',
       role: 'Architect & Lead Frontend',
       featured: true,
-      body: 'Two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries and deployed as separate Docker images behind nginx routing.',
+      international: 'Canada \u00B7 Remote',
+      body: 'Built remotely in English with a Canadian client\u2019s team: a two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries and deployed as separate Docker images behind nginx routing.',
       bullets: [
         'Integrated Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback — probes configured IP first, then scans localhost proxy ports for USB printers, with mobile-device and browser-print fallbacks.',
         'Real-time order sync between kiosk and kitchen via Laravel Echo + Pusher WebSockets, with a 10-second polling safety net and a live KDS board showing in-process vs ready orders.',
@@ -182,13 +226,14 @@ export class PortfolioV2Component {
       ],
     },
     {
-      name: 'Pharma',
-      sub: 'Prescription Drug E-commerce PWA',
+      name: 'RexRx',
+      sub: 'Online prescription pharmacy PWA',
       stack: ['Angular 17', 'PWA', 'Signals', 'Service Worker'],
       period: '2024',
-      role: 'Frontend Engineer',
+      role: 'Front-End Developer',
       featured: true,
-      body: 'Full Angular 17 PWA for prescription pharmaceutical e-commerce with a server-driven adaptive questionnaire engine and offline support.',
+      international: 'Canada \u00B7 Remote',
+      body: 'Front-end for a Canadian online pharmacy for GLP-1 weight-loss treatments (Ozempic, Wegovy, Mounjaro): a full Angular 17 PWA with a server-driven adaptive questionnaire engine and offline support.',
       bullets: [
         'Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched dynamically from the API based on the previous answer, enabling personalised eligibility screening.',
         'Signal-based session management replacing BehaviorSubject, CAPTCHA-protected auth, multi-step drug selection & checkout, in-app order support chat, and Service Worker for offline use.',
@@ -229,14 +274,24 @@ export class PortfolioV2Component {
       body: 'PM, architect, dev, QA and review agents built on Claude Code, working against written acceptance criteria and quality gates I defined. Architecture, API contracts and every production merge stay with me.',
     },
     {
-      tag: 'Leadership',
-      title: 'Leading the Credit & BNPL frontend line',
-      body: 'Setting technical direction, running code reviews, mentoring engineers, and unblocking cross-team work — while still shipping hands-on. Owning a product line that 10M+ people depend on to borrow and pay.',
+      tag: 'Ownership',
+      title: 'Front-end owner of Digipay\u2019s payment product',
+      body: 'Owned the entire Credit & BNPL front-end for 4+ years, and since Jul 2026 the payment (checkout) product \u2014 setting technical direction, reviewing code and mentoring engineers while still shipping hands-on, on flows 10M+ people use to borrow and pay.',
+    },
+    {
+      tag: 'Migration',
+      title: 'Merging two live payment apps into one',
+      body: '~840 TypeScript files moved without source edits, every published URL kept working, both versions ran side by side behind nginx, then a production cutover with no user-facing regressions.',
+    },
+    {
+      tag: 'AI / Team',
+      title: 'Claude Code across Digipay\u2019s front-end',
+      body: 'Figma-MCP dev, QA and design-review agents, AI code review for merge requests, and test-writing commands I wrote \u2014 a full test spec went from 1 day to under 1 hour.',
     },
     {
       tag: 'Architecture',
       title: 'Monorepo consolidation — 3 apps into 1 NX workspace',
-      body: 'Unified three standalone Angular apps into a single NX monorepo with shared libs, consolidating dependencies and unlocking cross-app code reuse across 75 packages.',
+      body: 'Unified three standalone Angular apps into a single NX monorepo with shared libs, consolidating dependencies and unlocking cross-app code reuse \u2014 later upgraded from Angular 17 to 22.',
     },
     {
       tag: 'AI / Tooling',

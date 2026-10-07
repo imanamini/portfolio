@@ -52,6 +52,9 @@ tags: Angular, TypeScript, NX Monorepo, RxJS, Signals, Playwright
 - Built a Playwright E2E suite for the checkout that runs against the real UAT backend: merchant-ticket API fixtures, page objects on stable data-testids, OTP codes read from the UAT OTP catcher, mobile runs and a screenshot-per-action report, covering 47 wallet, credit/BNPL, bank-gateway and error-recovery scenarios.
 - The E2E suite found and fixed 11 app bugs, 7 of which left users stuck mid-payment (each verified by reverting the fix and watching the test fail), and surfaced 4 backend findings including a double-payment risk.
 - Upgraded both front-end monorepos from Angular 17 / Nx 18 to Angular 22 / Nx 23 (TypeScript 6, ESLint 9) — the client monorepo (17 repos, 110+ Nx projects) and the payment monorepo (~1,150 files): built-in control flow, signal inputs/outputs, Hammer.js replaced by a custom pointer-event swipe directive, with E2E runs after every step.
+- Built the whole test setup and the playground demo app for Digipay's 80-package UI library (digipay-libs-workspace): 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines; together with the checkout suite, 7,400+ automated tests in suites I built.
+- Made Claude Code part of Digipay's front-end workflow with agents and commands I wrote: Figma-MCP dev → QA → design-review agents with a shared lessons file for the merchant dashboard, AI code-review commands for staging and production merge requests, and commands that write and fix component tests and build demo pages.
+- The AI-assisted test workflow cut the time to write a full component test spec from 1 day to under 1 hour, and library-level regressions reaching QA dropped to near zero.
 - Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.
 - Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.
 - Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.
@@ -72,6 +75,10 @@ backend_stack: Java / Spring Boot  ·  PHP
 - Fixed production Java bugs across microservices: NullPointerException in the blocking-detail service, journal double-linking on duplicate trackingCodes, and BNPL SMS double-activation — each covered with unit tests.
 - Implemented a configurable time-window scoring-provider switch in the credit-scoring Java service, enabling dynamic selection between two external scoring engines on a scheduled basis.
 - Built bank-partnership Credit Club and Installment Cheque landing pages in PHP on the Digipay marketing website, integrating credit-installment REST APIs.
+
+#### challenge
+- Merging two live payment apps into one without breaking a single URL
+- Credit and Web-Pay (~840 TypeScript files) had to become one app while real payments kept flowing. I designed a layout that moved every file without editing its source, kept every published URL working as a route subtree, ran both versions side by side behind nginx, then cut over in production with no user-facing regressions.
 
 ### XPCard | Remote | Founder & Software Engineer | Jul 2026 – Present
 about: Gift-card and gaming-credit marketplace I built from scratch with AI agents; **1B+ toman GMV in its first two months**.
@@ -99,6 +106,10 @@ backend_stack: Java 21  ·  Spring Boot 3  ·  MySQL  ·  MongoDB  ·  Redis
 - Automated fulfillment through wholesale supplier APIs: scheduled catalog sync, automatic purchase and delivery of digital codes, signed webhook handling and a supplier ledger, with real purchases gated behind a feature flag for safe rehearsal.
 - Covered the backend with nearly 1,000 test files — fast Mockito unit tests plus Testcontainers integration tests on real MySQL, MongoDB and Redis, sharing one Spring context to keep the full suite fast.
 - Run production myself: Docker Compose on a single VPS, self-hosted GitHub Actions runners with deploy locking, a TLS edge proxy, CDN and page caching, and a rehearsal environment seeded from anonymized production data for risky migrations.
+
+#### challenge
+- Shipping a full product alone at team speed
+- I designed a Claude Code multi-agent pipeline (PM → architect → dev → QA → review) with guardrails the agents cannot skip: lint, tests, build and screenshot checks on every change. It delivered ~115 features in three months, and I still review every merge myself.
 
 ### Adowing | Tehran, Iran | Front-End Developer | Oct 2019 – Dec 2021
 tags: Vue, Nuxt, Agile
@@ -185,6 +196,9 @@ RxJS, Vue, Nuxt, Playwright, Jest, Karma/Jasmine, SCSS / Tailwind, PWA / Service
 ### backend
 Java 21, Spring Boot, JPA / Hibernate, MySQL, MongoDB, Redis, REST / OpenAPI, Testcontainers, Docker, PHP
 
+### ai
+Claude Code, multi-agent workflows (20 agents / skills / commands written), MCP (Figma), AI code review, AI test generation, project rules & slash commands
+
 ### familiar
 GitHub Actions, WordPress, Technical SEO, Claude Code / AI agents, WebSockets, Git, Figma, Agile/Scrum
 
@@ -206,4 +220,10 @@ GitHub Actions, WordPress, Technical SEO, Claude Code / AI agents, WebSockets, G
 - Angular — The Complete Guide (2024 Edition) | Udemy
 - UTACM-Cafebazaar Android Course | Cafebazaar & University of Tehran | Winter 2019
 - Agile Software Development: Clean Coding Practices | LinkedIn
+- Agile Software Development: Refactoring | LinkedIn
+- JavaScript: Classes | LinkedIn
 - Test Automation Foundations | LinkedIn
+- Agile Testing | LinkedIn
+- Bootstrap 4 with Sass | LinkedIn
+- Interactive Animations with CSS and JavaScript | LinkedIn
+- JavaScript for Web Designers | LinkedIn

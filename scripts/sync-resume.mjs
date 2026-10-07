@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * sync-resume.mjs
- * Single source of truth pipeline: RESUME.md → resume-data.ts + PDF
+ * Single source of truth pipeline: RESUME.md → resume-data.ts + full PDF,
+ * resumes/frontend-developer.md → the site's downloadable PDF
  *
  * Usage: node scripts/sync-resume.mjs
  *    or: npm run sync
@@ -132,10 +133,19 @@ console.log(`✓  Written: src/app/data/resume-data.ts`);
 
 // ─── Regenerate PDF ───────────────────────────────────────────────────────────
 
-console.log('▸ Regenerating PDF…');
-execSync(`node ${resolve(__dirname, 'generate-pdf.mjs')}`, {
-  stdio: 'inherit',
-  cwd: ROOT,
-});
+// The site's downloadable CV is the short front-end variant; RESUME.md stays the full
+// content bank and gets its own complete PDF next to the variants.
+const PDFS = [
+  { md: 'resumes/frontend-developer.md', pdf: 'public/Iman Amini Resume.pdf' },
+  { md: 'RESUME.md', pdf: 'resumes/out/Iman Amini Resume (Full).pdf' },
+];
+for (const { md, pdf } of PDFS) {
+  console.log(`▸ Regenerating PDF from ${md}…`);
+  execSync(`node ${resolve(__dirname, 'generate-pdf.mjs')}`, {
+    stdio: 'inherit',
+    cwd: ROOT,
+    env: { ...process.env, RESUME_MD: resolve(ROOT, md), RESUME_PDF: resolve(ROOT, pdf) },
+  });
+}
 
 console.log('\n✓  Sync complete. Edit RESUME.md to update everything.');

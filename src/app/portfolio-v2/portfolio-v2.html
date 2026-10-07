@@ -70,10 +70,11 @@
     </div>
     <p class="hero__pitch">
       I
-      <span class="hero__accent">lead the Credit &amp; BNPL frontend team</span>
-      at a 10M+ user fintech, with
+      <span class="hero__accent">own the front-end of Digipay&rsquo;s payment product</span>
+      at a 10M+ user fintech, after 4+ years owning its Credit &amp; BNPL front-end &mdash;
       <span class="hero__strong">5+ years</span>
-      shipping production-grade financial journeys.
+      shipping production-grade financial journeys, including remote work for
+      <span class="hero__strong">international teams in Canada and the UK</span>.
       I also build
       <span class="hero__strong">full-stack</span>
       — I designed and built an e-commerce platform from scratch, from the Java / Spring Boot backend and databases to the Angular apps and production infrastructure.
@@ -113,9 +114,10 @@
         </div>
         <div class="exp__body">
           <div class="exp__head">
-            <h3 class="exp__company">{{ job.company }}</h3>
-            <span class="exp__role">{{ job.role }}</span>
+            <h3 class="exp__role">{{ job.role }}</h3>
+            <span class="exp__company">{{ job.company }}</span>
           </div>
+          <p *ngIf="job.about" class="exp__about">{{ job.about }}</p>
           <p *ngIf="job.summary" class="exp__summary">{{ job.summary }}</p>
           <div *ngIf="job.tags.length" class="exp__tags">
             <span *ngFor="let t of job.tags" class="exp__tag">{{ t }}</span>
@@ -144,6 +146,11 @@
               <li *ngFor="let b of job.backendBullets">{{ b }}</li>
             </ul>
           </div>
+          <div *ngIf="job.challenge" class="challenge">
+            <div class="challenge__label">Most important challenge</div>
+            <div class="challenge__title">{{ job.challenge.title }}</div>
+            <p class="challenge__body">{{ job.challenge.body }}</p>
+          </div>
         </div>
       </article>
     </div>
@@ -155,7 +162,7 @@
       Products I&rsquo;ve shipped
       <span class="heading-display-italic">end-to-end.</span>
     </h2>
-    <p class="projects__intro">Outside of fintech, I architect and lead React and Angular products from scratch — kiosks, PWAs, video platforms, form builders.</p>
+    <p class="projects__intro">Outside of Digipay, I build React, React Native and Angular products &mdash; several of them remotely for international teams in the UK and Canada.</p>
 
     <div class="projects__featured">
       <article *ngFor="let p of featuredProjects; let i = index" class="projects__card">
@@ -164,6 +171,7 @@
             <div class="projects__featured-label">Featured &middot; {{ pad(i) }}</div>
             <div class="projects__name">{{ p.name }}</div>
             <div class="projects__sub">{{ p.sub }}</div>
+            <div *ngIf="p.international" class="intl">International &middot; {{ p.international }}</div>
           </div>
           <div>
             <div class="projects__role-label">{{ p.role }}</div>
@@ -236,6 +244,10 @@
         <div class="stack__chips stack__chips--backend">
           <span *ngFor="let t of stackBackend" class="stack__chip stack__chip--backend">{{ t }}</span>
         </div>
+        <div class="stack__heading stack__heading--small stack__heading--ai">AI-assisted engineering</div>
+        <div class="stack__chips">
+          <span *ngFor="let t of stackAi" class="stack__chip stack__chip--ai">{{ t }}</span>
+        </div>
         <div class="stack__heading stack__heading--small">Also familiar</div>
         <div class="stack__familiar">
           <span *ngFor="let t of stackFamiliar">{{ t }}</span>
@@ -255,9 +267,14 @@
           <div class="bg__school">{{ e.institution }}</div>
           <div class="bg__period">{{ e.period }}</div>
         </div>
+        <div class="bg__heading bg__heading--spaced">Languages</div>
+        <div *ngFor="let l of languages" class="bg__lang">
+          <span class="bg__degree">{{ l.name }}</span>
+          <span class="bg__period">{{ l.level }}</span>
+        </div>
       </div>
       <div class="bg__col">
-        <div class="bg__heading">Recent courses</div>
+        <div class="bg__heading">Courses</div>
         <div class="bg__courses">
           <div *ngFor="let c of r.courses" class="bg__course">
             <div>
