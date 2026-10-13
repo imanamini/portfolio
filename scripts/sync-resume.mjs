@@ -133,15 +133,15 @@ console.log(`✓  Written: src/app/data/resume-data.ts`);
 
 // ─── Regenerate PDF ───────────────────────────────────────────────────────────
 
-// The site's downloadable CV is the short front-end variant; RESUME.md stays the full
+// The site's downloadable CV is the ATS-first variant; RESUME.md stays the full
 // content bank and gets its own complete PDF next to the variants.
 const PDFS = [
-  { md: 'resumes/frontend-developer.md', pdf: 'public/Iman Amini Resume.pdf' },
-  { md: 'RESUME.md', pdf: 'resumes/out/Iman Amini Resume (Full).pdf' },
+  { md: 'resumes/ats-frontend.md', pdf: 'public/Iman Amini Resume.pdf', script: 'generate-pdf-ats.mjs' },
+  { md: 'RESUME.md', pdf: 'resumes/out/Iman Amini Resume (Full).pdf', script: 'generate-pdf.mjs' },
 ];
-for (const { md, pdf } of PDFS) {
+for (const { md, pdf, script } of PDFS) {
   console.log(`▸ Regenerating PDF from ${md}…`);
-  execSync(`node ${resolve(__dirname, 'generate-pdf.mjs')}`, {
+  execSync(`node ${resolve(__dirname, script)}`, {
     stdio: 'inherit',
     cwd: ROOT,
     env: { ...process.env, RESUME_MD: resolve(ROOT, md), RESUME_PDF: resolve(ROOT, pdf) },

@@ -4,8 +4,9 @@
 **Never delete data from it** — variants pick from it and shorten, the bank keeps everything. It feeds the website's
 resume data (`src/app/data/resume-data.ts`) and its complete PDF `resumes/out/Iman Amini Resume (Full).pdf`.
 
-This folder holds shorter, role-focused variants that reuse the same PDF generator. The site's downloadable CV
-(`public/Iman Amini Resume.pdf`) is built from `frontend-developer.md`. `npm run sync` (or `npm run pdf`) rebuilds all of it.
+This folder holds shorter, role-focused variants. The site's downloadable CV
+(`public/Iman Amini Resume.pdf`) is built from `ats-frontend.md` with `scripts/generate-pdf-ats.mjs`. `npm run sync`
+(or `npm run pdf`) rebuilds all of it. `linkedin.md` is the LinkedIn profile text, kept in sync with the same facts.
 
 The home page (`src/app/portfolio-v2/portfolio-v2.ts`) keeps its own hand-written copy of the data — update it too
 when the bank changes.
@@ -13,6 +14,13 @@ when the bank changes.
 | File | Use for |
 |---|---|
 | `frontend-developer.md` | Front-end / JavaScript / React roles at product companies (3 pages). First built for the 2026-10 application in `applications/` |
+| `ats-frontend.md` | ATS-first 2-page version for front-end / software-engineer roles (2026-10-13). Rendered by `scripts/generate-pdf-ats.mjs`: single column, standard headings, literal bullets, "Technologies:" line per entry, Adowing + Carnotic merged as Awan Holding, XPCard / Pita / RexRx listed as part-time projects, no Origins |
+
+Build the ATS variant:
+
+```bash
+RESUME_MD=resumes/ats-frontend.md RESUME_PDF="resumes/out/Iman Amini Resume.pdf" node scripts/generate-pdf-ats.mjs
+```
 
 Build a variant:
 
@@ -71,6 +79,18 @@ Design (scripts/generate-pdf.mjs)
 - Digipay role: owned the entire Credit & BNPL front-end Dec 2021 – Jul 2026; front-end owner of Digipay's payment (purchase / checkout) product since Jul 2026 — NOT all of Digipay (it has many other lines).
 - Both front-end monorepos upgraded Angular 17 / Nx 18 → Angular 22 / Nx 23: client-monorepo (17 repos, 110+ Nx projects)
   and limbo-monorepo (~1,150 files).
+- client-monorepo Credit & BNPL applet (verified 2026-10-13 in the repo): `libs/applets/credit/{credit,bnpl,installment,home,purchase}`
+  ≈ 1,020 TS files / ~395 components (credit 551 files / 261 components, bnpl 387 / 99, installment 55 / 22, home 22 / 11)
+  plus `libs/shared/credit` (127 files); loaded by the `dpx` and `pillar` apps through `libs/shells/credit-shell`. Features:
+  onboarding, pre-registration (+ by campaign), smart scoring, wallet activation, wallet / transaction detail, payment callback,
+  resolve status, volunteer page, installments overview, contract settlement, installment pay link. Credit and BNPL libs mirror
+  each other (one abstracted codebase for both product lines).
+- Pillar (`apps/pillar` + `libs/applets/pillar/{home,login,error-state}` + `libs/shells/pillar-shell`, verified 2026-10-13):
+  Digipay's mini-app inside the Digikala super-app (`api.digikala.com/super-app`, dk-superweb-tabs SDK, Digikala SSO
+  resolver). Routes: home, transactions, card (digicard), profile, installments overview, auth, wallet / cash-in, service/credit.
+  Installable PWA (ngsw). Iman is the top committer of both the app and the applet repos (25 of ~45 commits each).
+- The web-wallet / credit / merchant-credit → Nx migration happened in **limbo-monorepo** (`apps/merchant-credit`, `apps/purchase`),
+  NOT in client-monorepo.
 - Digipay checkout (`limbo-monorepo`): merged Credit + Web-Pay (~840 TS files) into one `purchase` app, live; 83 Playwright
   tests / 47 scenarios against real UAT; Angular 17 / Nx 18 → Angular 22 / Nx 23 upgrade.
 - Digipay UI libraries (`digipay-libs-workspace`): 80+ packages, demo playground app, ~3,150 Playwright tests,

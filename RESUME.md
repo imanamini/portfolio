@@ -1,10 +1,11 @@
 ---
 name: Iman Amini
-role: Software Engineer
-subtitle: Front-End Focused · Full-Stack with Java / Spring Boot
+role: Senior Full-Stack Engineer (Front-End Focused)
+subtitle: Angular · TypeScript · React · Java / Spring Boot · 6+ years in fintech and e-commerce
+location: Tehran, Iran
 tagline: I build products people trust with their money — from fintech flows used by 10M+ people to full-stack platforms built from the database up.
-headline: **Front-end owner of Digipay's payment (checkout) product**, Digikala Group's fintech arm, after 4+ years owning its **Credit & BNPL front-end** — payment, wallet and credit flows for **10M+ users** · **Founder of XPCard**, built from scratch with AI agents · **Remote front-end work for international teams in Canada and the UK**
-availability: Open to international roles · Remote / Hybrid / On-site · Fluent English
+headline: **Front-end owner of Digipay's payment (checkout) product**, Digikala Group's fintech arm, after 4+ years owning its **Credit & BNPL front-end** — payment, wallet and credit flows for **10M+ users** · ships to its **Java / Spring Boot** microservices · **Founder of XPCard**, a full-stack marketplace built from scratch · **Remote front-end contracts for Canadian teams**
+availability: Open to full-time roles · Relocation or remote · Fluent English
 email: iman.fa88@gmail.com
 phone: +98-9034646366
 portfolio_url: https://imanamini.ir
@@ -17,7 +18,7 @@ github_label: github.com/imanamini
 
 ## Pitch
 
-Software engineer with a front-end core and real backend depth, who can carry a product end to end. At Digipay, Iran's largest digital-payments platform, I owned the entire Credit & BNPL front-end for more than four years, and since July 2026 I own the front-end of its payment (checkout) product, with flows used by 10M+ people. I also ship to its Java / Spring Boot microservices. I have also worked remotely as the front-end developer for **international teams in Canada and the UK**. In 2026 I founded XPCard and built the whole platform from scratch on my own, from the Spring Boot backend and databases to the Angular apps and production infrastructure. I used an AI-agent workflow I designed and kept architecture, review and releases in my own hands. I am looking for an international team to do my best work with.
+Software engineer with a front-end core and real backend depth, who can carry a product end to end. At Digipay, Iran's largest digital-payments platform, I owned the entire Credit & BNPL front-end for more than four years, and since July 2026 I own the front-end of its payment (checkout) product, with flows used by 10M+ people. I also ship to its Java / Spring Boot microservices. I have also worked remotely, part-time, as the front-end developer for **Canadian teams**. In 2026 I founded XPCard and built the whole platform from scratch on my own, from the Spring Boot backend and databases to the Angular apps and production infrastructure. I used an AI-agent workflow I designed and kept architecture, review and releases in my own hands. I am looking for a full-time senior full-stack or front-end role in an international team.
 
 ## Summary
 
@@ -32,7 +33,7 @@ Software engineer focused on front-end with production backend experience — 5+
 
 ## Skills
 
-Angular, TypeScript, RxJS, Signals, NX Monorepo, React, Next.js, Vue, Nuxt, Java 21, Spring Boot, JPA / Hibernate, MySQL, MongoDB, Redis, REST / OpenAPI, Testcontainers, Docker, CI/CD, Playwright, Jest, Karma/Jasmine, SCSS/CSS, WordPress / PHP, Technical SEO, AI-assisted development (Claude Code), Git, Figma, Agile/Scrum
+Angular, TypeScript, RxJS, Signals, NX Monorepo, React, Vue, Nuxt, Java 21, Spring Boot, JPA / Hibernate, MySQL, MongoDB, Redis, REST / OpenAPI, Testcontainers, Docker, CI/CD, Playwright, Jest, Karma/Jasmine, SCSS/CSS, WordPress / PHP, Technical SEO, AI-assisted development (Claude Code), Git, Figma, Agile/Scrum
 
 ## Experience
 
@@ -42,7 +43,7 @@ tags: Angular, TypeScript, NX Monorepo, RxJS, Signals, Playwright
 
 #### featured
 - **Front-end owner of Digipay's payment (checkout) product since Jul 2026**, after owning the entire Credit & BNPL front-end (Dec 2021 – Jul 2026) — multi-step financial journeys in Angular + TypeScript that 10M+ people rely on every day.
-- Architected and shipped 14 shared npm packages, cutting cross-team duplication and accelerating delivery across every product line.
+- Built and own the Credit & BNPL applet libraries in client-monorepo (~1,000 TypeScript files, ~400 components: onboarding, pre-registration and campaign flows, smart scoring, wallet activation, installments, contract settlement) — one abstracted codebase serving both product lines — and built Pillar, Digipay's mini-app inside the Digikala super-app.
 - Set the front-end technical direction for the Credit & BNPL and payment lines and mentor the engineers building them.
 - Own Digipay's purchase (checkout) app: merged two production payment apps into one, put it under a Playwright E2E safety net, and upgraded it to Angular 22 / Nx 23.
 
@@ -55,7 +56,10 @@ tags: Angular, TypeScript, NX Monorepo, RxJS, Signals, Playwright
 - Built the whole test setup and the playground demo app for Digipay's 80-package UI library (digipay-libs-workspace): 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines; together with the checkout suite, 7,400+ automated tests in suites I built.
 - Made Claude Code part of Digipay's front-end workflow with agents and commands I wrote: Figma-MCP dev → QA → design-review agents with a shared lessons file for the merchant dashboard, AI code-review commands for staging and production merge requests, and commands that write and fix component tests and build demo pages.
 - The AI-assisted test workflow cut the time to write a full component test spec from 1 day to under 1 hour, and library-level regressions reaching QA dropped to near zero.
-- Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.
+- limbo-monorepo: migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.
+- client-monorepo (17 repos, 110+ Nx projects): built and own the Credit & BNPL applet libraries (`libs/applets/credit/{credit,bnpl,installment,home}` + `libs/shared/credit`, ~1,000 TypeScript files / ~400 components) loaded by the main consumer app and the installments app through a credit shell: onboarding, pre-registration (+ campaign), smart scoring, wallet activation, wallet / transaction detail, payment callbacks, installments overview, contract settlement.
+- client-monorepo (pillar app): built Pillar, Digipay's mini-app inside the Digikala super-app — Digikala SSO, wallet and cash-in, transactions, card, installments and credit services as lazy-loaded applets behind a thin shell, as an installable PWA with a metadata-driven preloading strategy for critical routes.
+- digipay-libs-workspace: architected and published 14 of its shared npm packages used across product teams, cutting cross-team duplication and accelerating delivery across every product line.
 - Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.
 - Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.
 - Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document image inspection, implementing multi-touch distance calculation, boundary-constrained CSS transforms, and requestAnimationFrame-throttled magnifier with rotation-aware coordinate mapping.
@@ -80,8 +84,8 @@ backend_stack: Java / Spring Boot  ·  PHP
 - Merging two live payment apps into one without breaking a single URL
 - Credit and Web-Pay (~840 TypeScript files) had to become one app while real payments kept flowing. I designed a layout that moved every file without editing its source, kept every published URL working as a route subtree, ran both versions side by side behind nginx, then cut over in production with no user-facing regressions.
 
-### XPCard | Remote | Founder & Software Engineer | Jul 2026 – Present
-about: Gift-card and gaming-credit marketplace I built from scratch with AI agents; **1B+ toman GMV in its first two months**.
+### XPCard | Remote · side project, part-time | Founder & Sole Engineer | Jul 2026 – Present
+about: Gift-card and gaming-credit marketplace I built from scratch alongside my full-time job; **250+ paid orders (1B+ toman GMV) in its first two months**.
 tags: Java 21, Spring Boot 3, MySQL, MongoDB, Redis, Docker, Angular 20, Nx, OpenAPI, Claude Code
 backend_label: Backend Engineering
 backend_stack: Java 21  ·  Spring Boot 3  ·  MySQL  ·  MongoDB  ·  Redis
@@ -111,27 +115,15 @@ backend_stack: Java 21  ·  Spring Boot 3  ·  MySQL  ·  MongoDB  ·  Redis
 - Shipping a full product alone at team speed
 - I designed a Claude Code multi-agent pipeline (PM → architect → dev → QA → review) with guardrails the agents cannot skip: lint, tests, build and screenshot checks on every change. It delivered ~115 features in three months, and I still review every merge myself.
 
-### Adowing | Tehran, Iran | Front-End Developer | Oct 2019 – Dec 2021
-tags: Vue, Nuxt, Agile
+### Awan Holding (Adowing · Carnotic) | Tehran, Iran | Front-End Developer | Oct 2019 – Dec 2021
+about: Holding company behind Adowing (internal business panels) and Carnotic (online freight-forwarding platform).
+tags: Vue, Nuxt, JavaScript, HTML5, CSS3 / SCSS, SSR, SEO, Jest, Git, Agile / Scrum
 
 #### bullets
-- Developed internal panels for the marketing team, accounting team & other departments.
-- Built pixel-perfect UIs in different sizes according to the design.
-- Researched the agile approach with the product team and implemented it.
-- Researched test methods like unit test, integration test, regression test & acceptance test.
-- Researched clean code methods and developed products with them.
-- Mentored a front-end developer intern.
-
-### Carnotic | Tehran, Iran | Front-End Developer | Oct 2019 – Dec 2021
-about: Online freight-forwarding platform.
-tags: Nuxt, SEO
-
-#### bullets
-- Implemented a highly responsive user interface for a freight forwarding platform.
-- Built pixel-perfect UIs in different sizes according to the design.
-- Packed customized video player from "Talent Academy" project and used in Carnotic.
-- Implemented this Nuxt app for SEO purposes.
-- Documented components and wrote test cases for all methods.
+- Carnotic: built the responsive, server-side-rendered Nuxt front-end of a freight-forwarding platform, chosen for SEO; documented the components and wrote unit tests for all methods.
+- Adowing: developed internal Vue panels for the marketing, accounting and other departments, pixel-perfect across screen sizes from the Figma designs.
+- Built a reusable custom video player (playlists, instructor feedback, Instagram-live-style messages) for the Talent Academy learning platform and packaged it for reuse in Carnotic; implemented a global SSO login for the internal platforms.
+- Introduced agile practices with the product team, researched and applied unit / integration / regression / acceptance testing and clean-code practices, and mentored a front-end intern.
 
 ### Freelance | Tehran | Android Developer | Oct 2014 – Oct 2015
 tags: Android, B4A
@@ -143,16 +135,7 @@ tags: Android, B4A
 
 ## Projects
 
-### Origins | Ethical payments & rewards wallet | Front-End Developer | Sep 2026 – Present
-international: United Kingdom · Remote
-about: UK fintech building a rewards wallet and BNPL access for credit-invisible consumers.
-stack: React Native, React, TypeScript
-featured: true
-
-#### bullets
-- Built the marketing landing pages; now building the React Native mobile app for the wallet, working remotely with the UK team.
-
-### Pita | Restaurant Kiosk + Kitchen Display System | Architect & Lead Frontend | 2024 – 2025
+### Pita | Restaurant Kiosk + Kitchen Display System | Lead Front-End Developer · remote contract, part-time | 2024 – 2025
 international: Canada · Remote
 stack: React, NX Monorepo, WebSockets, Docker, TypeScript
 featured: true
@@ -164,7 +147,7 @@ Built remotely in English with a **Canadian client's team**: a two-app React/NX 
 - Real-time order sync between kiosk and kitchen over Laravel Echo + Pusher WebSockets, with a 10-second polling backup and a live in-process vs ready KDS board.
 - Zero-downtime version checker for always-on hardware — polls a cache-busted /version.json and forces a hard reload on new builds.
 
-### RexRx | Online prescription pharmacy PWA | Front-End Developer | 2024
+### RexRx | Online prescription pharmacy PWA | Front-End Developer · remote contract, part-time | 2024
 international: Canada · Remote
 stack: Angular 17, PWA, Signals, Service Worker
 featured: true
@@ -188,7 +171,7 @@ Drag-and-drop, JotForm-style form builder — schema-driven UI with deep nested-
 ## Toolkit
 
 ### core
-Angular · 5y, React / Next.js · 4y, TypeScript · 5y, NX Monorepo · 3y
+TypeScript · 6y, Angular · 5y, React, NX Monorepo · 3y
 
 ### proficient
 RxJS, Vue, Nuxt, Playwright, Jest, Karma/Jasmine, SCSS / Tailwind, PWA / Service Workers
@@ -200,7 +183,7 @@ Java 21, Spring Boot, JPA / Hibernate, MySQL, MongoDB, Redis, REST / OpenAPI, Te
 Claude Code, multi-agent workflows (20 agents / skills / commands written), MCP (Figma), AI code review, AI test generation, project rules & slash commands
 
 ### familiar
-GitHub Actions, WordPress, Technical SEO, Claude Code / AI agents, WebSockets, Git, Figma, Agile/Scrum
+Git, GitLab CI, GitHub Actions, Docker, nginx, Sentry, Google Tag Manager, WordPress, Technical SEO, WebSockets, Figma, Agile/Scrum
 
 ## Education
 

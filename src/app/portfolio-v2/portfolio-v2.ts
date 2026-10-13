@@ -56,8 +56,8 @@ export class PortfolioV2Component {
 
   firstName = 'Iman';
   lastName = 'Amini';
-  role = 'Software Engineer';
-  focus = 'Front-End Focused \u00B7 Full-Stack with Java / Spring Boot';
+  role = 'Senior Full-Stack Engineer';
+  focus = 'Front-End Focused \u00B7 Angular / TypeScript / React \u00B7 Java / Spring Boot';
 
   stats = [
     { value: '10M+', label: 'Users on payment flows I own' },
@@ -80,16 +80,18 @@ export class PortfolioV2Component {
         'Front-end owner of Digipay\u2019s payment (checkout) product since Jul 2026; before that I owned the entire Credit & BNPL front-end (Dec 2021 \u2013 Jul 2026). Flows used by 10M+ people.',
         'Merged two production payment apps into one, put the checkout under a Playwright E2E safety net, and upgraded both front-end monorepos to Angular 22 / Nx 23.',
         'Made Claude Code part of the front-end workflow with agents and commands I wrote \u2014 a full test spec went from 1 day to under 1 hour.',
-        'Architected and published 14 shared npm packages, and mentor the engineers on my product lines.',
+        'Built and own the Credit & BNPL applet libraries (~1,000 TypeScript files, ~400 components) and Pillar, Digipay’s mini-app inside the Digikala super-app, and mentor the engineers on my product lines.',
       ],
       bullets: [
+        'client-monorepo (17 repos, 110+ Nx projects): built and own the Credit & BNPL applet libraries (~1,000 TypeScript files, ~400 components) loaded by the main consumer app and the installments app through a credit shell: onboarding, pre-registration and campaign flows, smart scoring, wallet activation, wallet and transaction details, payment callbacks, installments overview and contract settlement — one abstracted codebase serving both product lines.',
+        'client-monorepo (pillar app): built Pillar, Digipay’s mini-app inside the Digikala super-app — Digikala SSO, wallet and cash-in, transactions, card, installments and credit services as lazy-loaded applets behind a thin shell, as an installable PWA.',
         'Merged the Credit (~340 TS files) and Web-Pay (~500 TS files) Angular apps into a single purchase app serving web.mydigipay.com: ~840 files moved without source edits, every published URL kept working as a route subtree, rolled out in parallel behind nginx, then cut over in production.',
         'Built a Playwright E2E suite for the checkout that pays through the real backend \u2014 47 wallet, credit/BNPL, bank-gateway and error-recovery scenarios with merchant-ticket fixtures, page objects, OTP automation and screenshot reports. It caught bugs that left users stuck mid-payment and a double-payment risk.',
         'Built the whole test setup and the playground demo app for the 80-package UI library: 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines.',
         'Upgraded both front-end monorepos from Angular 17 / Nx 18 to Angular 22 / Nx 23 \u2014 the client monorepo (17 repos, 110+ Nx projects) and the payment monorepo (~1,150 files): built-in control flow, signal inputs/outputs, and a custom pointer-event swipe directive replacing Hammer.js.',
         'Wrote Figma-MCP dev \u2192 QA \u2192 design-review agents with a shared lessons file, AI code-review commands for staging and production merge requests, and commands that write and fix component tests; library regressions reaching QA dropped to near zero.',
-        'Migrated three standalone Angular apps into a unified NX monorepo with shared libs, consolidating dependencies and enabling cross-app code reuse.',
-        'Established a multi-layer testing strategy across 75 packages: Karma/Jasmine unit tests, Playwright E2E, and a dual snapshot system (style + visual) as backward-compatibility guards.',
+        'limbo-monorepo: migrated the standalone web-wallet, credit and merchant-credit Angular apps into a unified NX monorepo with shared libs, consolidating dependencies and enabling cross-app code reuse.',
+        'digipay-libs-workspace: architected and published 14 of its shared npm packages used across product teams, and established a multi-layer testing strategy across the packages: Karma/Jasmine unit tests, Playwright E2E, and a dual snapshot system (style + visual) as backward-compatibility guards.',
         'Engineered a 7-step credit pre-registration state machine with conditional step-skipping, BehaviorSubject-driven reactive state, and bidirectional URL↔step sync.',
         'Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document inspection — multi-touch distance calculation, boundary-constrained CSS transforms, and rAF-throttled magnifier with rotation-aware coordinate mapping.',
         'Implemented a custom Angular preloading strategy using route metadata (preload: true, critical: true) with retryImport wrappers for network-resilient lazy module loading.',
@@ -112,10 +114,10 @@ export class PortfolioV2Component {
     },
     {
       company: 'XPCard',
-      role: 'Founder & Software Engineer',
+      role: 'Founder & Sole Engineer \u00B7 side project, part-time',
       period: 'Jul 2026 — Present',
       location: 'Remote',
-      about: 'Gift-card and gaming-credit marketplace I built from scratch with AI agents \u2014 1B+ toman GMV in its first two months.',
+      about: 'Gift-card and gaming-credit marketplace I built from scratch alongside my full-time job \u2014 250+ paid orders (1B+ toman GMV) in its first two months.',
       international: '',
       summary: 'Built a live marketplace for gift cards, game accounts and game top-ups from scratch as the only engineer — backend, storefront, admin dashboard, chat-bot channel and SEO content site.',
       tags: ['Java 21', 'Spring Boot 3', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'Angular 20', 'Nx', 'OpenAPI', 'Claude Code'],
@@ -147,49 +149,34 @@ export class PortfolioV2Component {
       } as Challenge,
     },
     {
-      company: 'Adowing',
+      company: 'Awan Holding (Adowing · Carnotic)',
       role: 'Front-End Developer',
       period: 'Oct 2019 — Dec 2021',
       location: 'Tehran, Iran',
-      about: '',
+      about: 'Holding company behind Adowing (internal business panels) and Carnotic (online freight-forwarding platform).',
       international: '',
       summary: '',
-      tags: ['Vue', 'Nuxt', 'Agile'],
+      tags: ['Vue', 'Nuxt', 'JavaScript', 'SSR', 'SEO', 'Jest', 'Agile'],
       featured: [] as string[],
       bullets: [
-        'Developed internal panels for marketing, accounting and other departments using Vue/Nuxt.',
-        'Researched and implemented agile process with the product team.',
-        'Mentored a front-end developer intern.',
-      ],
-    },
-    {
-      company: 'Carnotic',
-      role: 'Front-End Developer',
-      period: 'Oct 2019 — Dec 2021',
-      location: 'Tehran, Iran',
-      about: 'Online freight-forwarding platform.',
-      international: '',
-      summary: '',
-      tags: ['Nuxt', 'SEO'],
-      featured: [] as string[],
-      bullets: [
-        'Built a responsive freight-forwarding platform with pixel-perfect implementations.',
-        'Implemented a Nuxt.js app for SEO optimization.',
-        'Documented components and wrote test cases for all methods.',
+        'Carnotic: built the responsive, server-side-rendered Nuxt front-end of a freight-forwarding platform, chosen for SEO; documented the components and wrote unit tests for all methods.',
+        'Adowing: developed internal Vue panels for the marketing, accounting and other departments, pixel-perfect from the Figma designs.',
+        'Built a reusable custom video player for the Talent Academy learning platform (reused in Carnotic) and a global SSO login for the internal platforms.',
+        'Introduced agile practices with the product team, applied unit / integration / regression testing, and mentored a front-end intern.',
       ],
     },
   ];
 
   stackPrimary: StackPrimary[] = [
+    { name: 'TypeScript', years: 6 },
     { name: 'Angular', years: 5 },
-    { name: 'React / Next.js', years: 4 },
-    { name: 'TypeScript', years: 5 },
     { name: 'NX Monorepo', years: 3 },
+    { name: 'React', years: 2 },
   ];
-  stackSecondary = ['RxJS', 'Vue', 'Nuxt', 'Playwright', 'Jest', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers'];
-  stackBackend = ['Java 21', 'Spring Boot', 'JPA / Hibernate', 'MySQL', 'MongoDB', 'Redis', 'REST / OpenAPI', 'Testcontainers', 'Docker', 'PHP'];
+  stackSecondary = ['RxJS', 'Signals', 'Vue', 'Nuxt', 'Playwright', 'Jest', 'Karma/Jasmine', 'SCSS / Tailwind', 'PWA / Service Workers', 'SSR & SEO'];
+  stackBackend = ['Java 21', 'Spring Boot 3', 'JPA / Hibernate', 'MySQL', 'MongoDB', 'Redis', 'REST / OpenAPI', 'Testcontainers', 'Docker', 'PHP'];
   stackAi = ['Claude Code', 'Multi-agent workflows', 'MCP (Figma)', 'AI code review', 'AI test generation', 'Project rules & slash commands'];
-  stackFamiliar = ['React Native', 'GitHub Actions', 'WordPress', 'Technical SEO', 'WebSockets', 'Git', 'Figma', 'Agile/Scrum'];
+  stackFamiliar = ['Git', 'GitLab CI', 'GitHub Actions', 'nginx', 'Sentry', 'WordPress', 'Technical SEO', 'WebSockets', 'Figma', 'Agile/Scrum'];
 
   languages = [
     { name: 'English', level: 'Fluent' },
@@ -198,24 +185,11 @@ export class PortfolioV2Component {
 
   projects: Project[] = [
     {
-      name: 'Origins',
-      sub: 'Ethical payments & rewards wallet',
-      stack: ['React Native', 'React', 'TypeScript'],
-      period: 'Sep 2026 — Present',
-      role: 'Front-End Developer',
-      featured: true,
-      international: 'United Kingdom \u00B7 Remote',
-      body: 'UK fintech building a rewards wallet and BNPL access for credit-invisible consumers.',
-      bullets: [
-        'Built the marketing landing pages; now building the React Native mobile app for the wallet, working remotely with the UK team.',
-      ],
-    },
-    {
       name: 'Pita',
       sub: 'Restaurant Kiosk + Kitchen Display System',
       stack: ['React', 'NX Monorepo', 'WebSockets', 'Docker', 'TypeScript'],
       period: '2024 — 2025',
-      role: 'Architect & Lead Frontend',
+      role: 'Lead Front-End Developer \u00B7 remote contract, part-time',
       featured: true,
       international: 'Canada \u00B7 Remote',
       body: 'Built remotely in English with a Canadian client\u2019s team: a two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries and deployed as separate Docker images behind nginx routing.',
@@ -230,7 +204,7 @@ export class PortfolioV2Component {
       sub: 'Online prescription pharmacy PWA',
       stack: ['Angular 17', 'PWA', 'Signals', 'Service Worker'],
       period: '2024',
-      role: 'Front-End Developer',
+      role: 'Front-End Developer \u00B7 remote contract, part-time',
       featured: true,
       international: 'Canada \u00B7 Remote',
       body: 'Front-end for a Canadian online pharmacy for GLP-1 weight-loss treatments (Ozempic, Wegovy, Mounjaro): a full Angular 17 PWA with a server-driven adaptive questionnaire engine and offline support.',
@@ -290,8 +264,8 @@ export class PortfolioV2Component {
     },
     {
       tag: 'Architecture',
-      title: 'Monorepo consolidation — 3 apps into 1 NX workspace',
-      body: 'Unified three standalone Angular apps into a single NX monorepo with shared libs, consolidating dependencies and unlocking cross-app code reuse \u2014 later upgraded from Angular 17 to 22.',
+      title: 'Credit & BNPL libraries and the Pillar mini-app',
+      body: '~1,000 TypeScript files and ~400 components of credit, BNPL and installment applets behind a credit shell, one codebase for both product lines \u2014 plus Pillar, Digipay\u2019s mini-app inside the Digikala super-app.',
     },
     {
       tag: 'AI / Tooling',

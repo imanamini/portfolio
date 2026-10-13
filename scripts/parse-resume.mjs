@@ -178,8 +178,16 @@ function parseProjects(text) {
   });
 }
 
+/** `### Label` → { label: 'label' } so generators can show the heading as written. */
+function parseToolkitLabels(text) {
+  const labels = {};
+  for (const { header } of splitEntries(text)) labels[header.trim().toLowerCase()] = header.trim();
+  return labels;
+}
+
 function parseToolkit(text) {
-  const result = { core: [], proficient: [], backend: [], familiar: [] };
+  // Categories keep the order they have in the markdown; the four classic ones are always present.
+  const result = {};
   for (const { header, body } of splitEntries(text)) {
     const key = header.trim().toLowerCase();
     const raw = body.trim();
@@ -192,6 +200,7 @@ function parseToolkit(text) {
       result[key] = csv(raw);
     }
   }
+  for (const k of ['core', 'proficient', 'backend', 'familiar']) result[k] ??= [];
   return result;
 }
 
@@ -228,6 +237,7 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
       headline: fm.headline || '',
       projectsTitle: fm.projects_title || 'Projects',
       availability: fm.availability,
+      location: fm.location || '',
       email: fm.email,
       phone: fm.phone,
       links: [
@@ -244,6 +254,7 @@ export function parseResume(mdPath = RESUME_MD_PATH) {
     experience:  parseExperience(sec['experience'] || ''),
     projects:    parseProjects(sec['projects'] || ''),
     toolkit:     parseToolkit(sec['toolkit'] || ''),
+    toolkitLabels: parseToolkitLabels(sec['toolkit'] || ''),
     education:   parseEducation(sec['education'] || ''),
     courses:     parseCourses(sec['courses'] || ''),
     languages:   parseLanguages(sec['languages'] || ''),

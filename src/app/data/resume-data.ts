@@ -32,8 +32,8 @@ export interface Course {
 
 export const RESUME = {
   name: "Iman Amini",
-  title: "Software Engineer",
-  subtitle: "Front-End Focused · Full-Stack with Java / Spring Boot",
+  title: "Senior Full-Stack Engineer (Front-End Focused)",
+  subtitle: "Angular · TypeScript · React · Java / Spring Boot · 6+ years in fintech and e-commerce",
   email: "iman.fa88@gmail.com",
   phone: "+98-9034646366",
   linkedinUrl: "https://www.linkedin.com/in/imanamini78",
@@ -47,7 +47,6 @@ export const RESUME = {
     "Signals",
     "NX Monorepo",
     "React",
-    "Next.js",
     "Vue",
     "Nuxt",
     "Java 21",
@@ -87,7 +86,10 @@ export const RESUME = {
     "Built the whole test setup and the playground demo app for Digipay's 80-package UI library (digipay-libs-workspace): 3,150+ Playwright E2E / visual tests, 4,200+ unit tests and 770 visual baselines; together with the checkout suite, 7,400+ automated tests in suites I built.",
     "Made Claude Code part of Digipay's front-end workflow with agents and commands I wrote: Figma-MCP dev → QA → design-review agents with a shared lessons file for the merchant dashboard, AI code-review commands for staging and production merge requests, and commands that write and fix component tests and build demo pages.",
     "The AI-assisted test workflow cut the time to write a full component test spec from 1 day to under 1 hour, and library-level regressions reaching QA dropped to near zero.",
-    "Migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.",
+    "limbo-monorepo: migrated three standalone Angular applications (web-wallet, credit, merchant-credit) into a unified NX monorepo with shared libs/ structure, consolidating dependencies and enabling cross-app code reuse.",
+    "client-monorepo (17 repos, 110+ Nx projects): built and own the Credit & BNPL applet libraries (`libs/applets/credit/{credit,bnpl,installment,home}` + `libs/shared/credit`, ~1,000 TypeScript files / ~400 components) loaded by the main consumer app and the installments app through a credit shell: onboarding, pre-registration (+ campaign), smart scoring, wallet activation, wallet / transaction detail, payment callbacks, installments overview, contract settlement.",
+    "client-monorepo (pillar app): built Pillar, Digipay's mini-app inside the Digikala super-app — Digikala SSO, wallet and cash-in, transactions, card, installments and credit services as lazy-loaded applets behind a thin shell, as an installable PWA with a metadata-driven preloading strategy for critical routes.",
+    "digipay-libs-workspace: architected and published 14 of its shared npm packages used across product teams, cutting cross-team duplication and accelerating delivery across every product line.",
     "Established a multi-layer testing strategy across 75 shared npm packages: Karma/Jasmine unit tests for signal-based component logic and OnPush behavioral contracts, Playwright E2E tests for computed CSS, animation, and input-variant contracts, and a dual snapshot system (style .txt + visual .png) as backward-compatibility guards.",
     "Engineered a 7-step credit pre-registration state machine with conditional step-skipping logic, BehaviorSubject-driven reactive state, dynamic plan filtering by fund provider and collateral type, and bidirectional URL–step synchronization via query parameters.",
     "Built zero-dependency pinch-to-zoom, pan, and double-tap gesture directives for document image inspection, implementing multi-touch distance calculation, boundary-constrained CSS transforms, and requestAnimationFrame-throttled magnifier with rotation-aware coordinate mapping.",
@@ -109,8 +111,8 @@ export const RESUME = {
     },
     {
       company: "XPCard",
-      location: "Remote",
-      role: "Founder & Software Engineer",
+      location: "Remote · side project, part-time",
+      role: "Founder & Sole Engineer",
       period: "Jul 2026 – Present",
       bullets: [
     "Architected a four-repository system: a platform repo for product docs, API contracts and infrastructure, a Spring Boot backend, an Angular / Nx front-end monorepo with storefront and admin apps, and a CMS theme for the marketing site.",
@@ -131,30 +133,15 @@ export const RESUME = {
       backendLabel: "Backend Engineering",
     },
     {
-      company: "Adowing",
+      company: "Awan Holding (Adowing · Carnotic)",
       location: "Tehran, Iran",
       role: "Front-End Developer",
       period: "Oct 2019 – Dec 2021",
       bullets: [
-    "Developed internal panels for the marketing team, accounting team & other departments.",
-    "Built pixel-perfect UIs in different sizes according to the design.",
-    "Researched the agile approach with the product team and implemented it.",
-    "Researched test methods like unit test, integration test, regression test & acceptance test.",
-    "Researched clean code methods and developed products with them.",
-    "Mentored a front-end developer intern.",
-  ],
-    },
-    {
-      company: "Carnotic",
-      location: "Tehran, Iran",
-      role: "Front-End Developer",
-      period: "Oct 2019 – Dec 2021",
-      bullets: [
-    "Implemented a highly responsive user interface for a freight forwarding platform.",
-    "Built pixel-perfect UIs in different sizes according to the design.",
-    "Packed customized video player from \"Talent Academy\" project and used in Carnotic.",
-    "Implemented this Nuxt app for SEO purposes.",
-    "Documented components and wrote test cases for all methods.",
+    "Carnotic: built the responsive, server-side-rendered Nuxt front-end of a freight-forwarding platform, chosen for SEO; documented the components and wrote unit tests for all methods.",
+    "Adowing: developed internal Vue panels for the marketing, accounting and other departments, pixel-perfect across screen sizes from the Figma designs.",
+    "Built a reusable custom video player (playlists, instructor feedback, Instagram-live-style messages) for the Talent Academy learning platform and packaged it for reuse in Carnotic; implemented a global SSO login for the internal platforms.",
+    "Introduced agile practices with the product team, researched and applied unit / integration / regression / acceptance testing and clean-code practices, and mentored a front-end intern.",
   ],
     },
     {
@@ -171,14 +158,6 @@ export const RESUME = {
   ] as Experience[],
 
   projects: [
-    {
-      name: "Origins",
-      tech: "React Native · React · TypeScript",
-      period: "Sep 2026 – Present",
-      bullets: [
-    "Built the marketing landing pages; now building the React Native mobile app for the wallet, working remotely with the UK team.",
-  ],
-    },
     {
       name: "Pita",
       tech: "React · NX Monorepo · WebSockets · Docker · TypeScript",
