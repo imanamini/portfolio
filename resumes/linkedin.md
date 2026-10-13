@@ -117,7 +117,7 @@ Technologies: Angular 20, TypeScript, Nx, Jest, Playwright, OpenAPI 3.1, Java 21
 ### Pita — restaurant kiosk & kitchen display system
 - **Dates:** 2024 – 2025 · remote contract (Canada), part-time
 ```
-Lead Front-End Developer for a Canadian restaurant client, working remotely in English with their team.
+Sole front-end developer for a Canadian restaurant client, working remotely in English with their team — the whole front-end was mine.
 
 • Architected an Nx monorepo with two React apps (customer kiosk and kitchen display) sharing API and UI libraries, deployed as separate Docker images behind nginx.
 • Real-time order sync between kiosk and kitchen over WebSockets with a polling fallback; thermal receipt printing with automatic network → USB fallback; a version checker that reloads always-on kiosks when a new build ships.

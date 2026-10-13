@@ -189,7 +189,7 @@ export class PortfolioV2Component {
       sub: 'Restaurant Kiosk + Kitchen Display System',
       stack: ['React', 'NX Monorepo', 'WebSockets', 'Docker', 'TypeScript'],
       period: '2024 — 2025',
-      role: 'Lead Front-End Developer \u00B7 remote contract, part-time',
+      role: 'Sole Front-End Developer \u00B7 remote contract, part-time',
       featured: true,
       international: 'Canada \u00B7 Remote',
       body: 'Built remotely in English with a Canadian client\u2019s team: a two-app React/NX monorepo for self-service restaurant ordering: a customer-facing kiosk and a kitchen display, sharing @pita/api and @pita/ui libraries and deployed as separate Docker images behind nginx routing.',

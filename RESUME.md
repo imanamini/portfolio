@@ -135,7 +135,7 @@ tags: Android, B4A
 
 ## Projects
 
-### Pita | Restaurant Kiosk + Kitchen Display System | Lead Front-End Developer · remote contract, part-time | 2024 – 2025
+### Pita | Restaurant Kiosk + Kitchen Display System | Sole Front-End Developer · remote contract, part-time | 2024 – 2025
 international: Canada · Remote
 stack: React, NX Monorepo, WebSockets, Docker, TypeScript
 featured: true
