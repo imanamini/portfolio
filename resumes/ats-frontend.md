@@ -59,14 +59,14 @@ stack: Angular 20, TypeScript, Nx, Jest, Playwright, OpenAPI 3.1, Java 21, Sprin
 - Backend: Java 21 / Spring Boot modular monolith (catalog, order, payment, wallet, auth, supplier), 27 contract-first OpenAPI 3.1 specs, multiple payment gateways, OTP + JWT auth, automated supplier fulfilment with signed webhooks, ~1,000 Mockito / Testcontainers tests.
 - Delivery: designed a Claude Code multi-agent pipeline (PM → architect → dev → QA → review) with guardrails on every change (lint, tests, build, screenshot checks); ~115 features shipped in three months with my review on every merge; Dockerised production on a VPS with GitHub Actions deploys.
 
-### Pita | Restaurant kiosk & kitchen display system | Sole Front-End Developer · remote contract (Canada), part-time | 2024 – 2025
+### Pita | Restaurant kiosk & kitchen display system | Sole Front-End Developer · remote contract (Canada), part-time | Dec 2025 – Feb 2026
 stack: React, TypeScript, Nx Monorepo, WebSockets (Laravel Echo / Pusher), Epson ePOS SDK, Docker, nginx
 
 #### bullets
 - Built the entire front-end for a Canadian restaurant client, remotely in English with their team: an Nx monorepo with two React apps (customer kiosk and kitchen display) sharing API and UI libraries, deployed as separate Docker images behind nginx.
 - Real-time order sync between kiosk and kitchen over WebSockets with a polling fallback; thermal receipt printing with automatic network → USB fallback; a version checker that reloads always-on kiosks when a new build ships.
 
-### RexRx | Online prescription pharmacy PWA | Front-End Developer · remote contract (Canada), part-time | 2024
+### RexRx | Online prescription pharmacy PWA | Front-End Developer · remote contract (Canada), part-time | Dec 2025 – Mar 2026
 stack: Angular 17, TypeScript, Signals, PWA / Service Worker, SCSS
 
 #### bullets

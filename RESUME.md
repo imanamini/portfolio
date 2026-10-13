@@ -135,7 +135,7 @@ tags: Android, B4A
 
 ## Projects
 
-### Pita | Restaurant Kiosk + Kitchen Display System | Sole Front-End Developer · remote contract, part-time | 2024 – 2025
+### Pita | Restaurant Kiosk + Kitchen Display System | Sole Front-End Developer · remote contract, part-time | Dec 2025 – Feb 2026
 international: Canada · Remote
 stack: React, NX Monorepo, WebSockets, Docker, TypeScript
 featured: true
@@ -147,7 +147,7 @@ Built remotely in English with a **Canadian client's team**: a two-app React/NX 
 - Real-time order sync between kiosk and kitchen over Laravel Echo + Pusher WebSockets, with a 10-second polling backup and a live in-process vs ready KDS board.
 - Zero-downtime version checker for always-on hardware — polls a cache-busted /version.json and forces a hard reload on new builds.
 
-### RexRx | Online prescription pharmacy PWA | Front-End Developer · remote contract, part-time | 2024
+### RexRx | Online prescription pharmacy PWA | Front-End Developer · remote contract, part-time | Dec 2025 – Mar 2026
 international: Canada · Remote
 stack: Angular 17, PWA, Signals, Service Worker
 featured: true

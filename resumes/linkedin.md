@@ -1,5 +1,7 @@
 # LinkedIn profile — copy-paste source (synced with `resumes/ats-frontend.md`, 2026-10-13)
 
+Applied to the live profile on 2026-10-13 via Claude in Chrome (headline, About, both Digipay positions, Awan Holding, XPCard / Pita / RexRx projects, skills).
+
 Rules: same facts, numbers and titles as the resume. The headline carries the full-stack positioning;
 each position keeps its official title. No target company names anywhere.
 
@@ -77,12 +79,13 @@ Front-end owner of the payment (checkout) product since Jul 2026; owned the enti
 Technologies: Angular 17–22, TypeScript, RxJS, Signals, Nx Monorepo, PWA, SCSS, Playwright, Karma / Jasmine, Node.js, Git / GitLab CI, Sentry, Java / Spring Boot, Claude Code
 ```
 
-### 2. Awan Holding (Adowing · Carnotic)
+### 2. Awan Holding (company page: linkedin.com/company/89989141)
 - **Title:** Front-End Developer
 - **Employment type:** Full-time
 - **Dates:** Oct 2019 – Dec 2021
 - **Location:** Tehran, Iran · On-site
 - **Skills:** Vue.js, Nuxt.js, JavaScript, SEO, Agile
+- The older Awan Holding roles (UI Designer Apr–Oct 2019, Social Media Specialist, Junior Advertising Operator) stay on LinkedIn under the same company page; they are not on the resume.
 
 Description:
 ```
@@ -94,6 +97,8 @@ Holding company behind Adowing (internal business panels) and Carnotic (online f
 
 Technologies: Vue, Nuxt, JavaScript, HTML5, CSS3 / SCSS, SSR, SEO, Jest, Git, Agile / Scrum
 ```
+
+> Digipay on LinkedIn is two positions (Front-End Developer Dec 2021 – Aug 2024, Senior Front-End Engineer Aug 2024 – Present) — a real promotion split; the resume shows one entry.
 
 > Do NOT add XPCard, Pita or RexRx as positions — they are part-time and would show as three concurrent jobs. They go in **Projects** below. (If you want XPCard visible in the Experience timeline anyway, add it as *Self-employed · Part-time* with the same text as the project.)
 
@@ -115,7 +120,7 @@ Technologies: Angular 20, TypeScript, Nx, Jest, Playwright, OpenAPI 3.1, Java 21
 ```
 
 ### Pita — restaurant kiosk & kitchen display system
-- **Dates:** 2024 – 2025 · remote contract (Canada), part-time
+- **Dates:** Dec 2025 – Feb 2026 · remote contract (Canada), part-time
 ```
 Sole front-end developer for a Canadian restaurant client, working remotely in English with their team — the whole front-end was mine.
 
@@ -126,7 +131,7 @@ Technologies: React, TypeScript, Nx Monorepo, WebSockets (Laravel Echo / Pusher)
 ```
 
 ### RexRx — online prescription pharmacy PWA
-- **Dates:** 2024 · remote contract (Canada), part-time
+- **Dates:** Dec 2025 – Mar 2026 · remote contract (Canada), part-time
 ```
 Front-End Developer. Built the installable Angular PWA of a Canadian online pharmacy for GLP-1 treatments: a server-driven adaptive medical questionnaire for eligibility screening, signal-based session management, CAPTCHA-protected auth and a multi-step prescription checkout.
 

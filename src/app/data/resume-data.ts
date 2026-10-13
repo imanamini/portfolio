@@ -161,7 +161,7 @@ export const RESUME = {
     {
       name: "Pita",
       tech: "React · NX Monorepo · WebSockets · Docker · TypeScript",
-      period: "2024 – 2025",
+      period: "Dec 2025 – Feb 2026",
       bullets: [
     "Built remotely in English with a Canadian client's team: a two-app React/NX monorepo for self-service restaurant ordering — a customer-facing kiosk and a kitchen display — sharing @pita/api and @pita/ui, deployed as separate Docker images behind nginx routing.",
     "Integrated the Epson ePOS SDK for thermal receipt printing with automatic network → USB fallback, plus mobile-device and browser-print safety nets.",
@@ -172,7 +172,7 @@ export const RESUME = {
     {
       name: "RexRx",
       tech: "Angular 17 · PWA · Signals · Service Worker",
-      period: "2024",
+      period: "Dec 2025 – Mar 2026",
       bullets: [
     "Front-end for a Canadian online pharmacy for GLP-1 weight-loss treatments (Ozempic, Wegovy, Mounjaro): a full Angular 17 PWA, built around a server-driven adaptive questionnaire engine with offline support.",
     "Server-driven adaptive medical questionnaire (SingleChoice / MultipleChoice / FormFill / Terminate) — each question fetched from the API based on the previous answer for personalised eligibility screening.",

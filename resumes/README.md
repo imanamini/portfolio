@@ -96,4 +96,5 @@ Design (scripts/generate-pdf.mjs)
 - Digipay UI libraries (`digipay-libs-workspace`): 80+ packages, demo playground app, ~3,150 Playwright tests,
   ~4,240 unit tests, 770 visual baselines — the whole test setup was built by Iman.
 - XPCard: 27 OpenAPI contracts, ~115 features in 3 months, 1B+ toman GMV in the first two months.
+- Dates verified from the repos' git history (2026-10-13): Pita Dec 2025 – Feb 2026, RexRx/Pharma Dec 2025 – Mar 2026 (not 2024).
 - International, remote, front-end only (Iman was the only front-end dev on Pita — not a lead): Pita and RexRx/"Pharma" (Canada — GLP-1 online pharmacy, pharma-eta-ruby.vercel.app), Origins (UK, meetorigins.com — landing pages + React Native app, in progress).
