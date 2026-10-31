@@ -1,12 +1,26 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { SUPABASE_URL, SUPABASE_KEY } from './supabase.config';
 
 const TOKEN_KEY   = 'sb-access-token';
 const REFRESH_KEY = 'sb-refresh-token';
 
+// Tokens issued by the self-hosted API start with "at."; anything else is a
+// leftover Supabase session from before the migration and can never work.
+function dropStaleSession(): boolean {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (token && !token.startsWith('at.')) {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_KEY);
+    return false;
+  }
+  return !!token;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  isLoggedIn = signal<boolean>(!!localStorage.getItem(TOKEN_KEY));
+  private router = inject(Router);
+  isLoggedIn = signal<boolean>(dropStaleSession());
   isLoading  = signal<boolean>(false);
 
   getToken(): string | null {
@@ -58,6 +72,10 @@ export class AuthService {
       const refreshed = await this.refreshToken();
       if (refreshed) {
         res = await fetch(input, withToken(refreshed));
+      }
+      if (res.status === 401) {
+        this.clearSession();
+        void this.router.navigate(['/login']);
       }
     }
 

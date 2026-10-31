@@ -119,11 +119,14 @@ function issueAccess(userId) {
   const payload = b64u(JSON.stringify({ sub: userId, exp: Math.floor(Date.now() / 1000) + ACCESS_TTL }));
   return `at.${payload}.${sign(payload)}`;
 }
-// Returns user id, null for "anonymous" (publishable key / no header), or false for a bad/expired token.
+// Returns user id, null for anonymous (no header or the public "anon" key), or
+// false for anything else. Unknown tokens (e.g. a leftover Supabase JWT in the
+// browser) must get a 401 so the client drops the stale session and re-logs in.
 function authenticate(req) {
   const h = req.headers.authorization ?? '';
   const token = h.startsWith('Bearer ') ? h.slice(7) : '';
-  if (!token.startsWith('at.')) return null;
+  if (!token || token === 'anon') return null;
+  if (!token.startsWith('at.')) return false;
   const [, payload, sig] = token.split('.');
   if (!payload || !sig) return false;
   const expected = sign(payload);
