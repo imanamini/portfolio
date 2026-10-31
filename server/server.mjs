@@ -12,19 +12,23 @@ import bcrypt from 'bcryptjs';
 
 const PORT = Number(process.env.PORT ?? 8080);
 const DATA_DIR = process.env.DATA_DIR ?? './data';
-const JWT_SECRET = process.env.JWT_SECRET;
 const IMPORT_TOKEN = process.env.IMPORT_TOKEN ?? '';
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? 'https://imanamini.ir,http://localhost:4200')
   .split(',').map((s) => s.trim()).filter(Boolean);
 const ACCESS_TTL = 3600;              // seconds, same as Supabase default
 const REFRESH_TTL = 60 * 60 * 24 * 60; // 60 days
 
-if (!JWT_SECRET || JWT_SECRET.length < 32) {
-  console.error('JWT_SECRET env var (>= 32 chars) is required');
-  process.exit(1);
-}
-
 fs.mkdirSync(DATA_DIR, { recursive: true });
+
+// The signing secret comes from env if set, otherwise it is generated once and
+// kept on the data volume so sessions survive restarts without manual setup.
+function loadJwtSecret() {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  const file = path.join(DATA_DIR, 'jwt-secret');
+  if (!fs.existsSync(file)) fs.writeFileSync(file, crypto.randomBytes(48).toString('hex'), { mode: 0o600 });
+  return fs.readFileSync(file, 'utf8').trim();
+}
+const JWT_SECRET = loadJwtSecret();
 const db = new DatabaseSync(path.join(DATA_DIR, 'app.db'));
 db.exec(`
   PRAGMA journal_mode = WAL;
